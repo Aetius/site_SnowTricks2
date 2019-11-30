@@ -1,0 +1,26 @@
+.background{
+    text-align: center;
+    color: white;
+    background-image: url('/images/background_image.jpg');
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+}
+
+.intro-text{
+    padding-top: 10%;
+    padding-bottom: 20%;
+}
+
+.intro-heading{
+    font-weight: 700;
+    font-size: 500%;
+}
+
+.intro-paragraph{
+    padding-top: 30%;
+    font-weight: 400;
+    font-size: 500%;
+}
+
