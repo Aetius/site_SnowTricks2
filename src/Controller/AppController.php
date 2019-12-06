@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\TrickRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,13 +23,6 @@ class AppController extends AbstractController{
     }
 
 
-    /**
-     * @return string
-     * @Route("/", name="home", methods={"GET"})
-     */
-    public function index()
-    {
-        return new Response($this->twig->render("page/home.html.twig"));
-    }
+
 
 }
