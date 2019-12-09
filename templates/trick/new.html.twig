@@ -4,6 +4,13 @@
     {# {% import "macro/form.html.twig" as form %}#}
 
     <div class="container mt-5">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
 
         <div class="trick-image">
             <img src="/images/background_image.jpg" alt="" width="100%" height="100%" >

@@ -75,7 +75,12 @@ class TrickController extends AbstractController{
         if ($form->isSubmitted() && $form->isValid()){
             $this->em->persist($trick);
             $this->em->flush();
+            $this->addFlash('success', "Le trick a bien été créé!!");
+            return $this->redirectToRoute(('home'));
 
+        }
+        if ($form->isSubmitted() && $form->isValid()==false) {
+            $this -> addFlash( 'danger', "Echec lors de l'enregistrement" );
         }
         return $this->render('trick/new.html.twig', [
             'trick' => $trick,
@@ -85,7 +90,7 @@ class TrickController extends AbstractController{
 
     /**
      *@return string
-     *@Route("/trick/{id}", name="showTrick", methods={"GET"})
+     *@Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
     public function show(int $id, TrickRepository $repository){
         $trick = $repository->find($id);
@@ -121,7 +126,7 @@ class TrickController extends AbstractController{
     }
 
     /**
-     *@Route("/trick/{id}/delete", name="delete", methods={"DELETE"})
+     *@Route("/trick/{id}/delete", name="delete", methods={"GET"})
      */
     public function delete(Trick $trick, Request $request)
     {

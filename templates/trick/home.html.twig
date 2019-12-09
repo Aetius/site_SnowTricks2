@@ -4,6 +4,19 @@
     <header class="background">
       {#  <img src="images\background_image.jpg">#}
        <div class="container">
+           {#{%  for message in app.flashes('success') %}
+               <div  class="alert alert-success">
+                   {{  message }}
+               </div>
+           {% endfor %}#}
+
+           {% for label, messages in app.flashes %}
+               {% for message in messages %}
+                   <div class="alert alert-{{ label }}">
+                       {{ message }}
+                   </div>
+               {% endfor %}
+           {% endfor %}
 
            <div class="intro-text" >
                <h2 class="intro-heading text-uppercase h1 py-5">SnowTricks</h2>
@@ -26,21 +39,22 @@
                         <div class="card ">
 
                             <div class="mb-3 card-img-top d-flex justify-content-center">
-                                <a href="/trick/{{ trick.id }}"><img  src="/images/background_image.jpg" height="100" width="100" alt="test"></a>
+                                <a href="{{ path('trick_show', {'id': trick.id}) }}"><img  src="/images/background_image.jpg" height="100" width="100" alt="test"></a>
                             </div>
                         </div>
 
                     <div class="card">
                         <div class="card-body d-flex justify-content-around">
                             <a href="/trick/{{ trick.id }}">{{ trick.title }}</a>
-                            <a href="/trick/{{ trick.id }}/edit"><img src="/images/edit-24px.svg" alt='Editer'> </a>
+                            <a href="/trick/{{ trick.id }}/edit"><img src="/images/edit-24px.svg" alt='Editer'></a>
+
 
                          {#   <form method="post" target="#confirmDelete"#}{#action="/trick/{{ trick.id }}/delete" #}{#>#}
                                 {#<input type="hidden" name="_method" value="DELETE">
                                  <input type="hidden" name="_token" value="{{ csrf_token('delete'~ trick.id) }}">#}
 
                             {% include "/template/modal_confirm_close.html.twig" %}
-                            <a  data-toggle="modal" data-target="#confirmDelete{{ trick.id }}" ><img src="/images/delete-24px.svg" alt="Supprimer"></a>
+                            <a class="trick-delete-modal" data-url="{{ path('delete', {'id': trick.id}) }}" data-target="#confirmDelete{{ trick.id }}" ><img src="/images/delete-24px.svg" alt="Supprimer"></a>
                             {#</form>#}
 
                         </div>
