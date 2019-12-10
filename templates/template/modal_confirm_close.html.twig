@@ -1,6 +1,6 @@
 
 
-<div class="modal fade" id="confirmDelete{{ trick.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirmDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,10 +10,11 @@
                 </button>
             </div>
             <div class="modal-body"></div>
-            <div class="modal-footer">
-                <form method="post" action="/trick/{{ trick.id }}/delete" >
-                    <input type="hidden" name="_method" value="DELETE">
-                     <input type="hidden" name="_token" value="{{ csrf_token('delete'~ trick.id) }}">
+            <div class="modal-footer" id="articleId" >
+                <form method="post" action="" >
+                    <input type="hidden" name="_method" value="GET">
+                     <input type="hidden" name="_token" id="token" value="">
+
 
 
                     <button class="btn btn-primary" >Supprimer</button>

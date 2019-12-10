@@ -101,7 +101,7 @@ class TrickController extends AbstractController{
     }
 
     /**
-     *@Route("/trick/{id}/edit", name="editTrick", methods={"GET|POST"})
+     *@Route("/trick/{id}/edit", name="trick_edit", methods={"GET|POST"})
      */
      public function edit(int $id, TrickRepository $repository, Request $request, Trick $trick, EntityManagerInterface $em){
         $form = $this->createForm(TrickPublicType::class, $trick);
@@ -126,7 +126,7 @@ class TrickController extends AbstractController{
     }
 
     /**
-     *@Route("/trick/{id}/delete", name="delete", methods={"GET"})
+     *@Route("/trick/{id}/delete", name="trick_delete", methods={"GET"})
      */
     public function delete(Trick $trick, Request $request)
     {

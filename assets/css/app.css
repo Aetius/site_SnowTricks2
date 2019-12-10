@@ -93,5 +93,18 @@ a:not([href]) {
         font-size: 250%;
         color: white;
     }
+
+    .home-icons .material-icons{
+        font-size: 36px;
+    }
 }
+
+.material-icons {
+    color: rgba(0, 0, 0, 0.70);
+}
+.material-icons:hover{
+    color: rgba(0, 0, 0, 0.30);
+}
+
+
 

@@ -15,7 +15,7 @@
             parent::buildForm($builder,$options);
 
             $builder
-                ->rem('description', TextType::class)
+                ->add('description', TextType::class)
                 ->add('title', TextType::class)
 
             ;

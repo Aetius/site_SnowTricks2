@@ -10,7 +10,9 @@
             <h1>{{ trick.title }}</h1>
             <div class="block-editDelete border">
                 <div class="p-1">
-                    <a href="/trick/{{ trick.id }}/edit" class="mr-2"><img src="/images/edit-24px.svg" alt='Editer'> </a>
+                    <a href="/trick/{{ trick.id }}/edit" class="mr-2">
+                        <img src="/images/edit-24px.svg" alt='Editer'>
+                    </a>
                     <a data-toggle="modal" href="#confirmDelete"><img src="/images/delete-24px.svg" alt"Supprimer"> </a>
                 </div>
 
@@ -48,7 +50,7 @@
 
                     <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" data-backdrop="static">Supprimer</button>
                 </form>#}
-                <a class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete{{ trick.id }}" data-backdrop="static">Supprimer</a>
+                <a class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" data-backdrop="static">Supprimer</a>
 
             </div>
 
