@@ -50,7 +50,7 @@ class TrickController extends AbstractController{
      */
     public function index(TrickRepository $repository, EntityManagerInterface $entityManager)
     {
-        /*  $user = new User();
+        /*  $user = new UsersFixtures();
           $user->setEmail('tot<<o@toto.fr');
           $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
           $user->setPassword('toto');*/
