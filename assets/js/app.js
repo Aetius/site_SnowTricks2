@@ -11,22 +11,22 @@ require('../css/app.css');
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
 
-/*
+
 (function(){
 
-})
-*/
-let confirmClick = document.querySelectorAll(".trick-delete-modal");
-let doc = (document.querySelector("#articleId form"));
-let token = document.getElementById("token");
+    //let confirmClick = document.querySelectorAll(".trick-delete-modal");
+    let doc = (document.querySelector("#articleId form"));
+    let token = document.getElementById("token");
 
-document.addEventListener("click", function (e) {
+    document.addEventListener("click", function (e) {
+        let searchValueE = e.target.attributes.class.value;
 
-    if (e.target.attributes.class.value ==="material-icons test" ){
-        let url = (e.target.parentNode.getAttribute("data-url"));
-        let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
-        doc.setAttribute("action", url);
-        token.setAttribute("value", idTrick);
 
-    }
-})
+        if (searchValueE.split(" ").find(element => element === "trick-delete-modal")){
+            let url = (e.target.parentNode.getAttribute("data-url"));
+            let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
+            doc.setAttribute("action", url);
+            token.setAttribute("value", idTrick);
+        }
+    })
+})();
