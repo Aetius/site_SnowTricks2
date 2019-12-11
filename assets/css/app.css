@@ -1,0 +1,110 @@
+.background{
+    text-align: center;
+    color: white;
+    background-image: url('/images/background_image.jpg');
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-position: center center;
+    background-size: cover;
+}
+
+.btn-primary{
+    background-color: white;
+    color: #222222;
+    box-shadow: #222222;
+    border-color: #222222;
+}
+
+
+a:not([href]) {
+    color: white;
+}
+
+.intro-text{
+    padding-top: 10%;
+    padding-bottom: 20%;
+}
+
+.intro-heading{
+    font-weight: 700;
+    font-size: 500%;
+}
+
+.intro-paragraph{
+    padding-top: 30%;
+    font-weight: 400;
+    font-size: 500%;
+}
+
+.trick-image {
+    position: relative;
+    width: 100%;
+
+}
+
+
+.trick-image h1{
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    width: 100%;
+    font-size: 500%;
+    color: white;
+}
+
+.trick-image .block-editDelete{
+    background-color: #DDDDDD;
+    border: #222222;
+    position: absolute;
+    top: 3%;
+    right: 3%;
+}
+
+.trickEdit{
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+.trickEdit .text{
+    overflow: auto;
+}
+
+.trickEdit button{
+    margin-right: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .intro-heading{
+        font-weight: 700;
+        font-size: 250%;
+    }
+
+
+    .intro-paragraph{
+        font-size: 250%;
+    }
+
+    .trick-image h1{
+        position: absolute;
+        top: 40%;
+        left: 35%;
+        width: 100%;
+        font-size: 250%;
+        color: white;
+    }
+
+    .home-icons .material-icons{
+        font-size: 36px;
+    }
+}
+
+.material-icons {
+    color: rgba(0, 0, 0, 0.70);
+}
+.material-icons:hover{
+    color: rgba(0, 0, 0, 0.30);
+}
+
+
+
