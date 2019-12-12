@@ -4,8 +4,8 @@ namespace App\Controller;
 
 
 use App\Entity\Trick;
-use App\Form\TrickCreateType;
-use App\Form\TrickType;
+
+use App\Form\Trick\CreateType;
 use App\Repository\TrickRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,7 +70,7 @@ class TrickController extends AbstractController{
     public function new(Request $request)
     {
         $trick = new Trick();
-        $form = $this->createForm(TrickCreateType::class, $trick);
+        $form = $this->createForm(CreateType::class, $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $this->em->persist($trick);
@@ -104,7 +104,7 @@ class TrickController extends AbstractController{
      *@Route("/trick/{id}/edit", name="trick_edit", methods={"GET|POST"})
      */
      public function edit(int $id, TrickRepository $repository, Request $request, Trick $trick, EntityManagerInterface $em){
-        $form = $this->createForm(TrickCreateType::class, $trick);
+        $form = $this->createForm(CreateType::class, $trick);
 
         $form->handleRequest($request);
         $tricks = $repository->find($id);

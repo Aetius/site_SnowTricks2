@@ -69,7 +69,7 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Login could not be found.');
+            throw new CustomUserMessageAuthenticationException('Le couple login/mot de passe est incorrect !');
         }
 
         return $user;
@@ -95,7 +95,8 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         }
 
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('home'));
     }
 
     protected function getLoginUrl()

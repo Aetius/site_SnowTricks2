@@ -12,11 +12,7 @@
             {% endfor %}
         {% endfor %}
 
-        <div class="trick-image">
-            <img src="{{ asset('images/background_image.jpg') }}" alt="background image" width="100%" height="100%" >
-            <h1>{{ trick.title }}</h1>
 
-        </div>
         <div class="mt-5 d-flex row">
 
         </div>
@@ -27,15 +23,15 @@
             </div>
 
         </div>
-        <div class="col-md-12 trickEdit">
+        <div class="col-md-12 ">
 
             {{ form_start((form)) }}
             <div class="col-md-6  mb-5">
-                {{ form_row(form.title) }}
+                {{ form_row(form.login) }}
             </div>
 
             <div class="text col-md-12">
-                {{ form_row(form.description) }}
+                {{ form_row(form.password) }}
             </div>
             <div hidden>
                 {{ form_rest(form) }}
@@ -60,5 +56,5 @@
 
     </div>
 
-
+   
 {% endblock %}

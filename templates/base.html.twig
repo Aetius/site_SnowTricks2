@@ -29,11 +29,11 @@
 <div class="   d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">SnowTrick</h5>
     <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark mr-2" href="#">Home</a>
-        <a class="p-2 text-dark mr-2" href="#">Les tricks</a>
+        <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
+        <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
 
-    <a class="btn btn-outline-primary mr-2" href="#">S'identifier</a>
-    <a class="btn btn-outline-primary" href="#">Créer un compte</a>
+    <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
+    <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
     </nav>
 </div>
 </div>
@@ -51,15 +51,15 @@
     <div class=" p-3 px-md-4 bg-white  shadow-sm">
 
         <nav class="my-2 my-md-0 mr-md-3 d-flex d-flex justify-content-around home-icons">
-            <a href="">
+            <a href="{{ path('home') }}">
                 <i class="material-icons">house</i>
                 {#<img src="/images/house-24px.svg" height=40 title="Accueil" alt="Accueil">#}
             </a>
-            <a href="">
+            <a href="/#tricks">
                 <i class="material-icons">turned_in</i>
                 {#<img src="/images/turned_in-24px.svg" height=40 title="Les tricks" alt="Les tricks">#}
             </a>
-            <a href="">
+            <a href="{{ path('app_login') }}">
                 <i class="material-icons">get_app</i>
                 {#<img src="/images/get_app-24px.svg" height=40 title="Se connecter/s'inscrire" alt="Se connecter/s'inscrire">#}
             </a>
