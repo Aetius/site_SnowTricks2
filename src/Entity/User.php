@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -41,10 +43,16 @@ class User implements UserInterface, \Serializable
      */
     private $is_activate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Email", mappedBy="user", cascade={"persist"}, orphanRemoval=true)
+     */
+    private $email;
+
     public function __construct()
     {
         $this->is_activate = false;
         $this->roles = ['ROLE_USER'];
+        $this->email = new ArrayCollection();
     }
 
 
@@ -164,5 +172,36 @@ class User implements UserInterface, \Serializable
             $this->roles,
             $this->is_activate
         ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
+    /**
+     * @return Collection|Email[]
+     */
+    public function getEmail(): Collection
+    {
+        return $this->email;
+    }
+
+    public function addEmail(Email $email): self
+    {
+        if (!$this->email->contains($email)) {
+            $this->email[] = $email;
+            $email->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmail(Email $email): self
+    {
+        if ($this->email->contains($email)) {
+            $this->email->removeElement($email);
+            // set the owning side to null (unless already changed)
+            if ($email->getUser() === $this) {
+                $email->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

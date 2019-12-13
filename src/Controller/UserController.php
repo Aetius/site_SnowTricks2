@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 
-use App\Entity\Trick;
+
+
 use App\Entity\User;
-use App\Form\CreateUserType;
-use App\Form\User\CreateType;
+
+use App\Form\User\CreateUserType;
 use App\Form\User\LostPasswordType;
 use App\Repository\UserRepository;
 use App\Security\PasswordEncode;
@@ -45,7 +46,8 @@ class UserController extends AbstractController{
     public function new (Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User();
-        $form = $this->createForm(CreateType::class, $user);
+
+        $form = $this->createForm(CreateUserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
@@ -78,14 +80,16 @@ class UserController extends AbstractController{
      */
     public function lostPassword(Request $request, UserRepository $userRepository)
     {
-       $user = new User();
-        $form = $this->createForm(LostPasswordType::class, $user);
+       $userEntity = new User();
+
+
+        $form = $this->createForm(LostPasswordType::class, $userEntity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
 
-            if ($userRepository->findOneBy(['login'=> $user->getLogin()])){
-//ajouter le mail.
+            if ($user = $userRepository->findOneBy(['login'=> $userEntity->getLogin()])){
+
 //envoi email avec token
                 $this->addFlash('success', "Demande effectuée");
             }

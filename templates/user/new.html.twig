@@ -29,6 +29,13 @@
             <div class="col-md-6  mb-5">
                 {{ form_row(form.login) }}
             </div>
+            <div class="col-md-6  mb-5">
+            {#    {{ form_row(form.email) }}#}
+               {# {{ form_row(form.email.vars.prototype) }}#}
+{{ form_row(form.email.vars.prototype.email) }}
+                {# {{ dump(form) }}#}
+            </div>
+
 
             <div class="text col-md-12">
                 {{ form_row(form.password) }}
