@@ -1,2 +1,7 @@
 Title: Titre
 Content: Description
+DJEHZHG: La confirmation du mot de passe est incorrecte
+
+label.password: 'Mot de passe'
+flash.registration.success: 'Votre compte a bien été créé.'
+LoginNotExist.message:

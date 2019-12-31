@@ -3,21 +3,21 @@
 namespace App\Controller;
 
 
-
-
 use App\Entity\User;
-
 use App\Form\User\CreateUserType;
 use App\Form\User\LostPasswordType;
+use App\Form\User\ModifyType;
+use App\Notification\ContactNotification;
 use App\Repository\UserRepository;
-use App\Security\PasswordEncode;
+use App\Services\User\UserCreator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserController extends AbstractController{
+class UserController extends AbstractController
+{
 
     /**
      * @var EntityManagerInterface
@@ -27,80 +27,95 @@ class UserController extends AbstractController{
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var SessionInterface
+     */
+    private $session;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, SessionInterface $session)
     {
-        $this -> em = $em;
+        $this->em = $em;
+        $this->session = $session;
     }
 
     /**
-     *@Route ("/profile", name="user_admin", methods={"GET|POST"})
+     * @Route ("/admin", name="user_admin", methods={"GET|POST"})
      */
-    public function admin(){
+    public function admin()
+    {
         return $this->render('admin/AdminTrick.html.twig');
     }
 
     /**
-     *@Route ("/inscription", name="user_new", methods={"GET|POST"})
+     * @Route ("/inscription", name="user_new", methods={"GET|POST"})
      */
-    public function new (Request $request, UserPasswordEncoderInterface $encoder)
+    public function new(Request $request, UserCreator $userCreator)
     {
-        $user = new User();
-
-        $form = $this->createForm(CreateUserType::class, $user);
+        $form = $this->createForm(CreateUserType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
-            $this->em->persist($user);
-            $this->em->flush();
-            $this->addFlash('success', "Création du compte effectuée");
+            $userCreator->create($form->getData());
+            $this->addFlash('success', "flash.registration.success");
             return $this->redirectToRoute('app_login');
         }
-        if ($form->isSubmitted() && $form->isValid() == false){
-            $this->addFlash('danger', "Echec lors de l'inscription");
-        }
+
         return $this->render('user/new.html.twig', [
-            'form'=>$form->createView()
+            'form' => $form->createView(),
+            'errors'=>$form->getErrors(true)
         ]);
     }
 
-    /**
-     *@Route ("/profile", name="user_update", methods={"GET|POST"})
-     */
-    public function update(Request $request)
-    {
 
+    /**
+     * @Route ("/profile", name="user_update", methods={"GET|POST"})
+     */
+    public function update(Request $request, UserRepository $repository, SessionInterface $session)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(ModifyType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() ) {
+            $this->em->flush();
+            $this->addFlash('success', "Modifications effectuées");
+        }
+
+        return $this->render('user/update.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
 
     /**
      * @param User $user
-     *@Route ("/password_reset", name="user_password_lost", methods={"GET|POST"})
+     * @Route ("/password_reset", name="user_password_lost", methods={"GET|POST"})
      */
     public function lostPassword(Request $request, UserRepository $userRepository)
     {
-       $userEntity = new User();
+        $userEntity = new User();
 
 
         $form = $this->createForm(LostPasswordType::class, $userEntity);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($user = $userRepository->findOneBy(['login'=> $userEntity->getLogin()])){
+            if ($user = $userRepository->findOneBy(['login' => $userEntity->getLogin()])) {
 
 //envoi email avec token
                 $this->addFlash('success', "Demande effectuée");
             }
         }
-        if ($form->isSubmitted() && $form->isValid() == false){
+        if ($form->isSubmitted() && $form->isValid() == false) {
             $this->addFlash('danger', "Login invalide");
         }
 
 
         return $this->render('user/lost_password.html.twig', [
-            'form'=>$form->createView()
+            'form' => $form->createView()
         ]);
     }
 

@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- *  * @UniqueEntity("login")
+ * @UniqueEntity("login")
  */
 class User implements UserInterface, \Serializable
 {
@@ -44,15 +44,20 @@ class User implements UserInterface, \Serializable
     private $is_activate;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Email", mappedBy="user", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
      */
-    private $email;
+    private $emails;
+
+    /**
+     *
+     */
+    private $emailUser;
 
     public function __construct()
     {
         $this->is_activate = false;
         $this->roles = ['ROLE_USER'];
-        $this->email = new ArrayCollection();
+        $this->emails = new ArrayCollection();
     }
 
 
@@ -177,15 +182,15 @@ class User implements UserInterface, \Serializable
     /**
      * @return Collection|Email[]
      */
-    public function getEmail(): Collection
+    public function getEmails(): Collection
     {
-        return $this->email;
+        return $this->emails;
     }
 
     public function addEmail(Email $email): self
     {
-        if (!$this->email->contains($email)) {
-            $this->email[] = $email;
+        if (!$this->emails->contains($email)) {
+            $this->emails[] = $email;
             $email->setUser($this);
         }
 
@@ -194,14 +199,36 @@ class User implements UserInterface, \Serializable
 
     public function removeEmail(Email $email): self
     {
-        if ($this->email->contains($email)) {
-            $this->email->removeElement($email);
+        if ($this->emails->contains($email)) {
+            $this->emails->removeElement($email);
             // set the owning side to null (unless already changed)
             if ($email->getUser() === $this) {
                 $email->setUser(null);
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmailUser()
+    {
+        return $this->emailUser;
+    }
+
+    /**
+     * @param string $emailUser
+     */
+    public function setEmailUser($emailUser): self
+    {
+
+            $email = new Email();
+            $email->setEmail($emailUser);
+            $this->addEmail($email);
+
+        $this->$emailUser = $emailUser;
         return $this;
     }
 }

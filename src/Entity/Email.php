@@ -17,7 +17,7 @@ class Email
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="email")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="emails")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
