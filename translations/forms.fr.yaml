@@ -1,7 +1,8 @@
 Title: Titre
 Content: Description
-DJEHZHG: La confirmation du mot de passe est incorrecte
-
+form.email: 'Email'
+form.login: 'Login'
+label.currentPassword: 'Mot de passe actuel'
 label.password: 'Mot de passe'
+label.passwordConfirm: 'Confirmation du mot de passe'
 flash.registration.success: 'Votre compte a bien été créé.'
-LoginNotExist.message:

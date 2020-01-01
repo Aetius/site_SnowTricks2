@@ -1,0 +1,2 @@
+password.invalidMessage: 'La confirmation du mot de passe est incorrecte'
+currentPassword.invalidMessage: 'Le mot de passe est incorrect'

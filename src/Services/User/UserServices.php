@@ -26,9 +26,10 @@ class UserServices
 
     public function __construct(UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager)
     {
-        $this -> encoder = $encoder;
-        $this -> entityManager = $entityManager;
+        $this->encoder = $encoder;
+        $this->entityManager = $entityManager;
         $this->user = new User();
+
     }
 
 }

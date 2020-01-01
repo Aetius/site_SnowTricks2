@@ -20,8 +20,7 @@ class ModifyType extends AbstractType
     {
         $builder
             ->add('emails', CollectionType::class, [
-                'entry_type'   => ModifyEmailType::class,
-                'allow_add'    => true
+                'entry_type'   => ModifyEmailType::class
             ])
 
             ->add('password', RepeatedType::class, [

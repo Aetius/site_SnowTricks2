@@ -27,18 +27,20 @@
 
             {{ form_start((form)) }}
             <div class="col-md-6  mb-5">
-
+                {{ user.login }}
+                {{ form_row(form.login,{'value':""}) }}
             </div>
             <div class="col-md-6  mb-5">
-                {#    {{ form_row(form.email) }}#}
-                {# {{ form_row(form.email.vars.prototype) }}#}
-                {{ emails }}
-                {# {{ dump(form) }}#}
+                {{ user.email }}
+                {{ form_row(form.emailUser,{'value':""}) }}
+
             </div>
             <div >
-               {# {{ form_row(form.login) }}#}
-            </div>
 
+            </div>
+            <div class="text col-md-12">
+                {{ form_row(form.currentPassword) }}
+            </div>
 
             <div class="text col-md-12">
                 {{ form_row(form.password) }}
