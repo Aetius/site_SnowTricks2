@@ -1,0 +1,22 @@
+<h1>Welcome {{ login }}!</h1>
+
+<p>
+    You signed up as {{ login }} the following email:
+</p>
+<p><code>{{ login }}</code></p>
+
+<p>
+    {#<form action="{{ url('{{ path("/user/confirm_email/', { id: post.id }) }}" method="post">
+        #}{# the argument of csrf_token() is an arbitrary string used to generate the token #}{#
+        <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+
+        <button type="submit">Delete item</button>
+    </form>#}
+
+
+   {# <a href="{{ path('confirm_email', {'email':emailTo, 'login':login, 'pass':pass}) }}">#}
+        <a href="https://127.0.0.1:8000/user/confirm_email/{{emailTo}}/{{ login}}/{{ pass }}">
+        Click here to activate your
+        account</a>
+    (this link is valid until {{ expiration_date|date('F jS') }})
+</p>

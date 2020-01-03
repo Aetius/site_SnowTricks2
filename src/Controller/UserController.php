@@ -21,25 +21,6 @@ class UserController extends AbstractController
 {
 
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-
-    public function __construct(EntityManagerInterface $em, SessionInterface $session)
-    {
-        $this->em = $em;
-        $this->session = $session;
-    }
-
-    /**
      * @Route ("/admin", name="user_admin", methods={"GET|POST"})
      */
     public function admin()
@@ -82,13 +63,11 @@ class UserController extends AbstractController
             'email'=> $email->getEmail()
         ];
 
-       /* $form = $this->createForm(ModifyType::class, $user);*/
         $form = $this->createForm(EditUserType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $newUser = $userUpdate->update($form->getData(), $this->getUser(), $email);
-            //dd($user);
             $this->addFlash('success', "Modifications effectuées");
             $user = array_merge($user, $newUser);
         }
@@ -99,36 +78,6 @@ class UserController extends AbstractController
         ]);
     }
 
-
-    /**
-     * @param User $user
-     * @Route ("/password_reset", name="user_password_lost", methods={"GET|POST"})
-     */
-    public function lostPassword(Request $request, UserRepository $userRepository)
-    {
-        $userEntity = new User();
-
-
-        $form = $this->createForm(LostPasswordType::class, $userEntity);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            if ($user = $userRepository->findOneBy(['login' => $userEntity->getLogin()])) {
-
-//envoi email avec token
-                $this->addFlash('success', "Demande effectuée");
-            }
-        }
-        if ($form->isSubmitted() && $form->isValid() == false) {
-            $this->addFlash('danger', "Login invalide");
-        }
-
-
-        return $this->render('user/lost_password.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
 
 
 }

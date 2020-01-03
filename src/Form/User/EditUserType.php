@@ -23,7 +23,7 @@ class EditUserType extends AbstractType
                 'required' => false,
                 'label' => 'form.login',
                 'constraints' => [
-                    new Length(['min' => 5]),
+                    new Length(['min' => 3]),
                     new LoginNotExist()
 
                 ]

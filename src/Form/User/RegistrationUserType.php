@@ -25,7 +25,7 @@ class RegistrationUserType extends AbstractType
             ->add('login', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['min' => 5]),
+                    new Length(['min' => 3]),
                     new LoginNotExist()
 
                 ]
