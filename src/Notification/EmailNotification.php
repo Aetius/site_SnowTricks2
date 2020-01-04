@@ -11,7 +11,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
-class ContactNotification extends AbstractController
+class EmailNotification extends AbstractController
 {
      const FROM = 'dontomberry@outlook.com';
     /**
@@ -65,12 +65,38 @@ class ContactNotification extends AbstractController
             // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
-                'pass'=>(password_hash($idUser.'emailConfirm', PASSWORD_ARGON2I, ['cost'=> 12])),
+                'pass'=>(password_hash($idUser.'emailConfirm', PASSWORD_DEFAULT)),
                 'login'=>$login,
                 'emailTo'=>$to,
+                'url'=>'user/confirm_email',
             ]);
 
         $this->mailer->send($email);
+    }
+
+    public function lostPassword($fields)
+    {
+        $email = (new TemplatedEmail())
+            ->from(self::FROM)
+            ->to($fields['email'])
+            //->cc('cc@example.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject('Confirmation de votre email')
+            ->text('Sending emails is fun again!')
+            ->htmlTemplate('user/emailConfirm.html.twig')
+            // pass variables (name => value) to the template
+            ->context([
+                'expiration_date' => new \DateTime('+7 days'),
+                'pass'=>(password_hash($fields['id'].'resetPass', PASSWORD_DEFAULT)),
+                'login'=>$fields['login'],
+                'emailTo'=>$fields['email'],
+                'url'=>'user/lost_password',
+            ]);
+
+        $this->mailer->send($email);
+
     }
 
 

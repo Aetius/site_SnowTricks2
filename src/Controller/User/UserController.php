@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\User;
 
 
 use App\Entity\User;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
+use App\Form\User\NewPasswordType;
 use App\Form\User\RegistrationUserType;
+use App\Notification\EmailNotification;
 use App\Repository\EmailRepository;
 use App\Repository\UserRepository;
 use App\Services\User\UserEditor;
@@ -67,7 +69,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newUser = $userUpdate->update($form->getData(), $this->getUser(), $email);
+            $newUser = $userUpdate->update($this->getUser(), $email, $form->getData());
             $this->addFlash('success', "Modifications effectuées");
             $user = array_merge($user, $newUser);
         }
@@ -75,6 +77,37 @@ class UserController extends AbstractController
         return $this->render('user/update.html.twig', [
             'form' => $form->createView(),
             'user' => $user
+        ]);
+    }
+
+
+    /**
+     * @Route ("/password_reset", name="user_password_lost", methods={"GET|POST"})
+     */
+    public function lostPassword(Request $request, EmailNotification $emailNotification, UserRepository $userRepository,
+                                 EmailRepository $emailRepository, UserEditor $updateUser)
+    {
+        $form = $this->createForm(LostPasswordType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($user = $userRepository->findOneBy(['login' => $form->getData('login')])) {
+                $email = $emailRepository->findOneBy(['user'=>$user->getId()])->getEmail();
+                $emailFields = [
+                   'email' => $email,
+                    'id' => $user->getId(),
+                   'login'=> $user->getLogin()
+                   ];
+                $updateUser->update($user);
+                $emailNotification->lostPassword($emailFields);
+                $this->addFlash('success', "Demande effectuée");
+            }
+        }
+        if ($form->isSubmitted() && $form->isValid() === false) {
+            $this->addFlash('danger', "Login invalide");
+        }
+        return $this->render('user/lost_password.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 

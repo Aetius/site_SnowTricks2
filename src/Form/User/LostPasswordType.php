@@ -13,15 +13,12 @@ class LostPasswordType extends AbstractType
     {
         $builder
             ->add('login')
-
-
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
             'validation_groups' => false,
         ]);
     }
