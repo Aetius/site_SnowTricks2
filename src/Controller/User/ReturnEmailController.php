@@ -2,16 +2,22 @@
 
 namespace App\Controller\User;
 
+use App\Entity\TokenResetPassword;
+use App\Entity\User;
 use App\Form\User\NewPasswordType;
 use App\Repository\UserRepository;
+use App\Security\Loggin;
 use App\Services\Email\Email;
 use App\Services\User\UserEditor;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class ResponseRequestUserController extends AbstractController
+class ReturnEmailController extends AbstractController
 {
     /**
      * @var EntityManagerInterface
@@ -19,7 +25,7 @@ class ResponseRequestUserController extends AbstractController
     private $entityManager;
 
     /**
-     * ResponseRequestUserController constructor.
+     * ReturnEmailController constructor.
      * @param EntityManagerInterface $entityManager
      */
     public function __construct(EntityManagerInterface $entityManager)
@@ -42,11 +48,47 @@ class ResponseRequestUserController extends AbstractController
         return $this->redirectToRoute('home');
     }
 
-    /**
-     * @Route ("/user/lost_password", name="lost_password",  methods={"GET|POST"})
-     */
-    public function lostPassword(Request $request, Email $emailSevice, UserEditor $userEditor, UserRepository $userRepository)
+    public function Login($user)
     {
+       $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->container->get('security.token_storage')->setToken($token);
+        $this->container->get('session')->set('_security_main', serialize($token));
+    }
+
+    /**
+     * @Route ("/user/lost_password/{token}", name="lost_password",  methods={"GET|POST"})
+     */
+    public function lostPassword(TokenResetPassword $tokenResetPassword, User $user,Request $request, Email $emailSevice, UserEditor $userEditor, UserRepository $userRepository, LoggerInterface $log)
+    {
+
+      if ($emailSevice->lostPassword($user)){
+          $form = $this->createForm(NewPasswordType::class);
+          $form->handleRequest($request);
+
+          if (!($form->isSubmitted() && $form->isValid()))
+          {
+              return $this->render('user/new_password.html.twig', [
+                  'form' => $form->createView()
+              ]);
+
+          }
+          $userEditor->update($user, null, $form->getData());
+          $this->Login($user);
+
+      }
+      return $this->redirectToRoute('home');
+      }
+
+
+
+
+
+
+
+
+/*
+
+
         if ($emailSevice->lostPassword(
             $request->get('login'),
             $request->get('email'),
@@ -70,7 +112,7 @@ class ResponseRequestUserController extends AbstractController
 
         }
         return $this->redirectToRoute('home');
-    }
+    }*/
 
 
 }

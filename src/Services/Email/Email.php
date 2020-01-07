@@ -52,8 +52,14 @@ class Email
         }
     }
 
-    public function lostPassword($login, $email, $pass)
+    public function lostPassword($user)
     {
+        $limitDateConfirmation = new \DateTime('-7 days');
+        if (($user->getTokenResetPassword()->getDateCreation()) > $limitDateConfirmation){
+           return true;
+        };
+
+        /*
         $user = $this->userRepository->findOneBy(['login' => $login]);
         $emailUser = $this->emailRepository->findOneBy(['email' => $email]);
         $userId = $user->getId().'resetPass';
@@ -68,7 +74,7 @@ class Email
             if ((password_verify($userId, $pass)) && ($lastUpdate > $limitDateConfirmation)) {
                 return true;
             }
-        }
+        }*/
     }
 
 

@@ -74,24 +74,29 @@ class EmailNotification extends AbstractController
         $this->mailer->send($email);
     }
 
-    public function lostPassword($fields)
+    /**
+     * * @param string $user
+     * @param string $email
+     * @param string $token
+     */
+    public function lostPassword(string $user, string $email, string $token)
     {
         $email = (new TemplatedEmail())
             ->from(self::FROM)
-            ->to($fields['email'])
+            ->to($email)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Confirmation de votre email')
             ->text('Sending emails is fun again!')
-            ->htmlTemplate('user/emailConfirm.html.twig')
+            ->htmlTemplate('email/resetPassword.html.twig')
             // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
-                'pass'=>(password_hash($fields['id'].'resetPass', PASSWORD_DEFAULT)),
-                'login'=>$fields['login'],
-                'emailTo'=>$fields['email'],
+                'pass'=>$token,
+                'login'=>$user,
+                'emailTo'=>$email,
                 'url'=>'user/lost_password',
             ]);
 

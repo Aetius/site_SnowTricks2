@@ -41,7 +41,7 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\Column(type="boolean", options={"default" = false})
      */
-    private $is_activate;
+    private $isActivate;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
@@ -58,9 +58,15 @@ class User implements UserInterface, \Serializable
      */
     private $lastUpdate;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\TokenResetPassword", cascade={"persist", "remove"})
+     */
+    private $tokenResetPassword;
+
+
     public function __construct()
     {
-        $this->is_activate = false;
+        $this->isActivate = false;
         $this->roles = ['ROLE_USER'];
         $this->emails = new ArrayCollection();
     }
@@ -129,12 +135,12 @@ class User implements UserInterface, \Serializable
 
     public function getIsActivate(): ?bool
     {
-        return $this->is_activate;
+        return $this->isActivate;
     }
 
-    public function setIsActivate(bool $is_activate): self
+    public function setIsActivate(bool $isActivate): self
     {
-        $this->is_activate = $is_activate;
+        $this->isActivate = $isActivate;
 
         return $this;
     }
@@ -166,7 +172,7 @@ class User implements UserInterface, \Serializable
             $this->login,
             $this->password,
             $this->roles,
-            $this->is_activate
+            $this->isActivate
         ]);
     }
 
@@ -180,7 +186,7 @@ class User implements UserInterface, \Serializable
             $this->login,
             $this->password,
             $this->roles,
-            $this->is_activate
+            $this->isActivate
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
@@ -248,4 +254,27 @@ class User implements UserInterface, \Serializable
 
         return $this;
     }
+
+    public function getTokenResetPassword(): ?TokenResetPassword
+    {
+        return $this->tokenResetPassword;
+    }
+
+    public function setTokenResetPassword(TokenResetPassword $tokenResetPassword): self
+    {
+        $this->tokenResetPassword = $tokenResetPassword;
+        // set the owning side of the relation if necessary
+
+        if ($tokenResetPassword->getUser() !== $this) {
+            $tokenResetPassword->setUser($this->getId());
+        }
+
+
+
+        $tokenResetPassword->setUser($this->getId());
+        return $this;
+    }
+
+
+
 }

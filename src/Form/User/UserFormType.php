@@ -15,7 +15,7 @@ class UserFormType extends AbstractType
             ->add('login')
             ->add('roles')
             ->add('password')
-            ->add('is_activate')
+            ->add('isActivate')
         ;
     }
 

@@ -47,11 +47,11 @@ class UserEditor extends UserServices
 
     /**
      * @param User $user
-     * @param Email $email
-     * @param array|null $formFields
+     * @param Email|null $email
+     * @param array $formFields
      * @return array
      */
-    public function update(User $user, Email $email=null, array $formFields=null)
+    public function update(User $user, Email $email=null, array $formFields)
     {
         $returnUser = [];
         $this->user = $user;
@@ -69,7 +69,6 @@ class UserEditor extends UserServices
             $returnUser['email'] = $formFields['emailUser'];
             $this->notification->confirmEmail($formFields['emailUser'], $this->user->getLogin(), $this->user->getId() );
         }
-
 
         $this->user->setLastUpdate(new \DateTime('now'));
         $this->entityManager->persist($this->user);

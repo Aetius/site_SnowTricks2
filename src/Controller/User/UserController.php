@@ -4,6 +4,8 @@ namespace App\Controller\User;
 
 
 use App\Entity\User;
+use App\Form\User\AdminCollectionType;
+use App\Form\User\AdminType;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
@@ -11,8 +13,8 @@ use App\Form\User\RegistrationUserType;
 use App\Notification\EmailNotification;
 use App\Repository\EmailRepository;
 use App\Repository\UserRepository;
+use App\Services\User\ResetPassword;
 use App\Services\User\UserEditor;
-use App\Services\User\UserUpdate;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,9 +27,24 @@ class UserController extends AbstractController
     /**
      * @Route ("/admin", name="user_admin", methods={"GET|POST"})
      */
-    public function admin()
+    public function admin(Request $request, UserEditor $editor, UserRepository $userRepository)
     {
-        return $this->render('admin/AdminTrick.html.twig');
+        $users = $userRepository->findAll();
+        /*dd("pb : mettre en place un système permettant de générer le form plusieurs fois,
+        il doit être lié à un seul utilisateur. 
+        actuellement : un form pour tous les utilisateurs => provoque une erreur, car je veux l' afficher plusieurs fois. ");*/
+
+        $form = $this->createForm(AdminCollectionType::class, ['users' => $users]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $editor->update();
+            $this->addFlash('success', 'Modifications effectuées');
+        }
+        return $this->render('admin/AdminTrick.html.twig', [
+            'form'=>$form->createView(),
+            'users'=>$users
+        ]);
     }
 
     /**
@@ -85,7 +102,7 @@ class UserController extends AbstractController
      * @Route ("/password_reset", name="user_password_lost", methods={"GET|POST"})
      */
     public function lostPassword(Request $request, EmailNotification $emailNotification, UserRepository $userRepository,
-                                 EmailRepository $emailRepository, UserEditor $updateUser)
+                                 EmailRepository $emailRepository, ResetPassword $resetPassword)
     {
         $form = $this->createForm(LostPasswordType::class);
         $form->handleRequest($request);
@@ -93,23 +110,19 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($user = $userRepository->findOneBy(['login' => $form->getData('login')])) {
                 $email = $emailRepository->findOneBy(['user'=>$user->getId()])->getEmail();
-                $emailFields = [
-                   'email' => $email,
-                    'id' => $user->getId(),
-                   'login'=> $user->getLogin()
-                   ];
-                $updateUser->update($user);
-                $emailNotification->lostPassword($emailFields);
-                $this->addFlash('success', "Demande effectuée");
+                $token = $resetPassword->reset($user);
+
+                $emailNotification->lostPassword($user->getLogin(), $email, $token);
             }
+            $this->addFlash('success', "Demande effectuée");
         }
-        if ($form->isSubmitted() && $form->isValid() === false) {
-            $this->addFlash('danger', "Login invalide");
-        }
+
         return $this->render('user/lost_password.html.twig', [
             'form' => $form->createView()
         ]);
     }
+
+
 
 
 
