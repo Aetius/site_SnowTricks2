@@ -17,10 +17,10 @@ class Email
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="emails")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column(type="integer")
      */
-    private $user;
+ //   private $user;
+
 
     /**
      * @ORM\Column(type="string", length=150)
@@ -28,7 +28,7 @@ class Email
     private $email;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" = false})
      */
     private $isVerified;
 
@@ -36,6 +36,13 @@ class Email
      * @ORM\Column(type="datetime")
      */
     private $dateCreation;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="email")
+     */
+    private $user;
+
+
 
     public function __construct()
     {
@@ -49,17 +56,17 @@ class Email
         return $this->id;
     }
 
-    public function getUser(): ?User
+   /* public function getUser(): ?int
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(int $user): self
     {
         $this->user = $user;
 
         return $this;
-    }
+    }*/
 
     public function getEmail(): ?string
     {
@@ -96,4 +103,18 @@ class Email
 
         return $this;
     }
+
+    public function getUser(): ?int
+    {
+        return $this->user;
+    }
+
+    public function setUser(int $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
 }

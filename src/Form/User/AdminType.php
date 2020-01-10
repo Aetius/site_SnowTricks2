@@ -26,18 +26,17 @@ class AdminType extends AbstractType
             /*   ->get('login')*/
                ->add('isActivate', null, [
                    'label' => 'Is actif ?'
-            ])
-               ->add('roles', ChoiceType::class, [
+            ]);
+               /*->add('roles', ChoiceType::class, [
                    'choices'=>[
                        'User'=> 'ROLE_USER',
                        'Editor'=> 'ROLE_EDITOR',
                        'Administrator'=> 'ROLE_ADMIN'
                    ],
-                   'multiple'=> true,
-                   'invalid_message' => 'roles.invalidMessage',
+                   'invalid_message' =>'roles.invalidMessage',
                    'required' => true,
                    'label' => 'label_roles',
-               ]);
+               ]);*/
 
 
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Email;
 
+use App\Entity\EmailLinkToken;
 use App\Repository\EmailRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +32,18 @@ class Email
         $this->emailRepository = $emailRepository;
     }
 
-    public function validationEmail($email, $login, $pass)
+    public function validationEmail($user)
     {
+        $limitDateConfirmation = new \DateTime('-7 days');
+        if (($limitDateConfirmation < $user->getEmail()->getDateCreation()) &&
+            ($user->getEmailLinkToken()->getAction()['0'] === EmailLinkToken::ACTION[0])){
+            $user->getEmail()->setIsVerified(true);
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+            return true;
+        }
+       /* dd($user->getEmail()->getDateCreation());
+
         $user = $this->userRepository->findOneBy(['login' => $login]);
         $emailUser = $this->emailRepository->findOneBy(['email' => $email]);
         $userId = $user->getId().'emailConfirm';
@@ -49,16 +60,16 @@ class Email
                 $this->entityManager->flush();
                 return true;
             }
-        }
+        }*/
     }
 
     public function lostPassword($user)
     {
         $limitDateConfirmation = new \DateTime('-7 days');
-        if (($user->getTokenResetPassword()->getDateCreation()) > $limitDateConfirmation){
+        if ((($user->getEmailLinkToken()->getDateCreation()) > $limitDateConfirmation) &&
+            ($user->getEmailLinkToken()->getAction()['0'] === EmailLinkToken::ACTION[1])){
            return true;
         };
-
         /*
         $user = $this->userRepository->findOneBy(['login' => $login]);
         $emailUser = $this->emailRepository->findOneBy(['email' => $email]);

@@ -5,10 +5,15 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TokenResetPasswordRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EmailLinkTokenRepository")
  */
-class TokenResetPassword
+class EmailLinkToken
 {
+
+    const ACTION = [
+        0 => 'update_email',
+        1 => 'reset_password'
+    ];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -22,10 +27,9 @@ class TokenResetPassword
     private $token;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\user", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="App\Entity\user", mappedBy="emailLinkToken")
      */
-    //private $user;
+    private $user;
 
     /**
      * @ORM\Column(type="datetime")
@@ -35,7 +39,14 @@ class TokenResetPassword
     /**
      * @ORM\Column(type="integer")
      */
-    private $user;
+    //private $user;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $action = [];
+
+
 
     public function __construct()
     {
@@ -59,7 +70,7 @@ class TokenResetPassword
         return $this;
     }
 
-  /*  public function getUser(): ?user
+    public function getUser(): ?user
     {
         return $this->user;
     }
@@ -69,7 +80,7 @@ class TokenResetPassword
         $this->user = $user;
 
         return $this;
-    }*/
+    }
 
     public function getDateCreation(): ?\DateTimeInterface
     {
@@ -83,7 +94,7 @@ class TokenResetPassword
         return $this;
     }
 
-    public function getUser(): ?int
+   /* public function getUser(): ?int
     {
         return $this->user;
     }
@@ -93,5 +104,22 @@ class TokenResetPassword
         $this->user = $user;
 
         return $this;
+    }*/
+
+    public function getAction(): ?array
+    {
+        return $this->action;
+    }
+
+    protected function setAction(array $action): self
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    public function addAction (int $action): self
+    {
+        return $this->setAction( [self::ACTION[$action]]);
     }
 }

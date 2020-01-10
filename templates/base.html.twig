@@ -31,9 +31,16 @@
     <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
         <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
-
-    <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
-    <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
+    {% if is_granted ('ROLE_USER') %}
+        <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
+        <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
+    {% else %}
+        <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
+        <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
+    {% endif %}
+        {% if is_granted ('ROLE_ADMIN') %}
+            <a class="btn btn-outline-primary mr-2 ml-5" href="{{ path('user_admin') }}">Espace admin</a>
+        {% endif %}
     </nav>
 </div>
 </div>

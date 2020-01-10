@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Email;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -26,6 +27,10 @@ class UsersFixtures extends Fixture
             $user = new User();
             $user->setLogin('sim'.$i);
             $user->setPassword($this->encoder->encodePassword($user, 'demo'));
+            $email = new Email();
+            $email->setEmail("sim$i@yahoo.fr");
+            $user->setEmail($email);
+
             $manager->persist($user);
             $manager->flush();
         }

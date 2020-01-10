@@ -19,8 +19,6 @@ class NewPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-
-
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'La confirmation du mot de passe est incorrecte',
@@ -28,7 +26,6 @@ class NewPasswordType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe']
             ])
-            /*->add('email', EmailType::class)*/
         ;
     }
 

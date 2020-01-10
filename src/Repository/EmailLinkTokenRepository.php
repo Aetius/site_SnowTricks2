@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\TokenResetPassword;
+use App\Entity\EmailLinkToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method TokenResetPassword|null find($id, $lockMode = null, $lockVersion = null)
- * @method TokenResetPassword|null findOneBy(array $criteria, array $orderBy = null)
- * @method TokenResetPassword[]    findAll()
- * @method TokenResetPassword[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method EmailLinkToken|null find($id, $lockMode = null, $lockVersion = null)
+ * @method EmailLinkToken|null findOneBy(array $criteria, array $orderBy = null)
+ * @method EmailLinkToken[]    findAll()
+ * @method EmailLinkToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TokenResetPasswordRepository extends ServiceEntityRepository
+class EmailLinkTokenRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, TokenResetPassword::class);
+        parent::__construct($registry, EmailLinkToken::class);
     }
 
     // /**
-    //  * @return TokenResetPassword[] Returns an array of TokenResetPassword objects
+    //  * @return EmailLinkToken[] Returns an array of EmailLinkToken objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class TokenResetPasswordRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?TokenResetPassword
+    public function findOneBySomeField($value): ?EmailLinkToken
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')

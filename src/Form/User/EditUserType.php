@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Length;
 
 class EditUserType extends AbstractType
@@ -25,7 +26,6 @@ class EditUserType extends AbstractType
                 'constraints' => [
                     new Length(['min' => 3]),
                     new LoginNotExist()
-
                 ]
             ])
             ->add('currentPassword', PasswordType::class, [
@@ -33,7 +33,7 @@ class EditUserType extends AbstractType
                 'required' => false,
                 'label' => 'label.currentPassword',
                 'constraints' => [
-                    new PasswordValid()
+                    new UserPassword()
                 ]
             ])
             ->add('password', RepeatedType::class, [

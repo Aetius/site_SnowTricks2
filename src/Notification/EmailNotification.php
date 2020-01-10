@@ -50,24 +50,25 @@ class EmailNotification extends AbstractController
 
     }
 
-    public function confirmEmail($to, $login, $idUser)
+    public function confirmEmail($user)
     {
+
         $email = (new TemplatedEmail())
             ->from(self::FROM)
-            ->to($to)
+            ->to($user->getEmail()->getEmail())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
             //->priority(Email::PRIORITY_HIGH)
             ->subject('Confirmation de votre email')
             ->text('Sending emails is fun again!')
-            ->htmlTemplate('user/emailConfirm.html.twig')
+            ->htmlTemplate('email/emailConfirm.html.twig')
             // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
-                'pass'=>(password_hash($idUser.'emailConfirm', PASSWORD_DEFAULT)),
-                'login'=>$login,
-                'emailTo'=>$to,
+                'pass'=>$user->getEmailLinkToken()->getToken(),
+                'login'=>$user->getLogin(),
+                'emailTo'=>$user->getEmail()->getEmail(),
                 'url'=>'user/confirm_email',
             ]);
 
@@ -79,11 +80,11 @@ class EmailNotification extends AbstractController
      * @param string $email
      * @param string $token
      */
-    public function lostPassword(string $user, string $email, string $token)
+    public function lostPassword($user)
     {
         $email = (new TemplatedEmail())
             ->from(self::FROM)
-            ->to($email)
+            ->to($user->getEmail()->getEmail())
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
@@ -94,10 +95,10 @@ class EmailNotification extends AbstractController
             // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
-                'pass'=>$token,
-                'login'=>$user,
-                'emailTo'=>$email,
-                'url'=>'user/lost_password',
+                'pass'=>$user->getEmailLinkToken()->getToken(),
+                'login'=>$user->getLogin(),
+                'emailTo'=>$user->getEmail()->getEmail(),
+                'url'=>'user/password_reset',
             ]);
 
         $this->mailer->send($email);

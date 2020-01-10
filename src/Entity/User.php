@@ -44,14 +44,10 @@ class User implements UserInterface, \Serializable
     private $isActivate;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Email", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Email", inversedBy="user",  cascade={"persist"})
      */
-    private $emails;
+    private $email;
 
-    /**
-     *
-     */
-    private $emailUser;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -59,16 +55,16 @@ class User implements UserInterface, \Serializable
     private $lastUpdate;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\TokenResetPassword", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\EmailLinkToken", inversedBy="user",cascade={"persist"})
      */
-    private $tokenResetPassword;
+    private $emailLinkToken;
 
 
     public function __construct()
     {
         $this->isActivate = false;
         $this->roles = ['ROLE_USER'];
-        $this->emails = new ArrayCollection();
+        $this->lastUpdate = new \DateTime();
     }
 
 
@@ -190,58 +186,36 @@ class User implements UserInterface, \Serializable
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
-    /**
-     * @return Collection|Email[]
-     */
-    public function getEmails(): Collection
+
+
+    public function getEmail(): ?Email
     {
-        return $this->emails;
+        return $this->email;
     }
 
-    public function addEmail(Email $email): self
+    public function setEmail(Email $email): self
     {
-        if (!$this->emails->contains($email)) {
-            $this->emails[] = $email;
-            $email->setUser($this);
-        }
-
+        $this->email = $email;
+     /*  if ($email->getUser() !== $this){
+           $email->setUser($this->getId());
+       }
+       $email->setUser($this->getId());*/
         return $this;
     }
 
-    public function removeEmail(Email $email): self
+    public function removeEmail(): self
     {
-        if ($this->emails->contains($email)) {
-            $this->emails->removeElement($email);
+
+            $this->removeElement($this->email);
             // set the owning side to null (unless already changed)
-            if ($email->getUser() === $this) {
+        /*    if ($email->getUser() === $this) {
                 $email->setUser(null);
-            }
-        }
+            }*/
+
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getEmailUser()
-    {
-        return $this->emailUser;
-    }
-
-    /**
-     * @param string $emailUser
-     */
-    public function setEmailUser($emailUser): self
-    {
-
-            $email = new Email();
-            $email->setEmail($emailUser);
-            $this->addEmail($email);
-
-        $this->$emailUser = $emailUser;
-        return $this;
-    }
 
     public function getLastUpdate(): ?\DateTimeInterface
     {
@@ -255,23 +229,21 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getTokenResetPassword(): ?TokenResetPassword
+    public function getEmailLinkToken(): ?EmailLinkToken
     {
-        return $this->tokenResetPassword;
+        return $this->emailLinkToken;
     }
 
-    public function setTokenResetPassword(TokenResetPassword $tokenResetPassword): self
+    public function setEmailLinkToken(EmailLinkToken $emailLinkToken): self
     {
-        $this->tokenResetPassword = $tokenResetPassword;
+        $this->emailLinkToken = $emailLinkToken;
         // set the owning side of the relation if necessary
 
-        if ($tokenResetPassword->getUser() !== $this) {
-            $tokenResetPassword->setUser($this->getId());
-        }
+       /* if ($emailLinkToken->getUser() !== $this) {
+            $emailLinkToken->setUser($this->getId());
+        }*/
 
-
-
-        $tokenResetPassword->setUser($this->getId());
+        //$emailLinkToken->setUser($this->getId());
         return $this;
     }
 

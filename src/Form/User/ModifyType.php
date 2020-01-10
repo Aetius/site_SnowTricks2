@@ -30,7 +30,6 @@ class ModifyType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation du mot de passe']
             ])
-            /*->add('email', EmailType::class)*/
         ;
     }
 

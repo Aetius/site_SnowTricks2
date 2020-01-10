@@ -27,7 +27,6 @@ class RegistrationUserType extends AbstractType
                     new NotBlank(),
                     new Length(['min' => 3]),
                     new LoginNotExist()
-
                 ]
             ])
             ->add('password', RepeatedType::class, [
