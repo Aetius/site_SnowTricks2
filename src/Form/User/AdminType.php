@@ -23,20 +23,21 @@ class AdminType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
            $builder
-            /*   ->get('login')*/
+
                ->add('isActivate', null, [
                    'label' => 'Is actif ?'
-            ]);
-               /*->add('roles', ChoiceType::class, [
+            ])
+               ->add('roles', ChoiceType::class, [
                    'choices'=>[
                        'User'=> 'ROLE_USER',
                        'Editor'=> 'ROLE_EDITOR',
                        'Administrator'=> 'ROLE_ADMIN'
                    ],
-                   'invalid_message' =>'roles.invalidMessage',
+                   'multiple'=> true,
+                   'invalid_message' => 'roles.invalidMessage',
                    'required' => true,
                    'label' => 'label_roles',
-               ]);*/
+               ]);
 
 
     }
@@ -45,7 +46,7 @@ class AdminType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'forms',
-            'data_class' => User::class
+            'data_class' => User::class,
 
         ]);
     }

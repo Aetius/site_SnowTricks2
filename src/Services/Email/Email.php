@@ -38,6 +38,7 @@ class Email
         if (($limitDateConfirmation < $user->getEmail()->getDateCreation()) &&
             ($user->getEmailLinkToken()->getAction()['0'] === EmailLinkToken::ACTION[0])){
             $user->getEmail()->setIsVerified(true);
+            $user->setIsActivate(true);
             $this->entityManager->persist($user);
             $this->entityManager->flush();
             return true;

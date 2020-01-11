@@ -24,35 +24,26 @@
 
         </div>
 
-        <div>
 
-
-               {% for login, form in forms %}
-               {{ login }}
-               {{ form_start((form)) }}
-                   {{ form_row(form.isActivate) }}
-                   {{ form_row(form.roles) }}
-               {{ form_rest(form) }}
-                   <input type="hidden" name="login" value="{{ login }}">
-                   <button class="btn btn-primary mx-3" type="submit">Sauvegarder</button>
-               {{ form_end(form) }}
-                   {% endfor %}
-
-        </div>
-        {#<div class="col-md-12 ">
+        <div class="col-md-12 ">
             {{ form_start((form)) }}
 
-            {% for test in form.users %}
-{{ test.vars.value.login }}
-
-                {{ form_row(test.isActivate) }}
+            {% for key, test in form.users %}
+{#{{ test.vars.value.login }}#}
+             {% for userKey, userValue in users %}
+                 {% if userKey == key  %}
+                    {{ userValue.login }}
+                    {{ form_row(test.isActivate) }}
+                    {{ form_row(test.roles) }}
+                 {% endif %}
+                 {% endfor %}
             {% endfor %}
 
-            {% for user in users %}
+            {#{% for user in users %}
                 {{ user.login }}
                 {{ dump(user) }}
 
-                        #}{#<div class="col-md-6  mb-5">
+                        <div class="col-md-6  mb-5">
                            {{form_row(form.isActivate, {'value':user.isActivate}) }}
                         </div>
                         <div class="col-md-6  mb-5">
@@ -70,28 +61,15 @@
                         </div>
                         <div hidden>
                             {{ form_rest(form) }}
-                        </div>#}{#
-            {% endfor %}
+                        </div>
+            {% endfor %}#}
             <div class=" d-flex flex-row-reverse mt-4">
                 <button class="btn btn-primary mx-3">Sauvegarder</button>
 
-                {{ dump(form.users) }}
                 {{ form_end(form) }}
 
-                #}{# <form method="post"  >
-                     #}{##}{#<input type="hidden" name="_method" value="DELETE">#}{##}{#
-                    #}{##}{# <input type="hidden" name="_token" value="{{ csrf_token('delete'~ trick.id) }}">#}{##}{#
-
-                     <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" data-backdrop="static">Supprimer</button>
-                 </form>#}{#
-
-
             </div>
-
-
-
-
-        </div>#}
+        </div>
 
     </div>
 
