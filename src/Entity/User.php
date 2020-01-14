@@ -46,25 +46,43 @@ class User implements UserInterface, \Serializable
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Email", inversedBy="user",  cascade={"persist"})
      */
+    //private $email;
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $email;
+
 
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastUpdate;
+    private $updatedAt;
+
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\EmailLinkToken", inversedBy="user",cascade={"persist"})
      */
     private $emailLinkToken;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default" = false})
+     */
+    private $emailIsValid;
+
 
     public function __construct()
     {
         $this->isActivate = false;
         $this->roles = ['ROLE_USER'];
-        $this->lastUpdate = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
 
@@ -188,12 +206,12 @@ class User implements UserInterface, \Serializable
 
 
 
-    public function getEmail(): ?Email
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(Email $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
      /*  if ($email->getUser() !== $this){
@@ -217,14 +235,14 @@ class User implements UserInterface, \Serializable
     }
 
 
-    public function getLastUpdate(): ?\DateTimeInterface
+    public function getUpdatedat(): ?\DateTimeInterface
     {
-        return $this->lastUpdate;
+        return $this->updatedAt;
     }
 
-    public function setLastUpdate(?\DateTimeInterface $lastUpdate): self
+    public function setUpdatedat(?\DateTimeInterface $updatedAt): self
     {
-        $this->lastUpdate = $lastUpdate;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -244,6 +262,30 @@ class User implements UserInterface, \Serializable
         }*/
 
         //$emailLinkToken->setUser($this->getId());
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getEmailIsValid(): ?bool
+    {
+        return $this->emailIsValid;
+    }
+
+    public function setEmailIsValid(bool $emailIsValid): self
+    {
+        $this->emailIsValid = $emailIsValid;
+
         return $this;
     }
 

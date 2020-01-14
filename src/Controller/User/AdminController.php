@@ -71,7 +71,7 @@ class AdminController extends AbstractController
 
 
     /**
-     * @Route ("/admin2", name="user_show_admin_2", methods={"GET"})
+     * @Route ("/admin2", name="user_show_admin_2", methods={"GET","POST"})
      */
     public function showAdmin2 (UserRepository $userRepository)
     {
@@ -81,6 +81,8 @@ class AdminController extends AbstractController
             'Editor'=> 'ROLE_EDITOR',
             'Administrator'=> 'ROLE_ADMIN'
         ];
+
+
         return $this->render('admin/AdminTrick2.html.twig', [
             'users'=>$users,
             'roles'=>$choice

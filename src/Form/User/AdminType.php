@@ -22,6 +22,7 @@ class AdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $user = $options['users'];  //voir si moyen de récupérer le $user direcment en passant par le form. et si c'est pertinent de fonctionner de cette facon. 
            $builder
 
                ->add('isActivate', null, [

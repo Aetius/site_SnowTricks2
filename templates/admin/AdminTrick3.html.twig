@@ -28,41 +28,11 @@
         <div class="col-md-12 ">
             {{ form_start((form)) }}
 
-            {% for key, test in form.users %}
-{#{{ test.vars.value.login }}#}
-             {% for userKey, userValue in users %}
-                 {% if userKey == key  %}
-                    {{ userValue.login }}
-                    {{ form_row(test.isActivate) }}
-                    {{ form_row(test.roles) }}
-                 {% endif %}
-                 {% endfor %}
-            {% endfor %}
 
-            {#{% for user in users %}
+            {% for user in users %}
                 {{ user.login }}
-                {{ dump(user) }}
-
-                        <div class="col-md-6  mb-5">
-                           {{form_row(form.isActivate, {'value':user.isActivate}) }}
-                        </div>
-                        <div class="col-md-6  mb-5">
-                            {{ form_row(form.roles) }}
-                        </div>
-                        <div >
-
-                        </div>
-                        <div class="text col-md-12">
-
-                        </div>
-
-                        <div class="text col-md-12">
-
-                        </div>
-                        <div hidden>
-                            {{ form_rest(form) }}
-                        </div>
-            {% endfor %}#}
+                {{ form_row(form.users[loop.index0]) }}
+            {% endfor %}
             <div class=" d-flex flex-row-reverse mt-4">
                 <button class="btn btn-primary mx-3">Sauvegarder</button>
 

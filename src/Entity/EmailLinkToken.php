@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 class EmailLinkToken
 {
 
+    const ACTION_UPDATE_EMAIL = 0;
+    const ACTION_RESET_PASSWORD = 1;
+
     const ACTION = [
         0 => 'update_email',
         1 => 'reset_password'
@@ -42,9 +45,9 @@ class EmailLinkToken
     //private $user;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="string", length=255)
      */
-    private $action = [];
+    private $action;
 
 
 
@@ -106,20 +109,20 @@ class EmailLinkToken
         return $this;
     }*/
 
-    public function getAction(): ?array
+    public function getAction(): ?string
     {
         return $this->action;
     }
 
-    protected function setAction(array $action): self
+    protected function setAction(string $action): self
     {
         $this->action = $action;
 
         return $this;
     }
 
-    public function addAction (int $action): self
+   /* public function addAction (int $action): self
     {
         return $this->setAction( [self::ACTION[$action]]);
-    }
+    }*/
 }

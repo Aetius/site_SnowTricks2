@@ -5,7 +5,9 @@ namespace App\Services\User;
 
 
 use App\Entity\Email;
+use App\Entity\EmailLinkToken;
 use App\Entity\User;
+use App\Form\DTO\EditUserDTO;
 use App\Notification\EmailNotification;
 use App\Repository\UserRepository;
 use App\Security\TokenEmail;
@@ -56,7 +58,7 @@ class EditorService extends UserService
             ->setEmail($email)
             ;
 
-        $this->user->setLastUpdate(new \DateTime('now'));
+        $this->user->setUpdatedat(new \DateTime('now'));
         $this->token->create($this->user, 0);
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
@@ -72,6 +74,7 @@ class EditorService extends UserService
      */
     public function update(User $user, array $formFields)
     {
+
         $returnUser = [];
         $this->user = $user;
         if (!empty($formFields['login'])) {
@@ -85,11 +88,11 @@ class EditorService extends UserService
             $this->user->getEmail()->setEmail($formFields['emailUser']);
             $this->user->getEmail()->setIsVerified(0);
             $returnUser['email'] = $formFields['emailUser'];
-            $this->token->create($user, 0);
+            $this->token->create($user, EmailLinkToken::ACTION_UPDATE_EMAIL);
             $this->notification->confirmEmail($this->user);
         }
 
-        $this->user->setLastUpdate(new \DateTime('now'));
+        $this->user->setUpdatedat(new \DateTime('now'));
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
         return $returnUser;
@@ -101,7 +104,7 @@ class EditorService extends UserService
         $this->token->create($this->user, 1);
         $this->notification->lostPassword($this->user);
 
-        $this->user->setLastUpdate(new \DateTime('now'));
+        $this->user->setUpdatedat(new \DateTime('now'));
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
     }
