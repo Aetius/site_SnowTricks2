@@ -13,7 +13,7 @@ use Twig\Environment;
 
 class EmailNotification extends AbstractController
 {
-     const FROM = 'dontomberry@outlook.com';
+     const FROM = '***';
     /**
      * @var Mailer
      */
@@ -36,8 +36,8 @@ class EmailNotification extends AbstractController
     {
 
         $email = (new Email())
-            ->from('dontomberry@outlook.com')
-            ->to('thomas.brumain@hotmail.fr')
+            ->from('***')
+            ->to('***')
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')
             //->replyTo('fabien@example.com')
