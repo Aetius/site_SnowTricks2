@@ -4,10 +4,9 @@
 namespace App\Services\User;
 
 
-use App\Entity\Email;
 use App\Entity\EmailLinkToken;
 use App\Entity\User;
-use App\Form\DTO\EditUserDTO;
+use App\Form\User\DTO\UserDTO;
 use App\Notification\EmailNotification;
 use App\Repository\UserRepository;
 use App\Security\TokenEmail;
@@ -50,12 +49,10 @@ class EditorService extends UserService
      */
     public function create(array $userData)
     {
-        $email = new Email;
-        $email->setEmail($userData['emailUser']);
         $this->user
             ->setLogin($userData['login'])
             ->setPassword($this->encoder->encodePassword($this->user, $userData['password']))
-            ->setEmail($email)
+            ->setEmail($userData['emailUser']);
             ;
 
         $this->user->setUpdatedat(new \DateTime('now'));
@@ -69,25 +66,22 @@ class EditorService extends UserService
 
     /**
      * @param User $user
-     * @param array $formFields
-     * @return array
+     * @param UserDTO $userDTO
+     * @return User
      */
-    public function update(User $user, array $formFields)
+    public function update(User $user, UserDTO $userDTO)
     {
 
-        $returnUser = [];
         $this->user = $user;
-        if (!empty($formFields['login'])) {
-            $this->user->setLogin($formFields['login']);
-            $returnUser['login'] = $formFields['login'];
+        if (!empty($userDTO->login)) {
+            $this->user->setLogin($userDTO->login);
         }
-        if (!empty($formFields['password'])) {
-            $this->user->setPassword($this->encoder->encodePassword($this->user, $formFields['password']));
+        if (!empty($userDTO->password)) {
+            $this->user->setPassword($this->encoder->encodePassword($this->user, $userDTO->password));
         }
-        if (!empty($formFields['emailUser'])) {
-            $this->user->getEmail()->setEmail($formFields['emailUser']);
-            $this->user->getEmail()->setIsVerified(0);
-            $returnUser['email'] = $formFields['emailUser'];
+        if (!empty($userDTO->emailUser)) {
+            $this->user->setEmail($userDTO->emailUser);
+            $this->user->setEmailIsValid(true);
             $this->token->create($user, EmailLinkToken::ACTION_UPDATE_EMAIL);
             $this->notification->confirmEmail($this->user);
         }
@@ -95,13 +89,13 @@ class EditorService extends UserService
         $this->user->setUpdatedat(new \DateTime('now'));
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
-        return $returnUser;
+        return $this->user;
     }
 
     public function resetPassword(User $user)
     {
         $this->user = $user;
-        $this->token->create($this->user, 1);
+        $this->token->create($this->user, EmailLinkToken::ACTION_RESET_PASSWORD);
         $this->notification->lostPassword($this->user);
 
         $this->user->setUpdatedat(new \DateTime('now'));

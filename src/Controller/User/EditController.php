@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Entity\EmailLinkToken;
 use App\Entity\User;
+use App\Form\DTO\EditUserDTO;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
@@ -60,23 +61,20 @@ class EditController extends AbstractController
     /**
      * @Route ("/profile", name="user_update", methods={"GET|POST"})
      */
-    public function update(Request $request, EditorService $userUpdate)
+    public function update(Request $request, EditorService $userUpdate, UserRepository $repository)
     {
         /* $email = ($emailUser->findOneBy([
              'user'=>$this->getUser()->getId()
          ]));*/
 
-        $user = [
-            'login' => $this->getUser()->getLogin(),
-            'email' => $this->getUser()->getEmail()->getEmail()
-        ];
+        $user = $repository->findOneBy(['login' => $this->getUser()->getLogin()]);
+
         $form = $this->createForm(EditUserType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $newUser = $userUpdate->update($this->getUser(), $form->getData());
+            $user = $userUpdate->update($this->getUser(), $form->getData());
             $this->addFlash('success', "Modifications effectuées");
-            $user = array_merge($user, $newUser);
         }
         return $this->render('user/update.html.twig', [
             'form' => $form->createView(),
@@ -89,14 +87,13 @@ class EditController extends AbstractController
      * @Route ("/password_lost", name="user_password_lost", methods={"GET|POST"})
      */
     public function lostPassword(Request $request, EmailNotification $emailNotification, UserRepository $userRepository,
-                                 EmailRepository $emailRepository, TokenEmail $token, EditorService $editor)
+                                 TokenEmail $token, EditorService $editor)
     {
         $form = $this->createForm(LostPasswordType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($user = $userRepository->findOneBy(['login' => $form->getData('login')])) {
-                //$email = $emailRepository->findOneBy(['user' => $user->getId()])->getEmail();
+            if ($user = $userRepository->findOneBy(['login' => $form->getData()->login])) {
                 $editor->resetPassword($user);
             }
             $this->addFlash('success', "Demande effectuée");

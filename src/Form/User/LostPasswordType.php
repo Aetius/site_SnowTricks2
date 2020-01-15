@@ -2,7 +2,8 @@
 
 namespace App\Form\User;
 
-use App\Entity\User;
+
+use App\Form\User\DTO\UserDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,7 @@ class LostPasswordType extends AbstractType
     {
         $resolver->setDefaults([
             'validation_groups' => false,
+            'data_class' => UserDTO::class,
         ]);
     }
 }

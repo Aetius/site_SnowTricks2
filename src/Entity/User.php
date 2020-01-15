@@ -82,7 +82,8 @@ class User implements UserInterface, \Serializable
     {
         $this->isActivate = false;
         $this->roles = ['ROLE_USER'];
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
+        $this->emailIsValid = false;
     }
 
 
@@ -132,6 +133,16 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getRole(): ?string
+    {
+      return($this->roles[0]);
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->roles[0]=$role;
+        return $this;
+    }
     /**
      * @see UserInterface
      */
@@ -221,18 +232,6 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function removeEmail(): self
-    {
-
-            $this->removeElement($this->email);
-            // set the owning side to null (unless already changed)
-        /*    if ($email->getUser() === $this) {
-                $email->setUser(null);
-            }*/
-
-
-        return $this;
-    }
 
 
     public function getUpdatedat(): ?\DateTimeInterface

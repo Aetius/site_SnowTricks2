@@ -2,10 +2,8 @@
 
 namespace App\Form\User;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+
 use App\Validator\LoginNotExist;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -15,7 +13,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Unique;
 
 class RegistrationUserType extends AbstractType
 {
@@ -37,16 +34,12 @@ class RegistrationUserType extends AbstractType
                 'second_options' => ['label' => 'label.passwordConfirm']
             ])
             ->add('emailUser', EmailType::class)
-
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-          /*  'constraints'=>[
-                new UniqueEntity(['entityClass'=>User::class, 'fields'=>['login']])
-            ],*/
             'translation_domain' => 'forms',
         ]);
     }

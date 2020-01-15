@@ -55,20 +55,15 @@ class EmailNotification extends AbstractController
 
         $email = (new TemplatedEmail())
             ->from(self::FROM)
-            ->to($user->getEmail()->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
+            ->to($user->getEmail())
             ->subject('Confirmation de votre email')
             ->text('Sending emails is fun again!')
             ->htmlTemplate('email/emailConfirm.html.twig')
-            // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
                 'pass'=>$user->getEmailLinkToken()->getToken(),
                 'login'=>$user->getLogin(),
-                'emailTo'=>$user->getEmail()->getEmail(),
+                'emailTo'=>$user->getEmail(),
                 'url'=>'user/confirm_email',
             ]);
 
@@ -84,20 +79,15 @@ class EmailNotification extends AbstractController
     {
         $email = (new TemplatedEmail())
             ->from(self::FROM)
-            ->to($user->getEmail()->getEmail())
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
+            ->to($user->getEmail())
             ->subject('Confirmation de votre email')
             ->text('Sending emails is fun again!')
             ->htmlTemplate('email/resetPassword.html.twig')
-            // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
                 'pass'=>$user->getEmailLinkToken()->getToken(),
                 'login'=>$user->getLogin(),
-                'emailTo'=>$user->getEmail()->getEmail(),
+                'emailTo'=>$user->getEmail(),
                 'url'=>'user/password_reset',
             ]);
 

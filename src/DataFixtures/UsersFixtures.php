@@ -27,9 +27,7 @@ class UsersFixtures extends Fixture
             $user = new User();
             $user->setLogin('sim'.$i);
             $user->setPassword($this->encoder->encodePassword($user, 'demo'));
-            $email = new Email();
-            $email->setEmail("sim$i@yahoo.fr");
-            $user->setEmail($email);
+            $user->setEmail("sim$i@yahoo.fr");
 
             $manager->persist($user);
             $manager->flush();

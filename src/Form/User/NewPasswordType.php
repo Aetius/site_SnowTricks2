@@ -3,16 +3,12 @@
 namespace App\Form\User;
 
 
-
-use App\Entity\User;
-use App\Form\Email\ModifyEmailType;
+use App\Form\User\DTO\UserDTO;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class NewPasswordType extends AbstractType
 {
@@ -32,7 +28,8 @@ class NewPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'translation_domain'=>'forms'
+            'translation_domain'=>'forms',
+            'data_class'=> UserDTO::class,
         ]);
     }
 }
