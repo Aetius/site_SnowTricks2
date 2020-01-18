@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Services\Trick\UploadService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -59,6 +60,11 @@ class Trick
      * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
      */
     private $pictures;
+
+    /**
+     * @var array
+     */
+    private $picturesPath = [];
 
     public function __construct()
     {
@@ -174,5 +180,26 @@ class Trick
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPicturesPath(): array
+    {
+
+        foreach ($this->getPictures() as $picture)
+        {
+            $this->picturesPath[] = UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
+        }
+        return $this->picturesPath;
+    }
+
+    /**
+     * @param array $picturesPath
+     */
+    public function setPicturesPath(array $picturesPath): void
+    {
+        $this->picturesPath = $picturesPath;
     }
 }

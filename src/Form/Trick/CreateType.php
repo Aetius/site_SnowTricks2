@@ -3,7 +3,9 @@
 namespace App\Form\Trick;
 
 use App\Entity\Trick;
+use App\Form\Trick\DTO\CreateDTO;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,8 +18,16 @@ class CreateType extends AbstractType
         parent::buildForm($builder,$options);
 
         $builder
-            ->add('description', TextareaType::class)
-            ->add('title', TextType::class)
+            ->add('description', TextareaType::class,  [
+                'required'=> true,
+            ])
+            ->add('title', TextType::class, [
+                'required'=> true,
+            ])
+            ->add('pictureFiles', FileType::class, [
+                'required'=>true,
+                'multiple'=>true,
+            ])
         ;
     }
 
@@ -25,7 +35,7 @@ class CreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Trick::class,
+            'data_class' => CreateDTO::class,
             'translation_domain'=>'forms',
         ]);
     }

@@ -1,4 +1,7 @@
 {
+    "behat/transliterator": {
+        "version": "v1.3.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -105,6 +108,12 @@
     "egulias/email-validator": {
         "version": "2.1.11"
     },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.38"
+    },
+    "imagine/imagine": {
+        "version": "1.2.3"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -119,6 +128,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.2.3"
+    },
+    "php": {
+        "version": "7.3"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"

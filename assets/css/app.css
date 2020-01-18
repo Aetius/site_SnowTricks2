@@ -1,11 +1,18 @@
+
+/*homepage*/
 .background{
     text-align: center;
     color: white;
     background-image: url('/images/background_image.jpg');
+    background-origin: border-box;
     background-repeat: no-repeat;
-    background-attachment: scroll;
-    background-position: center center;
+    background-attachment: fixed;
+    background-position: center;
     background-size: cover;
+}
+
+.paragraph-home{
+    block-size: max-content;
 }
 
 .btn-primary{
@@ -15,23 +22,57 @@
     border-color: #222222;
 }
 
+.nav-arrows .material-icons{
+    font-size: 50px;
+}
+
+.down-arrow{
+    position: fixed;
+    bottom : 10vh;
+    right: 15px;
+    opacity: 0.8;
+    width: 60px;
+    height: 60px;
+    background-color: floralwhite;
+    border-radius: 50%;
+}
+
+.up-arrow{
+    position: fixed;
+    bottom : 12%;
+    right: -100px;
+    opacity: 0.8;
+    width: 60px;
+    height: 60px;
+    z-index: 1;
+}
+
 
 a:not([href]) {
     color: white;
 }
 
+.container{
+    height: 100%;
+}
+
+
+.container-tricks{
+}
+
 .intro-text{
-    padding-top: 10%;
-    padding-bottom: 20%;
+    padding-top: 10vh;
+    padding-bottom: 20vh;
 }
 
 .intro-heading{
+    padding-top: 20vh;
     font-weight: 700;
     font-size: 500%;
 }
 
 .intro-paragraph{
-    padding-top: 30%;
+    padding-top: 20vh;
     font-weight: 400;
     font-size: 500%;
 }
@@ -60,6 +101,8 @@ a:not([href]) {
     right: 3%;
 }
 
+
+/*edit Page*/
 .trickEdit{
     padding-left: 20%;
     padding-right: 20%;
@@ -73,8 +116,15 @@ a:not([href]) {
     margin-right: 15px;
 }
 
+.material-icons {
+    color: rgba(0, 0, 0, 0.70);
+}
+.material-icons:hover{
+    color: rgba(0, 0, 0, 0.30);
+}
 
-@media (max-width: 768px) {
+
+@media (max-width: 992px) {
     .intro-heading{
         font-weight: 700;
         font-size: 250%;
@@ -99,12 +149,15 @@ a:not([href]) {
     }
 }
 
-.material-icons {
-    color: rgba(0, 0, 0, 0.70);
+
+@media (min-width: 1200px){
+    .container-tricks{
+        min-width: 10vh;
+        margin: 10%;
+    }
 }
-.material-icons:hover{
-    color: rgba(0, 0, 0, 0.30);
-}
+
+
 
 
 

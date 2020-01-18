@@ -12,6 +12,7 @@ require('../css/app.css');
 // const $ = require('jquery');
 
 
+//show a modal to confirm the delete of a trick
 (function(){
 
     //let confirmClick = document.querySelectorAll(".trick-delete-modal");
@@ -30,3 +31,39 @@ require('../css/app.css');
         }
     })
 })();
+
+
+//correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, picture file)
+(function () {
+    $('.dropdown-toggle').dropdown();
+    $('.custom-file-input').on('change', function(event) {
+        var inputFile = event.currentTarget;
+        $(inputFile).parent()
+            .find('.custom-file-label')
+            .html(inputFile.files[0].name);
+    });
+})();
+
+
+//show an arrow to go down .
+(function(){
+    $(function () {
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 200 ) {
+                $('.up-arrow').css('right','15px');
+                $('.down-arrow').css( 'right','-100px' );
+            } else {
+                $('.up-arrow').removeAttr( 'style' );
+                $('.down-arrow').removeAttr( 'style' );
+            }
+        });
+    });
+})();
+
+//animation arrow home page
+let element = document.getElementById('arrow-down');
+element.addEventListener("click", function (event) {
+   /* event.preventDefault();*/
+    window.scrollTo(0, 75);
+
+})
