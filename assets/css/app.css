@@ -94,11 +94,11 @@ a:not([href]) {
 }
 
 .trick-image .block-editDelete{
-    background-color: #DDDDDD;
+    background-color: #cbcbcb;
     border: #222222;
     position: absolute;
     top: 3%;
-    right: 3%;
+    right: 10vh;
 }
 
 

@@ -30,7 +30,7 @@
                 <nav class="my-2 my-md-0 mr-md-3">
                     <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
                     <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
-                    {% if is_granted ('ROLE_USER') %}
+                    {% if is_granted ('ROLE_EDITOR') %}
                         <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
                         <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
                     {% else %}
@@ -64,7 +64,7 @@
                 </i>
                 {#<img src="/images/turned_in-24px.svg" height=40 title="Les tricks" alt="Les tricks">#}
             </a>
-            {% if is_granted('ROLE_USER') %}
+            {% if is_granted('ROLE_EDITOR') %}
                 <a href="{{ path('app_logout') }}">
                     <i class="material-icons">
                         exit_to_app

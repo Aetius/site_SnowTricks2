@@ -8,6 +8,7 @@ use Gedmo\Sluggable\Util\Urlizer;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Symfony\Component\Asset\Context\RequestStackContext;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadService
@@ -30,11 +31,17 @@ class UploadService
         $this->requestStackContext = $requestStackContext;
     }
 
-    public function uploadTrickImage(UploadedFile $uploadedFile)
+    public function uploadTrickImage(File $uploadedFile)
     {
         $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
-        $originalNamePicture = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $namePicture = Urlizer::urlize($originalNamePicture).'-'.uniqid().'.'.$uploadedFile->guessExtension();
+
+        if ($uploadedFile instanceof UploadedFile){
+            $originalNamePicture = $uploadedFile->getClientOriginalName();
+        }else{
+            $originalNamePicture = $uploadedFile->getFilename();
+        }
+
+        $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
 
         $uploadedFile->move(
             $directory,

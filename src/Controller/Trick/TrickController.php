@@ -7,6 +7,7 @@ use App\Entity\Trick;
 
 use App\Form\Trick\CreateType;
 use App\Form\Trick\DTO\CreateDTO;
+use App\Form\Trick\EditType;
 use App\Repository\TrickRepository;
 use App\Services\Cache\ImageCache;
 use App\Services\Trick\EditorService;
@@ -100,18 +101,18 @@ class TrickController extends AbstractController{
     /**
      *@Route("/trick/{id}/edit", name="trick_edit", methods={"GET|POST"})
      */
-     public function edit(Trick $trick, Request $request, EntityManagerInterface $em)
+     public function edit(Trick $trick, Request $request, EditorService $service)
      {
-        $form = $this->createForm(CreateType::class, $trick);
+        $form = $this->createForm(EditType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            //$em = $this->getDoctrine()->getManager();  //pareil que EntityManagerInterface
-            $em->flush();
-            return $this->render('trick/edit.html.twig',[
+            $service->edit($form->getData(), $form->get('filePicture')->getData()[0]);
+            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+          /*  return $this->render('trick/edit.html.twig',[
                 'form' => $form->createView(),
                 'trick' => $trick
-            ]);
+            ]);*/
         }
 
         return $this->render('trick/edit.html.twig', [

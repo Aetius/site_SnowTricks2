@@ -10,6 +10,8 @@ use App\Form\Trick\DTO\CreateDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sluggable\Util\Urlizer;
 use phpDocumentor\Reflection\Types\Context;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class EditorService
 {
@@ -44,5 +46,16 @@ class EditorService
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
 
+    }
+
+    public function edit (Trick $trick, UploadedFile $uploadedFile)
+    {
+        $picture = new Picture();
+        $namePicture=$this->uploadService->uploadTrickImage($uploadedFile);
+        $picture->setFilename($namePicture);
+       $trick -> addPicture($picture);
+
+        $this->entityManager->persist($trick);
+        $this->entityManager->flush();
     }
 }

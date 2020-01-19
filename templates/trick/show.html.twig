@@ -3,36 +3,41 @@
 
     <div class="container mt-5">
 
-        <div class="trick-image">
-
-            <img class="" src="{{ asset(uploaded_asset(trick.getPictures().0.filename) )}}" alt="background image" height="800"  >
-
+        <div class="trick-image d-flex justify-content-center">
+            <img class="" src="{{ asset(uploaded_asset(trick.getPictures().0.filename) ) }}" alt="background image"
+                 height="80%">
             <h1>{{ trick.title }}</h1>
-            <div class="block-editDelete border">
-                <div class="p-1 d-flex justify-content-around">
-                    <div class="pr-2">
-                        <a href="{{ path('trick_edit', {'id':  trick.id }) }}"><i class="material-icons ">edit</i></a>
-                    </div>
-                    <div class="">
-                        <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
-                        <a href="#confirmDelete"  data-toggle="modal"  data-url="{{ path('trick_delete', {'id': trick.id}) }}" >
-                            <i class="material-icons trick-delete-modal">delete</i>
-                        </a>
+            {% if is_granted('ROLE_EDITOR') %}
+                <div class="block-editDelete border">
+                    <div class="p-1 d-flex justify-content-center">
+                        <div class="pr-2">
+                            <a href="{{ path('trick_edit', {'id':  trick.id }) }}"><i
+                                        class="material-icons ">edit</i></a>
+                        </div>
+                        <div class="">
+                            <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
+                            <a href="#confirmDelete" data-toggle="modal"
+                               data-url="{{ path('trick_delete', {'id': trick.id}) }}">
+                                <i class="material-icons trick-delete-modal">delete</i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
+
+
         <div class="mt-5 d-flex row">
 
         </div>
 
         <div>
             <div class="m-5 p-3 text-justify">
-                {{ trick.description}}
+                {{ trick.description }}
             </div>
         </div>
 
     </div>
-{% include "/template/modal_confirm_close.html.twig" %}
+    {% include "/template/modal_confirm_close.html.twig" %}
 
 {% endblock %}
