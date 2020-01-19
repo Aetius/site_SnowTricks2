@@ -66,7 +66,7 @@ class TrickController extends AbstractController{
         ]);
     }
     /**
-     *@Route("/trick/new", name="new", methods={"GET|POST"})
+     *@Route("/edit/trick/new", name="new", methods={"GET|POST"})
      */
     public function new(Request $request, EditorService $service)
     {
@@ -99,7 +99,7 @@ class TrickController extends AbstractController{
     }
 
     /**
-     *@Route("/trick/{id}/edit", name="trick_edit", methods={"GET|POST"})
+     *@Route("/edit/trick/{id}", name="trick_edit", methods={"GET|POST"})
      */
      public function edit(Trick $trick, Request $request, EditorService $service)
      {
@@ -123,7 +123,7 @@ class TrickController extends AbstractController{
     }
 
     /**
-     *@Route("/trick/{id}/delete", name="trick_delete", methods={"GET"})
+     *@Route("/edit/trick/{id}/delete", name="trick_delete", methods={"GET"})
      */
     public function delete(Trick $trick, Request $request)
     {
