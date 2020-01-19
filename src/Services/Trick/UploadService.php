@@ -42,7 +42,7 @@ class UploadService
         }
 
         $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
-
+//dd($uploadedFile->guessExtension());
         $uploadedFile->move(
             $directory,
             $namePicture);

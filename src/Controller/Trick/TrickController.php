@@ -60,7 +60,7 @@ class TrickController extends AbstractController{
      */
     public function index(TrickRepository $repository )
     {
-        $tricks = $repository->findBy(["publicated"=>"0"],["id"=>'DESC'], "10");
+        $tricks = $repository->findBy(["publicated"=>"1"],["id"=>'DESC'], "10");
         return $this->render('trick/home.html.twig', [
             'tricks' => $tricks
         ]);

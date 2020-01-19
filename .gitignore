@@ -22,4 +22,5 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /public/uploads/
 /public/images/
-public/images/montagne.jpg
+src/DataFixtures/images/montagne.jpg
+/src/DataFixtures/images/

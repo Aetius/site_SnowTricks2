@@ -38,10 +38,10 @@ Suspendisse quis urna convallis ligula aliquet eleifend viverra nec erat. Donec 
             $filesystem = new Filesystem();
             $file = new File(__DIR__.'/images/montagne.jpg');
 
-            $targetPath = sys_get_temp_dir().'/'.$file;
-            $filesystem->copy($targetPath, $targetPath, true);
+            $targetPath = sys_get_temp_dir().'/montagne.jpg';
+            $filesystem->copy($file, $targetPath, true);
 
-            $namePicture=$this->uploadService->uploadTrickImage($file);
+            $namePicture=$this->uploadService->uploadTrickImage(new File($targetPath));
             $picture->setFilename($namePicture);
 
             $tricks
