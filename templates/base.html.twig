@@ -20,36 +20,32 @@
     {% endblock %}
 
 
-
     <!-- Custom styles for this template -->
 
 </head>
-<body>
-<div class="d-none d-md-block">
-<div class="   d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h5 class="my-0 mr-md-auto font-weight-normal">SnowTrick</h5>
-    <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
-        <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
-    {% if is_granted ('ROLE_USER') %}
-        <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
-        <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
-    {% else %}
-        <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
-        <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
-    {% endif %}
-        {% if is_granted ('ROLE_ADMIN') %}
-            <a class="btn btn-outline-primary mr-2 ml-5" href="{{ path('user_admin') }}">Espace admin</a>
-        {% endif %}
-    </nav>
-</div>
-</div>
+    <body>
+        <div class="d-none d-md-block">
+            <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
+                <h5 class="my-0 mr-md-auto font-weight-normal">SnowTrick</h5>
+                <nav class="my-2 my-md-0 mr-md-3">
+                    <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
+                    <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
+                    {% if is_granted ('ROLE_USER') %}
+                        <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
+                        <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
+                    {% else %}
+                        <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
+                        <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
+                    {% endif %}
+                    {% if is_granted ('ROLE_ADMIN') %}
+                        <a class="btn btn-outline-primary mr-2 ml-5" href="{{ path('user_admin') }}">Espace admin</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
 
 
-
-
-
-    {% block body %} {% endblock %}
+{% block body %} {% endblock %}
 <div class="d-md-none  mt-5">
     <div class="container">
         <div class="border-top">
@@ -63,18 +59,30 @@
                 {#<img src="/images/house-24px.svg" height=40 title="Accueil" alt="Accueil">#}
             </a>
             <a href="/#tricks">
-                <i class="material-icons">turned_in</i>
+                <i class="material-icons">
+                    photo_library
+                </i>
                 {#<img src="/images/turned_in-24px.svg" height=40 title="Les tricks" alt="Les tricks">#}
             </a>
-            <a href="{{ path('app_login') }}">
-                <i class="material-icons">get_app</i>
-                {#<img src="/images/get_app-24px.svg" height=40 title="Se connecter/s'inscrire" alt="Se connecter/s'inscrire">#}
-            </a>
+            {% if is_granted('ROLE_EDITOR') %}
+                <a href="{{ path('app_logout') }}">
+                    <i class="material-icons">
+                        exit_to_app
+                    </i>
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}">
+                    <i class="material-icons">
+                        how_to_reg
+                    </i>
+                    {#<img src="/images/get_app-24px.svg" height=40 title="Se connecter/s'inscrire" alt="Se connecter/s'inscrire">#}
+                </a>
+
+            {% endif %}
 
         </nav>
     </div>
 </div>
-
 
 
 <div class="container d-none d-md-block">
@@ -117,8 +125,12 @@
     </footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 

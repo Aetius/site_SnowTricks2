@@ -1,0 +1,70 @@
+<div class="card-block  col-lg-12 d-lg-flex mt-5 tricks-block">
+    {% for key,trick in tricks %}
+    {% if key % 5 == 0 and key != 0 %}
+</div>
+<div class="card-block col-lg-12 d-lg-flex mt-5">
+    {% endif %}
+    <div class="card-body  col-md-3 d-flex justify-content-center flex-column  mt-4 mr-2">
+        <div class="card ">
+
+            <div class="mb-3 card-img-top d-flex justify-content-center">
+                <a href="{{ path('trick_show', {'id': trick.id}) }}">
+
+                    {% set picturePath = "" %}
+                    {% for picture in trick.pictures %}
+                        {% if picture.selectedPicture %}
+                            {% set picturePath = picture.filename %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if picturePath == "" %}
+                        {% set picturePath = trick.pictures.0.filename %}
+                    {% endif %}
+
+                    <img alt="" class="article-img"
+                         src="{{ asset(uploaded_thumbnail_asset(picturePath)) }}"
+                         width="150" height="">
+
+
+
+                    {# {% if trick.PicturesPath != null %}
+                         <img alt="" class="article-img"
+                              src="{{ asset(uploaded_thumbnail_asset(trick.getPictures().0.filename)) }}"
+                              width="150" height="">
+                     {% else %}
+                         <img src="{{ asset('images/background_image.jpg') }}" height="" width="150"
+                              alt="background-image">
+                     {% endif %}#}
+
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body d-flex justify-content-around">
+                <a href="{{ path('trick_show', {'id':  trick.id }) }}">{{ trick.title }}</a>
+                {% if is_granted('ROLE_EDITOR') %}
+                    <a href="{{ path('trick_edit', {'id':  trick.id }) }}">
+                        <i class="material-icons ">edit</i>
+                    </a>
+                    <div class="">
+                        <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
+                        <a href="#confirmDelete" data-toggle="modal"
+                           data-url="{{ path('trick_delete', {'id': trick.id}) }}">
+                            <i class="material-icons trick-delete-modal">delete</i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+</div>
+
+{% if hideButton is defined and hideButton == true %}
+<div class="mb-5" id="hideButton">
+</div>
+{% endif %}
+

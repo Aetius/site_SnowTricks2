@@ -6,139 +6,125 @@ namespace App\Controller\Trick;
 use App\Entity\Trick;
 
 use App\Form\Trick\CreateType;
+use App\Form\Trick\EditType;
 use App\Repository\TrickRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Services\Cache\ImageCache;
+use App\Services\Trick\EditorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 
 class TrickController extends AbstractController{
-    /**
-     * @var TrickRepository
-     */
-    private $repository;
 
     /**
      * @var Environment
      */
     private $twig;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
 
 
     /**
-     * TrickController constructor.
      * @param Environment $twig
-     * @param TrickRepository $repository
      */
-    public function __construct(Environment $twig, TrickRepository $repository, EntityManagerInterface $em)
+    public function __construct(Environment $twig)
     {
-        $this->repository = $repository;
         $this->twig = $twig;
-        $this -> em = $em;
     }
 
 
     /**
-     * @return string
      * @Route("/", name="home", methods={"GET"})
      */
-    public function index(TrickRepository $repository, EntityManagerInterface $entityManager)
+    public function index(TrickRepository $repository )
     {
-        /*  $user = new UsersFixtures();
-          $user->setEmail('tot<<o@toto.fr');
-          $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
-          $user->setPassword('toto');*/
-        /*
-                $entityManager->persist($user);
-                $entityManager->flush();*/
-
-        $tricks = $repository->findBy(["publicated"=>"0"],["id"=>'DESC'], "10");
+        $tricks = $repository->findBy(["publicated"=>"1"],["id"=>'DESC'], "10");
         return $this->render('trick/home.html.twig', [
             'tricks' => $tricks
         ]);
     }
+
     /**
-     *@Route("/trick/new", name="new", methods={"GET|POST"})
-     *
+     * @Route("/{id}", name="home_tricks", methods={"GET"})
      */
-    public function new(Request $request)
+    public function showTricks(int $id,  TrickRepository $repository)
     {
-        $trick = new Trick();
-        $form = $this->createForm(CreateType::class, $trick);
+        $min = 10 + ($id*10);
+        $hideButton = false;
+
+        $tricks = $repository->findByMinMax($min) ;
+        if(count($tricks)< 10){
+            $hideButton = true;
+        }
+
+        return $this->render('/template/_home_tricks.html.twig', [
+            'tricks' => $tricks,
+            'hideButton'=> $hideButton
+        ]);
+    }
+
+
+    /**
+     *@Route("/edit/trick/new", name="new", methods={"GET|POST"})
+     */
+    public function new(Request $request, EditorService $service)
+    {
+        $form = $this->createForm(CreateType::class);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()){
-            $this->em->persist($trick);
-            $this->em->flush();
+            $service->create($form->getData());
             $this->addFlash('success', "Le trick a bien été créé!!");
             return $this->redirectToRoute(('home'));
+        }
 
-        }
-        if ($form->isSubmitted() && $form->isValid()==false) {
-            $this -> addFlash( 'danger', "Echec lors de l'enregistrement" );
-        }
         return $this->render('trick/new.html.twig', [
-            'trick' => $trick,
             'form' => $form->createView()
         ]);
     }
 
+
+
     /**
-     *@return string
      *@Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
-    public function show(int $id, TrickRepository $repository){
-        $trick = $repository->find($id);
-
+    public function show(Trick $trick)
+    {
         return $this->render('trick/show.html.twig', [
             'trick' => $trick
         ]);
     }
 
     /**
-     *@Route("/trick/{id}/edit", name="trick_edit", methods={"GET|POST"})
+     *@Route("/edit/trick/{id}", name="trick_edit", methods={"GET|POST"})
      */
-     public function edit(int $id, TrickRepository $repository, Request $request, Trick $trick, EntityManagerInterface $em){
-        $form = $this->createForm(CreateType::class, $trick);
-
+     public function edit(Trick $trick, Request $request, EditorService $service)
+     {
+        $form = $this->createForm(EditType::class);
         $form->handleRequest($request);
-        $tricks = $repository->find($id);
 
         if ($form->isSubmitted() && $form->isValid()){
-            //$em = $this->getDoctrine()->getManager();  //pareil que EntityManagerInterface
-            $em->flush();
-            return $this->render('trick/edit.html.twig',[
-                'form' => $form->createView(),
-                'trick' => $tricks
-            ]);
+            $service->edit($form->getData(), $trick,  $form->get('filePicture')->getData());
+            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+          return $this->redirectToRoute('trick_edit', ['id'=> $trick->getId()]);
         }
 
         return $this->render('trick/edit.html.twig', [
-            'trick' => $tricks,
+            'trick' => $trick,
             'form' => $form->createView()
         ]);
 
     }
 
     /**
-     *@Route("/trick/{id}/delete", name="trick_delete", methods={"GET"})
+     *@Route("/edit/trick/{id}/delete", name="trick_delete", methods={"GET"})
      */
-    public function delete(Trick $trick, Request $request)
+    public function delete(Trick $trick, Request $request, EditorService $service)
     {
         if ($this -> isCsrfTokenValid( 'delete' . $trick -> getId(), $request -> get( '_token' ) )) {
-            $em = $this -> getDoctrine() -> getManager();
-            $em -> remove( $trick );
-            $em -> flush();
+            $service->delete($trick);
             return $this->redirectToRoute("home");
-
         }
     }
-
-
 
 }

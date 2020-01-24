@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Services\Trick\UploadService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -53,10 +56,22 @@ class Trick
      */
     private $dateUpdate;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $pictures;
+
+    /**
+     * @var array
+     */
+    private $picturesPath = [];
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-        $this->publicated = false;
+        $this->publicated = true;
+        $this->pictures = new ArrayCollection();
+        $this->datePublication = new \DateTime();
     }
 
     public function getId(): ?int
@@ -135,5 +150,57 @@ class Trick
         $this->dateUpdate = $dateUpdate;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Picture[]
+     */
+    public function getPictures(): Collection
+    {
+        return $this->pictures;
+    }
+
+    public function addPicture(Picture $picture): self
+    {
+        if (!$this->pictures->contains($picture)) {
+            $this->pictures[] = $picture;
+            $picture->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removePicture(Picture $picture): self
+    {
+        if ($this->pictures->contains($picture)) {
+            $this->pictures->removeElement($picture);
+            // set the owning side to null (unless already changed)
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPicturesPath(): array
+    {
+
+        foreach ($this->getPictures() as $picture)
+        {
+            $this->picturesPath[] = UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
+        }
+        return $this->picturesPath;
+    }
+
+    /**
+     * @param array $picturesPath
+     */
+    public function setPicturesPath(array $picturesPath): void
+    {
+        $this->picturesPath = $picturesPath;
     }
 }

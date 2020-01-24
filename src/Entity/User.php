@@ -63,7 +63,7 @@ class User implements UserInterface, \Serializable
 
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\EmailLinkToken", inversedBy="user",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="App\Entity\EmailLinkToken", inversedBy="user",cascade={"persist"},  orphanRemoval=true,)
      */
     private $emailLinkToken;
 

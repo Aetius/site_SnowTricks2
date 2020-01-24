@@ -1,36 +1,51 @@
 {% extends "base.html.twig" %}
 {% block body %}
-
+    {% set picturePath = "" %}
     <div class="container mt-5">
 
-        <div class="trick-image">
-            <img src="{{ asset('images/background_image.jpg') }}" alt="background image" width="100%" height="100%" >
+        <div class="trick-image d-flex justify-content-center">
+            {% for picture in trick.pictures %}
+                {% if picture.selectedPicture %}
+                    {% set picturePath = picture.filename %}
+                {% endif %}
+            {% endfor %}
+            {% if picturePath == "" %}
+                {% set picturePath = trick.pictures.0.filename %}
+            {% endif %}
+
+            <img class="" src="{{ asset( uploaded_asset(picturePath ) ) }}" alt="background image" width="100%" height="100%">
             <h1>{{ trick.title }}</h1>
-            <div class="block-editDelete border">
-                <div class="p-1 d-flex justify-content-around">
-                    <div class="pr-2">
-                        <a href="{{ path('trick_edit', {'id':  trick.id }) }}"><i class="material-icons ">edit</i></a>
-                    </div>
-                    <div class="">
-                        <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
-                        <a href="#confirmDelete"  data-toggle="modal"  data-url="{{ path('trick_delete', {'id': trick.id}) }}" >
-                            <i class="material-icons trick-delete-modal">delete</i>
-                        </a>
+            {% if is_granted('ROLE_EDITOR') %}
+                <div class="block-editDelete border">
+                    <div class="p-1 d-flex justify-content-center">
+                        <div class="pr-2">
+                            <a href="{{ path('trick_edit', {'id':  trick.id }) }}"><i
+                                        class="material-icons ">edit</i></a>
+                        </div>
+                        <div class="">
+                            <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
+                            <a href="#confirmDelete" data-toggle="modal"
+                               data-url="{{ path('trick_delete', {'id': trick.id}) }}">
+                                <i class="material-icons trick-delete-modal">delete</i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
+
+
         <div class="mt-5 d-flex row">
 
         </div>
 
         <div>
             <div class="m-5 p-3 text-justify">
-                {{ trick.description}}
+                {{ trick.description }}
             </div>
         </div>
 
     </div>
-{% include "/template/modal_confirm_close.html.twig" %}
+    {% include "/template/modal_confirm_close.html.twig" %}
 
 {% endblock %}
