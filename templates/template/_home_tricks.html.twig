@@ -19,21 +19,17 @@
                     {% if picturePath == "" %}
                         {% set picturePath = trick.pictures.0.filename %}
                     {% endif %}
-
+                    {% if trick.PicturesPath != null %}
                     <img alt="" class="article-img"
                          src="{{ asset(uploaded_thumbnail_asset(picturePath)) }}"
                          width="150" height="">
 
 
+                    {% else %}
 
-                    {# {% if trick.PicturesPath != null %}
-                         <img alt="" class="article-img"
-                              src="{{ asset(uploaded_thumbnail_asset(trick.getPictures().0.filename)) }}"
-                              width="150" height="">
-                     {% else %}
                          <img src="{{ asset('images/background_image.jpg') }}" height="" width="150"
                               alt="background-image">
-                     {% endif %}#}
+                     {% endif %}
 
                 </a>
             </div>

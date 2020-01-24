@@ -8,7 +8,6 @@ use App\Entity\Trick;
 use App\Form\Trick\CreateType;
 use App\Form\Trick\EditType;
 use App\Repository\TrickRepository;
-use App\Services\Cache\ImageCache;
 use App\Services\Trick\EditorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,8 +89,13 @@ class TrickController extends AbstractController{
      */
     public function show(Trick $trick)
     {
+        $form = $this->createForm(\App\Form\Comment\CreateType::class);
+        $comments = $trick->getComments();
+
         return $this->render('trick/show.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'form'=>$form->createView(),
+            'comments'=> $comments
         ]);
     }
 
@@ -104,7 +108,7 @@ class TrickController extends AbstractController{
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $service->edit($form->getData(), $trick,  $form->get('filePicture')->getData());
+            $service->edit($form->getData(), $trick,  $form->get('pictureFiles')->getData());
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
           return $this->redirectToRoute('trick_edit', ['id'=> $trick->getId()]);
         }

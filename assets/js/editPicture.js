@@ -56,13 +56,13 @@
 })();
 
 /*
-//change action in picture modal
+//change action in images modal
 (function () {
-    ;console.log(picture)
+    ;console.log(images)
     document.addEventListener("click", function (e) {
         let searchValueE = e.target.attributes.class.value;
         if (searchValueE.split(" ").find(element => element === "thumbnails-modal")){
-            let url = (e.target.parentNode.getAttribute("data-url")); console.log(picture)
+            let url = (e.target.parentNode.getAttribute("data-url")); console.log(images)
 
         }
     })

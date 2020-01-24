@@ -46,6 +46,58 @@
         </div>
 
     </div>
+{#border#}
+    <div class="col-md-12 d-flex flex-row justify-content-center">
+        <div class="col-md-6 my-4 pt-5 pb-2 border-top">
+        </div>
+    </div>
+
+    {% if (is_granted('ROLE_USER')) and (app.user.isActivate == true) %}
+    <div class="row justify-content-center ">
+        <div class="col-md-4 text-center">
+            {{ form_start(form, {'action': path('comment_create', {'id':trick.id})}) }}
+            {{ form_row(form.content) }}
+            {{ form_rest(form) }}
+        </div>
+        <div class="col-md-2 text-center">
+            <button class="btn btn-primary">Valider</button>
+        </div>
+            {{ form_end(form) }}
+    </div>
+    {% else %}
+        <div class="row justify-content-center">
+        <div class="col-md-4 text-center">
+            <p>Désolé, Vous devez être connecté pour pouvoir laisser un commentaire !!</p>
+        </div>
+        </div>
+    {% endif %}
+
+    {#border#}
+    <div class="col-md-12 d-flex flex-row justify-content-center">
+        <div class="col-md-6 my-4 pt-5 pb-2 border-bottom">
+        </div>
+    </div>
+    <div class="col-md d-flex justify-content-center">
+        <div class="d-flex flex-column col-md-5 mt-5">
+                {% for comment in comments %}
+        <div class="border text-center my-2">
+            <div class="">
+                {{ comment.content }}
+            </div>
+            <div class="">
+                {{ comment.dateCreation|date('Y-m-d') }}
+            </div>
+            <div class="">
+                {{ comment.user.login }}
+            </div>
+        </div>
+
+                {% endfor %}
+
+        </div>
+
+    </div>
+
     {% include "/template/modal_confirm_close.html.twig" %}
 
 {% endblock %}

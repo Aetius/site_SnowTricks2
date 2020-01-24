@@ -34,7 +34,7 @@
                     <div class="row d-flex justify-content-end px-4 mt-2">
                         <div>
                             <input type="hidden" value="{{ csrf_token('edit'~ picture.id) }}">
-                            {# <a href="#editPicture{{ loop.index }}" data-toggle="modal" data-url="{{ path('picture_edit', {'id':  picture.id }) }}" class="thumbnails">#}
+                            {# <a href="#editPicture{{ loop.index }}" data-toggle="modal" data-url="{{ path('picture_edit', {'id':  images.id }) }}" class="thumbnails">#}
                             <a href="#editPicture" data-toggle="modal"
                                 data-url="{{ path('picture_edit', {'id':  picture.id }) }}" class="thumbnails">
                                 <i class="material-icons thumbnails-modal">edit</i>
@@ -62,7 +62,7 @@
             <div class="col-md-12 trickEdit">
                 {{ form_start((form)) }}
                     <div class="text col-md-12">
-                        {{ form_row(form.filePicture) }}
+                        {{ form_row(form.pictureFiles) }}
                     </div>
                     <div class="col-md-6  mb-5">
                         {{ form_row(form.title, {'value':trick.title}) }}

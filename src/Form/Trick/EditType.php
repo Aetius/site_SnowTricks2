@@ -33,7 +33,7 @@ class EditType extends AbstractType
             ->add('title', TextType::class, [
                 "required"=>false
             ])
-            ->add('filePicture', FileType::class, [
+            ->add('pictureFiles', FileType::class, [
                 'multiple'=>true,
                 "required"=>false
             ])

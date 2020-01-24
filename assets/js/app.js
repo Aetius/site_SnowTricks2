@@ -33,7 +33,7 @@ $(document).ready(function() {
     })();
 
 
-//correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, picture file)
+//correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, images file)
     (function () {
         $('.dropdown-toggle').dropdown();
         $('.custom-file-input').on('change', function (event) {
@@ -120,8 +120,8 @@ $(document).ready(function() {
                     }
 
                     /*console.log(document.querySelector('.test'))*/
-                    /*let picture = (document.querySelector("#pictureId"));
-                    picture.setAttribute("action", url );*/
+                    /*let images = (document.querySelector("#pictureId"));
+                    images.setAttribute("action", url );*/
                 }
 
             };

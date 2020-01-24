@@ -23,7 +23,7 @@ class PictureController extends AbstractController
 
 
     /**
-     * @Route("/edit/picture/{id}/delete", name="picture_delete", methods={"GET"})
+     * @Route("/edit/images/{id}/delete", name="picture_delete", methods={"GET"})
      */
     public function delete(Picture $picture, Request $request, EditorService $editPhoto)
     {
@@ -36,7 +36,7 @@ class PictureController extends AbstractController
     }
 
     /**
-     * @Route("/edit/picture/{id}", name="picture_edit", methods={"GET|POST"})
+     * @Route("/edit/images/{id}", name="picture_edit", methods={"GET|POST"})
      */
     public function edit(Picture $picture, Request $request, EditorService $editPhoto)
     {
