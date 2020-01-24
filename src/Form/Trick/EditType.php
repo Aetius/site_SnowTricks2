@@ -4,10 +4,11 @@ namespace App\Form\Trick;
 
 use App\Entity\Trick;
 use App\Form\Trick\DTO\CreateDTO;
-use App\Form\Trick\DTO\EditDTO;
+use App\Form\Trick\DTO\TrickDTO;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -23,6 +24,7 @@ class EditType extends AbstractType
         parent::buildForm($builder,$options);
 
         $builder
+            ->add('id', HiddenType::class)
             ->add('description', TextareaType::class)
             ->add('title', TextType::class)
             ->add('filePicture', FileType::class, [
@@ -37,7 +39,7 @@ class EditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'=> EditDTO::class,
+            'data_class'=> TrickDTO::class,
             'translation_domain'=>'forms',
         ]);
     }

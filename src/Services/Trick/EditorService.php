@@ -7,6 +7,7 @@ namespace App\Services\Trick;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\CreateDTO;
+use App\Form\Trick\DTO\TrickDTO;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Context;
 use Symfony\Component\Form\Form;
@@ -29,7 +30,7 @@ class EditorService
         $this->uploadService = $uploadService;
     }
 
-    public function create(CreateDTO $createDTO)
+    public function create(TrickDTO $createDTO)
     {
         $trick = new Trick();
 
@@ -52,8 +53,14 @@ class EditorService
 
     }
 
-    public function edit (Trick $trick, array $uploadedFile)
+    public function edit (TrickDTO $dto, Trick $trick, array $uploadedFile)
     {
+        if ($dto->title){
+            $trick->setTitle($dto->title);
+        }
+        if ($dto->description){
+            $trick->setDescription($dto->description);
+        }
         $this->addImage($trick, $uploadedFile);
        /* $picture = new Picture();
         $namePicture=$this->uploadService->uploadTrickImage($uploadedFile);

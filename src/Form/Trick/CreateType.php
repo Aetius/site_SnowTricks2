@@ -3,7 +3,7 @@
 namespace App\Form\Trick;
 
 use App\Entity\Trick;
-use App\Form\Trick\DTO\CreateDTO;
+use App\Form\Trick\DTO\TrickDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -35,7 +35,7 @@ class CreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => CreateDTO::class,
+            'data_class' => TrickDTO::class,
             'translation_domain'=>'forms',
         ]);
     }

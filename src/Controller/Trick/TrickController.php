@@ -115,7 +115,7 @@ class TrickController extends AbstractController{
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $service->edit($form->getData(), $form->get('filePicture')->getData());
+            $service->edit($form->getData(), $trick,  $form->get('filePicture')->getData());
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
           return $this->redirectToRoute('trick_edit', ['id'=> $trick->getId()]);
         }

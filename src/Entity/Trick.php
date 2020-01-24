@@ -69,8 +69,9 @@ class Trick
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
-        $this->publicated = false;
+        $this->publicated = true;
         $this->pictures = new ArrayCollection();
+        $this->datePublication = new \DateTime();
     }
 
     public function getId(): ?int
