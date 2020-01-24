@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Form\Trick;
+namespace App\Form\Picture;
 
+use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\CreateDTO;
-use App\Form\Trick\DTO\EditDTO;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\Unique;
 
 class EditType extends AbstractType
 {
@@ -23,21 +21,24 @@ class EditType extends AbstractType
         parent::buildForm($builder,$options);
 
         $builder
-            ->add('description', TextareaType::class)
-            ->add('title', TextType::class)
+            ->add('selectedPicture', ChoiceType::class, [
+                'choices'=>[
+                    'Yes'=> 1,
+                    'No'=> 0
+                ]
+            ])
             ->add('filePicture', FileType::class, [
                 'mapped'=>false,
-                'multiple'=>true,
-                "required"=>false
+                'required'=>false,
+                'constraints'=>
+                [new Image( ['maxSize'=>"3M"])]
             ])
         ;
     }
 
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'=> EditDTO::class,
             'translation_domain'=>'forms',
         ]);
     }

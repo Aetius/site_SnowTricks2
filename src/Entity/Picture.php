@@ -27,6 +27,16 @@ class Picture
      */
     private $trick;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default" = false})
+     */
+    private $selectedPicture;
+
+    public function __construct()
+    {
+        $this->selectedPicture = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,5 +64,21 @@ class Picture
         $this->trick = $trick;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSelectedPicture()
+    {
+        return $this->selectedPicture;
+    }
+
+    /**
+     * @param mixed $selectedPicture
+     */
+    public function setSelectedPicture($selectedPicture): void
+    {
+        $this->selectedPicture = $selectedPicture;
     }
 }

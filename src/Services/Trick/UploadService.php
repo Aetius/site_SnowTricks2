@@ -77,5 +77,7 @@ class UploadService
                 ->thumbnail($size, $mode)
                 ->save($pathThumbnail);
         }
+
+        return $this;
     }
 }

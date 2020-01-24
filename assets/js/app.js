@@ -16,21 +16,22 @@ require('../css/app.css');
 (function(){
 
     //let confirmClick = document.querySelectorAll(".trick-delete-modal");
-    let doc = (document.querySelector("#articleId form"));
+    let article = (document.querySelector("#articleId form"));
+
     let token = document.getElementById("token");
 
     document.addEventListener("click", function (e) {
         let searchValueE = e.target.attributes.class.value;
 
-
         if (searchValueE.split(" ").find(element => element === "trick-delete-modal")){
             let url = (e.target.parentNode.getAttribute("data-url"));
             let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
-            doc.setAttribute("action", url);
+            article.setAttribute("action", url);
             token.setAttribute("value", idTrick);
         }
     })
 })();
+
 
 
 //correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, picture file)
@@ -61,9 +62,80 @@ require('../css/app.css');
 })();
 
 //animation arrow home page
-let element = document.getElementById('arrow-down');
-element.addEventListener("click", function (event) {
-   /* event.preventDefault();*/
-    window.scrollTo(0, 75);
+(function(){
+    let element = document.getElementById('arrow-down');
+    element.addEventListener("click", function (event) {
+        /* event.preventDefault();*/
+        window.scrollTo(0, 75);
+    })
+})();
 
-})
+
+//home page AJAX
+(function () {
+
+    let getHTTPRequest = function(){
+        var httpRequest = false;
+
+        if (window.XMLHttpRequest){
+            httpRequest = new XMLHttpRequest();
+            if(httpRequest.overrideMimeType){
+                httpRequest.overrideMimeType('text/xml');
+            }
+        }else if (window.ActiveXObject){
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {}
+            }
+            if (!httpRequest){
+                alert('Abandon: (impossible de créer une instance XMLHTTP');
+                return false;
+            }
+        }
+        return httpRequest;
+    };
+
+    var link = document.querySelector('#addTricks');
+
+
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            let wait = document.getElementById('waitButton');  console.log(wait)
+            let numberPage = (document.getElementsByClassName('numberPage')).length;
+            //result.innerHTML = "chargement";
+            let httpRequest = getHTTPRequest();
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4) {
+                    let create = document.createElement("div");
+                    create.setAttribute('class', 'numberPage')
+                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText
+                    link.removeAttribute('hidden')
+                    wait.setAttribute('hidden', 'true')
+                    if (document.getElementById('hideButton')){
+                        link.remove();
+                    }
+
+                 /*console.log(document.querySelector('.test'))*/
+                    /*let picture = (document.querySelector("#pictureId"));
+                    picture.setAttribute("action", url );*/
+                }
+
+            };
+
+            httpRequest.open('GET', '/'+numberPage, true);
+            httpRequest.send();
+            link.setAttribute('hidden', 'true')
+            wait.removeAttribute('hidden')
+
+        })
+
+})();
+
+
+
+

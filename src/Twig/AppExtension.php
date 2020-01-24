@@ -19,22 +19,17 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 {
 
     private $container;
-    /**
-     * @var ImageCache
-     */
-    private $cache;
-    /**
-     * @var UploadService
-     */
-    private $uploadService;
 
-    public function __construct(ContainerInterface $container, ImageCache $cache, UploadService $uploadService)
+
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->cache = $cache;
-        $this->uploadService = $uploadService;
     }
 
+    public function  getUploadService(){
+        return $this->container
+            ->get(UploadService::class);
+    }
 
     public function getFunctions(): array
     {
@@ -53,17 +48,16 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getUploadedAssetPath(string $path): string
     {
-        return $this->container
-            ->get(UploadService::class)
-            ->getPath(UploadService::ARTICLE_IMAGE.'/'.$path);
+
+         return $this->getUploadService()
+             ->getPath(UploadService::ARTICLE_IMAGE.'/'.$path);
     }
 
     public function getUploadedThumbnailAssetPath(string $path)
     {
-        $this->uploadService->resizeThumbnail($path);
 
-        return $this->container
-            ->get(UploadService::class)
+        return  $this->getUploadService()
+            ->resizeThumbnail($path)
             ->getPath(UploadService::THUMBNAIL_IMAGE.'/'.$path);
 
 

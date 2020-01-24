@@ -1,0 +1,12 @@
+
+<img src="{{ asset(uploaded_asset(picture.filename)) }}" height="300" alt="">
+<div id="">
+    {{ form_start(form, {'attr': {'id':"pictureId"}}) }}
+    {{ form_row(form.filePicture) }}
+    {{ form_row(form.selectedPicture) }}
+    <div class="hidden">
+        {{ form_rest(form) }}
+    </div>
+    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    {{ form_end(form) }}
+</div>

@@ -154,6 +154,7 @@ a:not([href]) {
     .container-tricks{
         min-width: 10vh;
         margin: 10%;
+        margin-bottom: 10px;
     }
 }
 

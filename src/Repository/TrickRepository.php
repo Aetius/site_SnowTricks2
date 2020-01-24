@@ -14,13 +14,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class TrickRepository extends ServiceEntityRepository
 {
+
+    const MAXIMUM_RESULT = 10;
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Trick::class);
     }
 
     /*exemple de création de nouvelle méthode de recherche*/
-    public function findAllVisible()
+ /*   public function findAllVisible()
     {
         return $this->createQueryBuilder('queryBuilder')
             ->andWhere('queryBuilder.field = :value')
@@ -29,7 +33,20 @@ class TrickRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+    }*/
+
+    public function findByMinMax(int $min)
+    {
+      return $this->createQueryBuilder('p')
+            ->where('p.publicated=true')
+            ->setMaxResults(self::MAXIMUM_RESULT)
+            ->setFirstResult($min)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
+
+
 
     // /**
     //  * @return Trick[] Returns an array of Trick objects

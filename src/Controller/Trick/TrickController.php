@@ -26,36 +26,23 @@ use Twig\Environment;
 
 
 class TrickController extends AbstractController{
-    /**
-     * @var TrickRepository
-     */
-    private $repository;
 
     /**
      * @var Environment
      */
     private $twig;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
 
 
     /**
-     * TrickController constructor.
      * @param Environment $twig
-     * @param TrickRepository $repository
      */
-    public function __construct(Environment $twig, TrickRepository $repository, EntityManagerInterface $em)
+    public function __construct(Environment $twig)
     {
-        $this->repository = $repository;
         $this->twig = $twig;
-        $this -> em = $em;
     }
 
 
     /**
-     * @return string
      * @Route("/", name="home", methods={"GET"})
      */
     public function index(TrickRepository $repository )
@@ -65,6 +52,27 @@ class TrickController extends AbstractController{
             'tricks' => $tricks
         ]);
     }
+
+    /**
+     * @Route("/{id}", name="home_tricks", methods={"GET"})
+     */
+    public function showTricks(int $id,  TrickRepository $repository)
+    {
+        $min = 10 + ($id*10);
+        $hideButton = false;
+
+        $tricks = $repository->findByMinMax($min) ;
+        if(count($tricks)< 10){
+            $hideButton = true;
+        }
+
+        return $this->render('/template/_home_tricks.html.twig', [
+            'tricks' => $tricks,
+            'hideButton'=> $hideButton
+        ]);
+    }
+
+
     /**
      *@Route("/edit/trick/new", name="new", methods={"GET|POST"})
      */
@@ -103,16 +111,13 @@ class TrickController extends AbstractController{
      */
      public function edit(Trick $trick, Request $request, EditorService $service)
      {
-        $form = $this->createForm(EditType::class, $trick);
+        $form = $this->createForm(EditType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $service->edit($form->getData(), $form->get('filePicture')->getData()[0]);
+            $service->edit($form->getData(), $form->get('filePicture')->getData());
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
-          /*  return $this->render('trick/edit.html.twig',[
-                'form' => $form->createView(),
-                'trick' => $trick
-            ]);*/
+          return $this->redirectToRoute('trick_edit', ['id'=> $trick->getId()]);
         }
 
         return $this->render('trick/edit.html.twig', [

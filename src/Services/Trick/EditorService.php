@@ -8,7 +8,6 @@ use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\CreateDTO;
 use Doctrine\ORM\EntityManagerInterface;
-use Gedmo\Sluggable\Util\Urlizer;
 use phpDocumentor\Reflection\Types\Context;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -33,29 +32,48 @@ class EditorService
     public function create(CreateDTO $createDTO)
     {
         $trick = new Trick();
-        $picture = new Picture();
 
-        $namePicture=$this->uploadService->uploadTrickImage($createDTO->pictureFiles[0]);
-        $picture->setFilename($namePicture);
 
+       /* foreach ($createDTO->pictureFiles as $pictureFile){
+            $picture = new Picture();
+            $namePicture=$this->uploadService->uploadTrickImage($pictureFile);
+            $picture->setFilename($namePicture);
+            $trick ->addPicture($picture);
+        }*/
+
+       $this->addImage($trick, $createDTO->pictureFiles);
         $trick
             ->setTitle($createDTO->title)
-            ->setDescription($createDTO->description)
-            ->addPicture($picture);
+            ->setDescription($createDTO->description);
+
 
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
 
     }
 
-    public function edit (Trick $trick, UploadedFile $uploadedFile)
+    public function edit (Trick $trick, array $uploadedFile)
     {
-        $picture = new Picture();
+        $this->addImage($trick, $uploadedFile);
+       /* $picture = new Picture();
         $namePicture=$this->uploadService->uploadTrickImage($uploadedFile);
         $picture->setFilename($namePicture);
-       $trick -> addPicture($picture);
+        $trick -> addPicture($picture);*/
 
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
     }
+
+    private function addImage(Trick $trick, array $pictures)
+    {
+        foreach ($pictures as $pictureFile){
+            $picture = new Picture();
+            $namePicture=$this->uploadService->uploadTrickImage($pictureFile);
+            $picture->setFilename($namePicture);
+            $trick ->addPicture($picture);
+        }
+
+    }
+
+
 }

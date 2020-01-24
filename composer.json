@@ -2,9 +2,10 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.4",
+        "php": "^7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "gedmo/doctrine-extensions": "^2.4",
         "imagine/imagine": "^1.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "5.0.*",
@@ -30,7 +31,8 @@
         "symfony/validator": "5.0.*",
         "symfony/web-link": "5.0.*",
         "symfony/webpack-encore-bundle": "*",
-        "symfony/yaml": "5.0.*"
+        "symfony/yaml": "5.0.*",
+        "ext-json": "*"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
