@@ -7,16 +7,14 @@ namespace App\Services\Picture;
 use App\Entity\Picture;
 use App\Services\Trick\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Request;
 
 class EditorService
 {
     /**
      * @var EntityManagerInterface
      */
-        private $entityManager;
+    private $entityManager;
 
     /**
      * @var UploadService
@@ -44,24 +42,22 @@ class EditorService
         $this->entityManager->flush();
     }
 
-    public function edit(Picture $picture, File $file=null)
+    public function edit(Picture $picture, File $file = null)
     {
-        if ($file){
+        if ($file) {
             $this->deleteFile($picture);
-            $namePicture=$this->uploadService->uploadTrickImage($file);
+            $namePicture = $this->uploadService->uploadTrickImage($file);
             $picture->setFilename($namePicture);
         }
         $this->entityManager->persist($picture);
         $this->entityManager->flush();
     }
 
-    protected function deleteFile(Picture $picture){
+    protected function deleteFile(Picture $picture)
+    {
         $thumbnailPath = $this->uploadsPath.'/'.UploadService::THUMBNAIL_IMAGE.'/'.$picture->getFilename();
         $imagePath = $this->uploadsPath.'/'.UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
 
-        /*$filesystem = new Filesystem();
-        $filesystem->remove($imagePath);
-        $filesystem->remove($thumbnailPath);*/
         @unlink(($imagePath));
         @unlink($thumbnailPath);
     }

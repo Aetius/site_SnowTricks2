@@ -23,17 +23,6 @@ class TrickRepository extends ServiceEntityRepository
         parent::__construct($registry, Trick::class);
     }
 
-    /*exemple de création de nouvelle méthode de recherche*/
- /*   public function findAllVisible()
-    {
-        return $this->createQueryBuilder('queryBuilder')
-            ->andWhere('queryBuilder.field = :value')
-            ->setParameter('value', $value)
-            ->orderBy('queryBuilder.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult();
-    }*/
 
     public function findByMinMax(int $min)
     {
@@ -47,33 +36,4 @@ class TrickRepository extends ServiceEntityRepository
     }
 
 
-
-    // /**
-    //  * @return Trick[] Returns an array of Trick objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Trick
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

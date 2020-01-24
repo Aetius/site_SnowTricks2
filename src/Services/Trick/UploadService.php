@@ -35,14 +35,14 @@ class UploadService
     {
         $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
 
-        if ($uploadedFile instanceof UploadedFile){
+        if ($uploadedFile instanceof UploadedFile) {
             $originalNamePicture = $uploadedFile->getClientOriginalName();
-        }else{
+        } else {
             $originalNamePicture = $uploadedFile->getFilename();
         }
 
         $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
-//dd($uploadedFile->guessExtension());
+
         $uploadedFile->move(
             $directory,
             $namePicture);
@@ -51,10 +51,12 @@ class UploadService
         return $namePicture;
     }
 
+
     public function getPath($path)
     {
         return $this->requestStackContext->getBasePath().'uploads/'.$path;
     }
+
 
     public function resize(string $path)
     {
@@ -64,6 +66,7 @@ class UploadService
             ->resize(new Box(1024, 768))
             ->save($path);
     }
+
 
     public function resizeThumbnail(string $path)
     {
@@ -77,7 +80,6 @@ class UploadService
                 ->thumbnail($size, $mode)
                 ->save($pathThumbnail);
         }
-
         return $this;
     }
 }

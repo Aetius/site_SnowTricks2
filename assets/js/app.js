@@ -10,102 +10,101 @@ require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
-
+$(document).ready(function() {
 
 //show a modal to confirm the delete of a trick
-(function(){
+    (function () {
 
-    //let confirmClick = document.querySelectorAll(".trick-delete-modal");
-    let article = (document.querySelector("#articleId form"));
+        //let confirmClick = document.querySelectorAll(".trick-delete-modal");
+        let article = (document.querySelector("#articleId form"));
 
-    let token = document.getElementById("token");
+        let token = document.getElementById("token");
 
-    document.addEventListener("click", function (e) {
-        let searchValueE = e.target.attributes.class.value;
+        document.addEventListener("click", function (e) {
+            let searchValueE = e.target.attributes.class.value;
 
-        if (searchValueE.split(" ").find(element => element === "trick-delete-modal")){
-            let url = (e.target.parentNode.getAttribute("data-url"));
-            let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
-            article.setAttribute("action", url);
-            token.setAttribute("value", idTrick);
-        }
-    })
-})();
-
+            if (searchValueE.split(" ").find(element => element === "trick-delete-modal")) {
+                let url = (e.target.parentNode.getAttribute("data-url"));
+                let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
+                article.setAttribute("action", url);
+                token.setAttribute("value", idTrick);
+            }
+        })
+    })();
 
 
 //correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, picture file)
-(function () {
-    $('.dropdown-toggle').dropdown();
-    $('.custom-file-input').on('change', function(event) {
-        var inputFile = event.currentTarget;
-        $(inputFile).parent()
-            .find('.custom-file-label')
-            .html(inputFile.files[0].name);
-    });
-})();
+    (function () {
+        $('.dropdown-toggle').dropdown();
+        $('.custom-file-input').on('change', function (event) {
+            var inputFile = event.currentTarget;
+            $(inputFile).parent()
+                .find('.custom-file-label')
+                .html(inputFile.files[0].name);
+        });
+    })();
 
 
 //show an arrow to go down .
-(function(){
-    $(function () {
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 200 ) {
-                $('.up-arrow').css('right','15px');
-                $('.down-arrow').css( 'right','-100px' );
-            } else {
-                $('.up-arrow').removeAttr( 'style' );
-                $('.down-arrow').removeAttr( 'style' );
-            }
+    (function () {
+        $(function () {
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 200) {
+                    $('.up-arrow').css('right', '15px');
+                    $('.down-arrow').css('right', '-100px');
+                } else {
+                    $('.up-arrow').removeAttr('style');
+                    $('.down-arrow').removeAttr('style');
+                }
+            });
         });
-    });
-})();
+    })();
 
 //animation arrow home page
-(function(){
-    let element = document.getElementById('arrow-down');
-    element.addEventListener("click", function (event) {
-        /* event.preventDefault();*/
-        window.scrollTo(0, 75);
-    })
-})();
+    (function () {
+        let element = document.getElementById('arrow-down');
+        element.addEventListener("click", function (event) {
+            /* event.preventDefault();*/
+            window.scrollTo(0, 75);
+        })
+    })();
 
 
 //home page AJAX
-(function () {
+    (function () {
 
-    let getHTTPRequest = function(){
-        var httpRequest = false;
+        let getHTTPRequest = function () {
+            var httpRequest = false;
 
-        if (window.XMLHttpRequest){
-            httpRequest = new XMLHttpRequest();
-            if(httpRequest.overrideMimeType){
-                httpRequest.overrideMimeType('text/xml');
-            }
-        }else if (window.ActiveXObject){
-            try {
-                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
-            }
-            catch (e) {
-                try {
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            if (window.XMLHttpRequest) {
+                httpRequest = new XMLHttpRequest();
+                if (httpRequest.overrideMimeType) {
+                    httpRequest.overrideMimeType('text/xml');
                 }
-                catch (e) {}
+            } else if (window.ActiveXObject) {
+                try {
+                    httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    try {
+                        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                    } catch (e) {
+                    }
+                }
+                if (!httpRequest) {
+                    alert('Abandon: (impossible de créer une instance XMLHTTP');
+                    return false;
+                }
             }
-            if (!httpRequest){
-                alert('Abandon: (impossible de créer une instance XMLHTTP');
-                return false;
-            }
-        }
-        return httpRequest;
-    };
+            return httpRequest;
+        };
 
-    var link = document.querySelector('#addTricks');
+        var link = document.querySelector('#addTricks');
 
 
         link.addEventListener('click', function (e) {
             e.preventDefault();
-            let wait = document.getElementById('waitButton');  console.log(wait)
+            let wait = document.getElementById('waitButton');
+            console.log(wait)
             let numberPage = (document.getElementsByClassName('numberPage')).length;
             //result.innerHTML = "chargement";
             let httpRequest = getHTTPRequest();
@@ -116,26 +115,26 @@ require('../css/app.css');
                     document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText
                     link.removeAttribute('hidden')
                     wait.setAttribute('hidden', 'true')
-                    if (document.getElementById('hideButton')){
+                    if (document.getElementById('hideButton')) {
                         link.remove();
                     }
 
-                 /*console.log(document.querySelector('.test'))*/
+                    /*console.log(document.querySelector('.test'))*/
                     /*let picture = (document.querySelector("#pictureId"));
                     picture.setAttribute("action", url );*/
                 }
 
             };
 
-            httpRequest.open('GET', '/'+numberPage, true);
+            httpRequest.open('GET', '/' + numberPage, true);
             httpRequest.send();
             link.setAttribute('hidden', 'true')
             wait.removeAttribute('hidden')
 
         })
 
-})();
+    })();
 
 
-
+})
 

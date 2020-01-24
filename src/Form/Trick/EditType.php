@@ -24,11 +24,16 @@ class EditType extends AbstractType
         parent::buildForm($builder,$options);
 
         $builder
-            ->add('id', HiddenType::class)
-            ->add('description', TextareaType::class)
-            ->add('title', TextType::class)
+            ->add('id', HiddenType::class, [
+                'required'=>true
+            ])
+            ->add('description', TextareaType::class, [
+                "required"=>false
+            ])
+            ->add('title', TextType::class, [
+                "required"=>false
+            ])
             ->add('filePicture', FileType::class, [
-                'mapped'=>false,
                 'multiple'=>true,
                 "required"=>false
             ])

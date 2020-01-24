@@ -6,21 +6,12 @@ namespace App\Controller\Trick;
 use App\Entity\Trick;
 
 use App\Form\Trick\CreateType;
-use App\Form\Trick\DTO\CreateDTO;
 use App\Form\Trick\EditType;
 use App\Repository\TrickRepository;
 use App\Services\Cache\ImageCache;
 use App\Services\Trick\EditorService;
-use App\Services\Trick\UploadService;
-use Doctrine\ORM\EntityManagerInterface;
-use Imagine\File\LoaderInterface;
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
-use Imagine\Image\ImagineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
@@ -88,7 +79,6 @@ class TrickController extends AbstractController{
         }
 
         return $this->render('trick/new.html.twig', [
-           /* 'trick' => $trick,*/
             'form' => $form->createView()
         ]);
     }
@@ -96,7 +86,6 @@ class TrickController extends AbstractController{
 
 
     /**
-     *@return string
      *@Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
     public function show(Trick $trick)
@@ -130,46 +119,12 @@ class TrickController extends AbstractController{
     /**
      *@Route("/edit/trick/{id}/delete", name="trick_delete", methods={"GET"})
      */
-    public function delete(Trick $trick, Request $request)
+    public function delete(Trick $trick, Request $request, EditorService $service)
     {
         if ($this -> isCsrfTokenValid( 'delete' . $trick -> getId(), $request -> get( '_token' ) )) {
-            $em = $this -> getDoctrine() -> getManager();
-            $em -> remove( $trick );
-            $em -> flush();
+            $service->delete($trick);
             return $this->redirectToRoute("home");
         }
     }
-
-
-
-    /**
-     *@Route("/test", name="test")
-     */
-    public function test(TrickRepository $repository, ImageCache $cache)
-    {
-
-        $tricks = $repository->findOneBy(['id'=>551]);
-
-        $path = ('uploads/'.$tricks->getPicturesPath()[0]);
-        $image = $cache->create($path);
-        /*     $imagine = new \Imagine\Gd\Imagine();
-             $image = $imagine->open($path);
-             $size = new Box(200, 200);
-             $mode   = ImageInterface::THUMBNAIL_INSET;
-             $image
-                 ->thumbnail($size, $mode);*/
-
-        /*$test = explode("/", $tricks->getPicturesPath()[0] );
-     $image = "uploads/trick_images/thumbnails/". $test[1];*/
-
-
-        return $this->render('trick/test.html.twig', [
-            'tricks' => $tricks,
-            'image'=> $image
-        ]);
-    }
-
-
-
 
 }

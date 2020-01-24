@@ -100,8 +100,8 @@
 {% include "/template/modal_confirm_close.html.twig" %}
 {% include "/template/modal_edit_picture.html.twig" %}
 {% block javascripts %}
-    {{ encore_entry_script_tags('editTrick') }}
     {{ parent() }}
+    {{ encore_entry_script_tags('editTrick') }}
 {% endblock %}
 
 {% endblock %}
