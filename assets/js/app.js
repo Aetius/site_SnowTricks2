@@ -12,27 +12,6 @@ require('../css/app.css');
 // const $ = require('jquery');
 $(document).ready(function() {
 
-//show a modal to confirm the delete of a trick
-    (function () {
-
-        //let confirmClick = document.querySelectorAll(".trick-delete-modal");
-        let article = (document.querySelector("#articleId form"));
-
-        let token = document.getElementById("token");
-
-        document.addEventListener("click", function (e) {
-            let searchValueE = e.target.attributes.class.value;
-
-            if (searchValueE.split(" ").find(element => element === "trick-delete-modal")) {
-                let url = (e.target.parentNode.getAttribute("data-url"));
-                let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
-                article.setAttribute("action", url);
-                token.setAttribute("value", idTrick);
-            }
-        })
-    })();
-
-
 //correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, images file)
     (function () {
         $('.dropdown-toggle').dropdown();
@@ -59,82 +38,213 @@ $(document).ready(function() {
             });
         });
     })();
+});
 
 //animation arrow home page
-    (function () {
-        let element = document.getElementById('arrow-down');
+(function () {
+    let element = document.getElementById('arrow-down');
+    if (element !== null){
         element.addEventListener("click", function (event) {
             /* event.preventDefault();*/
             window.scrollTo(0, 75);
         })
-    })();
+    }
+
+})();
+
+
+//show a modal to confirm the delete of a trick
+(function () {
+
+    //let confirmClick = document.querySelectorAll(".trick-delete-modal");
+    let article = (document.querySelector("#articleId form"));
+
+    let token = document.getElementById("token");
+
+    document.addEventListener("click", function (e) {
+        let searchValueE = e.target.attributes.class.value;
+
+        if (searchValueE.split(" ").find(element => element === "trick-delete-modal")) {
+            let url = (e.target.parentNode.getAttribute("data-url"));
+            let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
+            article.setAttribute("action", url);
+            token.setAttribute("value", idTrick);
+        }
+    })
+})();
 
 
 //home page AJAX
-    (function () {
+(function () {
 
-        let getHTTPRequest = function () {
-            var httpRequest = false;
+    let getHTTPRequest = function () {
+        var httpRequest = false;
 
-            if (window.XMLHttpRequest) {
-                httpRequest = new XMLHttpRequest();
-                if (httpRequest.overrideMimeType) {
-                    httpRequest.overrideMimeType('text/xml');
-                }
-            } else if (window.ActiveXObject) {
+        if (window.XMLHttpRequest) {
+            httpRequest = new XMLHttpRequest();
+            if (httpRequest.overrideMimeType) {
+                httpRequest.overrideMimeType('text/xml');
+            }
+        } else if (window.ActiveXObject) {
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
                 try {
-                    httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
                 } catch (e) {
-                    try {
-                        httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                    } catch (e) {
-                    }
-                }
-                if (!httpRequest) {
-                    alert('Abandon: (impossible de créer une instance XMLHTTP');
-                    return false;
                 }
             }
-            return httpRequest;
-        };
+            if (!httpRequest) {
+                alert('Abandon: (impossible de créer une instance XMLHTTP');
+                return false;
+            }
+        }
+        return httpRequest;
+    };
 
-        var link = document.querySelector('#addTricks');
+    var link = document.querySelector('#addTricks');
 
-
+    if (link !== null){
         link.addEventListener('click', function (e) {
             e.preventDefault();
             let wait = document.getElementById('waitButton');
-            console.log(wait)
+            console.log(wait);
             let numberPage = (document.getElementsByClassName('numberPage')).length;
             //result.innerHTML = "chargement";
             let httpRequest = getHTTPRequest();
             httpRequest.onreadystatechange = function () {
                 if (httpRequest.readyState === 4) {
                     let create = document.createElement("div");
-                    create.setAttribute('class', 'numberPage')
-                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText
-                    link.removeAttribute('hidden')
-                    wait.setAttribute('hidden', 'true')
+                    create.setAttribute('class', 'numberPage');
+                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText;
+                    link.removeAttribute('hidden');
+                    wait.setAttribute('hidden', 'true');
                     if (document.getElementById('hideButton')) {
                         link.remove();
                     }
-
-                    /*console.log(document.querySelector('.test'))*/
-                    /*let images = (document.querySelector("#pictureId"));
-                    images.setAttribute("action", url );*/
                 }
-
             };
-
             httpRequest.open('GET', '/' + numberPage, true);
             httpRequest.send();
-            link.setAttribute('hidden', 'true')
+            link.setAttribute('hidden', 'true');
             wait.removeAttribute('hidden')
 
         })
+    }
+})();
 
-    })();
+//Ajax request in edit photo
+//function MDN to run this request with all browser
+(function () {
 
+    let getHTTPRequest = function(){
+        var httpRequest = false;
 
-})
+        if (window.XMLHttpRequest){
+            httpRequest = new XMLHttpRequest();
+            if(httpRequest.overrideMimeType){
+                httpRequest.overrideMimeType('text/xml');
+            }
+        }else if (window.ActiveXObject){
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            }
+            catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                catch (e) {}
+            }
+            if (!httpRequest){
+                alert('Abandon: (impossible de créer une instance XMLHTTP');
+                return false;
+            }
+        }
+        return httpRequest;
+    };
 
+    let links = document.querySelectorAll('.thumbnails');
+    for (let i = 0; i<links.length; i++) {
+        if (links[i] !== null){
+            links[i].addEventListener('click', function (e) {
+                e.preventDefault();
+
+                result.innerHTML = "Chargement";
+                let httpRequest = getHTTPRequest();
+                httpRequest.onreadystatechange = function () {
+                    if (httpRequest.readyState === 4) {
+
+                        document.getElementById('result').innerHTML = httpRequest.responseText;
+                        let picture = (document.querySelector("#pictureId"));
+                        picture.setAttribute("action", url );
+                    }
+
+                };
+                let url = this.getAttribute('data-url');
+                httpRequest.open('GET', url, true);
+                httpRequest.send();
+            })
+        }
+    }
+})();
+
+//show trick's comments AJAX
+(function () {
+
+    let getHTTPRequest = function () {
+        var httpRequest = false;
+
+        if (window.XMLHttpRequest) {
+            httpRequest = new XMLHttpRequest();
+            if (httpRequest.overrideMimeType) {
+                httpRequest.overrideMimeType('text/xml');
+            }
+        } else if (window.ActiveXObject) {
+            try {
+                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {
+                try {
+                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+                } catch (e) {
+                }
+            }
+            if (!httpRequest) {
+                alert('Abandon: (impossible de créer une instance XMLHTTP');
+                return false;
+            }
+        }
+        return httpRequest;
+    };
+
+    var link = document.querySelector('#showMoreComments');
+
+    if (link !== null){
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            let wait = document.getElementById('waitButton');
+
+            let numberPage = (document.getElementsByClassName('numberPage')).length;
+            //result.innerHTML = "chargement";
+            let httpRequest = getHTTPRequest();
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === 4) {
+                    let create = document.createElement("div");
+                    create.setAttribute('class', 'numberPage');
+                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText;
+                    link.removeAttribute('hidden');
+                    wait.setAttribute('hidden', 'true');
+                    if (document.getElementById('hideButton')) {
+                        link.remove();
+                    }
+                }
+            };
+            console.log(numberPage)
+            let url = this.getAttribute('data-url'); console.log(url);
+            httpRequest.open('GET', url+numberPage, true);
+            httpRequest.send();
+            link.setAttribute('hidden', 'true');
+            wait.removeAttribute('hidden')
+
+        })
+    }
+})();

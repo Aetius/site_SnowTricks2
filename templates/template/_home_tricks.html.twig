@@ -58,9 +58,5 @@
 
     {% endfor %}
 </div>
-
-{% if hideButton is defined and hideButton == true %}
-<div class="mb-5" id="hideButton">
-</div>
-{% endif %}
+{% include "/template/_hide_loop.html.twig" %}
 

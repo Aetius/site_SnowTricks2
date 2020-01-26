@@ -87,7 +87,7 @@ a:not([href]) {
 .trick-image h1{
     position: absolute;
     top: 40%;
-    left: 40%;
+
     width: 100%;
     font-size: 500%;
     color: white;

@@ -37,12 +37,12 @@
         links[i].addEventListener('click', function (e) {
             e.preventDefault();
 
-            result.innerHTML = "chargement";
+            result.innerHTML = "Chargement";
             let httpRequest = getHTTPRequest();
             httpRequest.onreadystatechange = function () {
                 if (httpRequest.readyState === 4) {
 
-                    document.getElementById('result').innerHTML = httpRequest.responseText
+                    document.getElementById('result').innerHTML = httpRequest.responseText;
                     let picture = (document.querySelector("#pictureId"));
                     picture.setAttribute("action", url );
                 }

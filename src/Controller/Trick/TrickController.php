@@ -7,6 +7,7 @@ use App\Entity\Trick;
 
 use App\Form\Trick\CreateType;
 use App\Form\Trick\EditType;
+use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Services\Trick\EditorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -87,10 +88,10 @@ class TrickController extends AbstractController{
     /**
      *@Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
-    public function show(Trick $trick)
+    public function show(Trick $trick, CommentRepository $commentRepository)
     {
         $form = $this->createForm(\App\Form\Comment\CreateType::class);
-        $comments = $trick->getComments();
+        $comments = $commentRepository->findBy(['trick'=>$trick->getId()], ["dateCreation"=>"DESC"], 2);
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,

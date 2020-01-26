@@ -17,9 +17,11 @@
             {% endif %}
 
             <img src="{{ asset( uploaded_asset(picturePath ) ) }}" alt="background image" width="100%" height="100%">
+                <div class="text-center">
+                    <h1>{{ trick.title }}
+                    </h1>
+                </div>
 
-                <h1>{{ trick.title }}
-                </h1>
 
             </div>
 
@@ -34,7 +36,6 @@
                     <div class="row d-flex justify-content-end px-4 mt-2">
                         <div>
                             <input type="hidden" value="{{ csrf_token('edit'~ picture.id) }}">
-                            {# <a href="#editPicture{{ loop.index }}" data-toggle="modal" data-url="{{ path('picture_edit', {'id':  images.id }) }}" class="thumbnails">#}
                             <a href="#editPicture" data-toggle="modal"
                                 data-url="{{ path('picture_edit', {'id':  picture.id }) }}" class="thumbnails">
                                 <i class="material-icons thumbnails-modal">edit</i>
@@ -74,8 +75,8 @@
                         {{ form_row(form.id, {'value':trick.id}) }}
                         {{ form_rest(form) }}
                     </div>
-                    <div class=" d-flex flex-row-reverse mt-4">
-                        <button class="btn btn-primary mx-3">Sauvegarder</button>
+                    <div class=" d-flex flex-row justify-content-end mt-4">
+                        <button class="btn btn-primary mx-3 mr-4">Sauvegarder</button>
                 {{ form_end(form) }}
     {# <form method="post"  >
     #}{#<input type="hidden" name="_method" value="DELETE">#}{#
@@ -99,9 +100,9 @@
 
 {% include "/template/modal_confirm_close.html.twig" %}
 {% include "/template/modal_edit_picture.html.twig" %}
-{% block javascripts %}
+{#{% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('editTrick') }}
-{% endblock %}
+{% endblock %}#}
 
 {% endblock %}

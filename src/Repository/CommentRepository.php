@@ -14,9 +14,21 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CommentRepository extends ServiceEntityRepository
 {
+    const MAXIMUM_RESULT = 2;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
+    }
+
+    public function findByMinMax(int $min, int $trick)
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.trick=$trick")
+            ->setMaxResults(self::MAXIMUM_RESULT)
+            ->setFirstResult($min)
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     // /**
