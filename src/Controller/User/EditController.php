@@ -4,14 +4,11 @@ namespace App\Controller\User;
 
 use App\Entity\EmailLinkToken;
 use App\Entity\User;
-use App\Form\DTO\EditUserDTO;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
 use App\Form\User\RegistrationUserType;
 use App\Notification\EmailNotification;
-use App\Repository\EmailLinkTokenRepository;
-use App\Repository\EmailRepository;
 use App\Repository\UserRepository;
 use App\Security\TokenEmail;
 use App\Services\Email\Email;
@@ -25,12 +22,13 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class EditController extends AbstractController
 {
     /**
-     * @Route ("/inscription", name="user_new", methods={"GET|POST"})
+     * @Route ("/user/inscription", name="user_new", methods={"GET|POST"})
      */
     public function new(Request $request, EditorService $userCreator, EmailNotification $notification)
     {
         $form = $this->createForm(RegistrationUserType::class);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userCreator->create($form->getData());
@@ -46,20 +44,7 @@ class EditController extends AbstractController
     }
 
     /**
-     * @Route ("/user/confirm_email/{token}", name="confirm_email",  methods={"GET"})
-     */
-    public function confirmEmail(EmailLinkToken $emailLinkToken, User $user, Email $emailSevice, Request $request)
-    {
-        if ($emailSevice->validationEmail($user) === true) {
-            $this->addFlash('success', "L'email a bien été enregistré");
-        } else {
-            $this->addFlash('danger', "L'adresse email n'a pu être enregistrée. Veuillez Réessayer!");
-        }
-        return $this->redirectToRoute('home');
-    }
-
-    /**
-     * @Route ("/profile", name="user_update", methods={"GET|POST"})
+     * @Route ("/user/profile", name="user_update", methods={"GET|POST"})
      */
     public function update(Request $request, EditorService $userUpdate, UserRepository $repository)
     {
@@ -84,7 +69,7 @@ class EditController extends AbstractController
 
 
     /**
-     * @Route ("/password_lost", name="user_password_lost", methods={"GET|POST"})
+     * @Route ("/user/password_lost", name="user_password_lost", methods={"GET|POST"})
      */
     public function lostPassword(Request $request, EmailNotification $emailNotification, UserRepository $userRepository,
                                  TokenEmail $token, EditorService $editor)
@@ -103,6 +88,18 @@ class EditController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/user/confirm_email/{token}", name="confirm_email",  methods={"GET"})
+     */
+    public function confirmEmail(EmailLinkToken $emailLinkToken, User $user, Email $emailSevice, Request $request)
+    {
+        if ($emailSevice->validationEmail($user) === true) {
+            $this->addFlash('success', "L'email a bien été enregistré");
+        } else {
+            $this->addFlash('danger', "L'adresse email n'a pu être enregistrée. Veuillez Réessayer!");
+        }
+        return $this->redirectToRoute('home');
+    }
 
     /**
      * @Route ("/user/password_reset/{token}", name="user_password_reset",  methods={"GET|POST"})

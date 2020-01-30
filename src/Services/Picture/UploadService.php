@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Trick;
+namespace App\Services\Picture;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
@@ -15,6 +15,7 @@ class UploadService
 {
     const ARTICLE_IMAGE = 'trick_images/1024x768';
     const THUMBNAIL_IMAGE = 'trick_images/thumbnails';
+    const USER_IMAGE = 'user_images';
 
     /**
      * @var string
@@ -31,7 +32,16 @@ class UploadService
         $this->requestStackContext = $requestStackContext;
     }
 
-    public function uploadTrickImage(File $uploadedFile)
+    public function uploadUserImage(File $uploadedFile)
+    {
+        $directory = $this->uploadsPath.'/'.self::USER_IMAGE;
+        $namePicture = $this->upload($uploadedFile, $directory);
+        $this->resizeUserImage($directory.'/'.$namePicture);
+        return $namePicture;
+    }
+
+
+ /*   public function uploadTrickImage(File $uploadedFile)
     {
         $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
 
@@ -49,22 +59,20 @@ class UploadService
 
         $this->resize($directory.'/'.$namePicture);
         return $namePicture;
+    }*/
+
+    public function uploadTrickImage(File $uploadedFile)
+    {
+        $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
+        $namePicture = $this->upload($uploadedFile, $directory);
+        $this->resizeUserImage($directory.'/'.$namePicture);
+        return $namePicture;
     }
 
 
     public function getPath($path)
     {
         return $this->requestStackContext->getBasePath().'uploads/'.$path;
-    }
-
-
-    public function resize(string $path)
-    {
-        $imagine = new \Imagine\Gd\Imagine();
-        $imagine
-            ->open($path)
-            ->resize(new Box(1024, 768))
-            ->save($path);
     }
 
 
@@ -82,4 +90,41 @@ class UploadService
         }
         return $this;
     }
+
+    protected function upload(File $uploadedFile, string $directory)
+    {
+        if ($uploadedFile instanceof UploadedFile) {
+            $originalNamePicture = $uploadedFile->getClientOriginalName();
+        } else {
+            $originalNamePicture = $uploadedFile->getFilename();
+        }
+
+        $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
+
+        $uploadedFile->move(
+            $directory,
+            $namePicture);
+
+        return $namePicture;
+    }
+
+
+    protected function resize(string $path)
+    {
+        $imagine = new \Imagine\Gd\Imagine();
+        $imagine
+            ->open($path)
+            ->resize(new Box(1024, 768))
+            ->save($path);
+    }
+
+    protected function resizeUserImage(string $path)
+    {
+        $imagine = new \Imagine\Gd\Imagine();
+        $imagine
+            ->open($path)
+            ->resize(new Box(300, 300))
+            ->save($path);
+    }
+
 }

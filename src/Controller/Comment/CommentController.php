@@ -37,12 +37,10 @@ class CommentController extends AbstractController
     }
 
     /**
-     *@Route("/trick/{id}/{pageComment}", name="comment_show_page", methods={"GET|POST"})
+     *@Route("/trick/{id}/{pageComment}", name="comment_show_page", methods={"GET"})
      */
     public function show(Trick $trick, string $pageComment, CommentRepository $repository)
     {
-
-
         $min = self::NUMBER_OF_COMMENT_BY_VIEW + ($pageComment*self::NUMBER_OF_COMMENT_BY_VIEW);
         $hideButton = false;
 

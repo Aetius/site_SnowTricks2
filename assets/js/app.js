@@ -10,12 +10,12 @@ require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
-$(document).ready(function() {
+$(function(){
 
 //correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, images file)
     (function () {
         $('.dropdown-toggle').dropdown();
-        $('.custom-file-input').on('change', function (event) {
+        $(document).on('change','.custom-file-input', function (event) {
             var inputFile = event.currentTarget;
             $(inputFile).parent()
                 .find('.custom-file-label')
@@ -73,34 +73,32 @@ $(document).ready(function() {
     })
 })();
 
+let getHTTPRequest = function () {
+    var httpRequest = false;
 
-//home page AJAX
-(function () {
-
-    let getHTTPRequest = function () {
-        var httpRequest = false;
-
-        if (window.XMLHttpRequest) {
-            httpRequest = new XMLHttpRequest();
-            if (httpRequest.overrideMimeType) {
-                httpRequest.overrideMimeType('text/xml');
-            }
-        } else if (window.ActiveXObject) {
+    if (window.XMLHttpRequest) {
+        httpRequest = new XMLHttpRequest();
+        if (httpRequest.overrideMimeType) {
+            httpRequest.overrideMimeType('text/xml');
+        }
+    } else if (window.ActiveXObject) {
+        try {
+            httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (e) {
             try {
-                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
+                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
             } catch (e) {
-                try {
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (e) {
-                }
-            }
-            if (!httpRequest) {
-                alert('Abandon: (impossible de créer une instance XMLHTTP');
-                return false;
             }
         }
-        return httpRequest;
-    };
+        if (!httpRequest) {
+            alert('Abandon: (impossible de créer une instance XMLHTTP');
+            return false;
+        }
+    }
+    return httpRequest;
+};
+//home page AJAX
+(function () {
 
     var link = document.querySelector('#addTricks');
 
@@ -126,6 +124,7 @@ $(document).ready(function() {
             };
             httpRequest.open('GET', '/' + numberPage, true);
             httpRequest.send();
+
             link.setAttribute('hidden', 'true');
             wait.removeAttribute('hidden')
 
@@ -137,31 +136,7 @@ $(document).ready(function() {
 //function MDN to run this request with all browser
 (function () {
 
-    let getHTTPRequest = function(){
-        var httpRequest = false;
 
-        if (window.XMLHttpRequest){
-            httpRequest = new XMLHttpRequest();
-            if(httpRequest.overrideMimeType){
-                httpRequest.overrideMimeType('text/xml');
-            }
-        }else if (window.ActiveXObject){
-            try {
-                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
-            }
-            catch (e) {
-                try {
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                catch (e) {}
-            }
-            if (!httpRequest){
-                alert('Abandon: (impossible de créer une instance XMLHTTP');
-                return false;
-            }
-        }
-        return httpRequest;
-    };
 
     let links = document.querySelectorAll('.thumbnails');
     for (let i = 0; i<links.length; i++) {
@@ -191,30 +166,7 @@ $(document).ready(function() {
 //show trick's comments AJAX
 (function () {
 
-    let getHTTPRequest = function () {
-        var httpRequest = false;
 
-        if (window.XMLHttpRequest) {
-            httpRequest = new XMLHttpRequest();
-            if (httpRequest.overrideMimeType) {
-                httpRequest.overrideMimeType('text/xml');
-            }
-        } else if (window.ActiveXObject) {
-            try {
-                httpRequest = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch (e) {
-                try {
-                    httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (e) {
-                }
-            }
-            if (!httpRequest) {
-                alert('Abandon: (impossible de créer une instance XMLHTTP');
-                return false;
-            }
-        }
-        return httpRequest;
-    };
 
     var link = document.querySelector('#showMoreComments');
 

@@ -1,16 +1,22 @@
 
     {% for comment in comments %}
-        <div class="border text-left p-3">
-            <div class="">
-                {{ comment.content|capitalize }}
+        <div class="col-12 row">
+            <div class="col-1">
+                <img class="" src="{{ asset( uploaded_user_asset(comment.user.picture ) ) }}" alt="background image" width="100%" height="">
             </div>
-        </div>
-        <div class="text-right m-3 ">
-            <div class="">
-                {{ comment.user.login | capitalize }}, le {{ comment.dateCreation|date('d-m-Y') }}.
+            <div class="border text-left p-3 col-6">
+                <div class="">
+                    {{ comment.content|capitalize }}
+                </div>
             </div>
+            <div class="text-right m-3 ">
+                <div class="">
+                    {{ comment.user.login | capitalize }}, le {{ comment.dateCreation|date('d-m-Y') }}.
+                </div>
 
+            </div>
         </div>
+
 
 
     {% endfor %}

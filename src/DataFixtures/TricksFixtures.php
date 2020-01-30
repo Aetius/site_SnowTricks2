@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Filesystem\Filesystem;

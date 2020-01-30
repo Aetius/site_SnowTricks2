@@ -34,6 +34,13 @@ class TrickController extends AbstractController{
 
 
     /**
+     * @Route("/test/test", name="testtest", methods={"GET"})
+     */
+    public function testest(){
+        return $this->render('test.html.twig');
+    }
+
+    /**
      * @Route("/", name="home", methods={"GET"})
      */
     public function index(TrickRepository $repository )

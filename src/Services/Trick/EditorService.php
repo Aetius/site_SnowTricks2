@@ -7,6 +7,7 @@ namespace App\Services\Trick;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\TrickDTO;
+use App\Services\Picture\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EditorService

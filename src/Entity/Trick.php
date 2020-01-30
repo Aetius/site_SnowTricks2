@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

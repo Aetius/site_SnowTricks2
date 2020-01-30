@@ -5,7 +5,7 @@ namespace App\Services\Picture;
 
 
 use App\Entity\Picture;
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 

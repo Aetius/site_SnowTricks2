@@ -5,6 +5,7 @@ namespace App\Form\User;
 use App\Form\User\DTO\EditUserDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -36,6 +37,9 @@ class EditUserType extends AbstractType
             ->add('emailUser', EmailType::class, [
                 'required' => false,
                 'label' => 'form.email'
+            ])
+            ->add('picture', FileType::class, [
+                "required"=>false
             ]);
     }
 

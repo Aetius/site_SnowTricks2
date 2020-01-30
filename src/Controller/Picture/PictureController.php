@@ -8,7 +8,7 @@ use App\Entity\Picture;
 use App\Form\Picture\EditType;
 use App\Repository\PictureRepository;
 use App\Services\Picture\EditorService;
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;

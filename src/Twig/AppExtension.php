@@ -6,7 +6,7 @@ namespace App\Twig;
 
 use App\Services\Cache\ImageCache;
 use App\Twig\ImageFilter;
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Psr\Container\ContainerInterface;
@@ -35,7 +35,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     {
         return [
             new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath']),
-            new TwigFunction('uploaded_thumbnail_asset', [$this, 'getUploadedThumbnailAssetPath'])
+            new TwigFunction('uploaded_thumbnail_asset', [$this, 'getUploadedThumbnailAssetPath']),
+            new TwigFunction('uploaded_user_asset',[$this, 'getUploadedUserAssetPath'])
         ];
     }
 
@@ -48,19 +49,21 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getUploadedAssetPath(string $path): string
     {
-
          return $this->getUploadService()
              ->getPath(UploadService::ARTICLE_IMAGE.'/'.$path);
     }
 
     public function getUploadedThumbnailAssetPath(string $path)
     {
-
         return  $this->getUploadService()
             ->resizeThumbnail($path)
             ->getPath(UploadService::THUMBNAIL_IMAGE.'/'.$path);
+    }
 
-
+    public function getUploadedUserAssetPath(string $path)
+    {
+        return $this->getUploadService()
+            ->getPath(UploadService::USER_IMAGE.'/'.$path);
     }
 
     /**

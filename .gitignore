@@ -24,3 +24,4 @@ yarn-error.log
 /public/images/
 src/DataFixtures/images/montagne.jpg
 /src/DataFixtures/images/
+/web/test-coverage/
