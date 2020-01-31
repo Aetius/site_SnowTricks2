@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Services\Picture\UploadService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -77,6 +78,16 @@ class User implements UserInterface, \Serializable
      */
     private $emailIsValid;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $picture;
+
 
     public function __construct()
     {
@@ -84,6 +95,7 @@ class User implements UserInterface, \Serializable
         $this->roles = ['ROLE_USER'];
         $this->createdAt = new \DateTime();
         $this->emailIsValid = false;
+        $this->comments = new ArrayCollection();
     }
 
 
@@ -284,6 +296,49 @@ class User implements UserInterface, \Serializable
     public function setEmailIsValid(bool $emailIsValid): self
     {
         $this->emailIsValid = $emailIsValid;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(string $picture): self
+    {
+        $this->picture = $picture;
 
         return $this;
     }

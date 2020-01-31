@@ -4,7 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Services\Trick\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Filesystem\Filesystem;
@@ -15,7 +15,7 @@ class TricksFixtures extends Fixture
 {
 
     /**
-     * @var UploadService
+     * @var Uploader
      */
     private  $uploadService;
 
@@ -24,7 +24,7 @@ Suspendisse quis urna convallis ligula aliquet eleifend viverra nec erat. Donec 
 
 
 
-    public function __construct(UploadService $uploadService)
+    public function __construct(Uploader $uploadService)
     {
         $this->uploadService = $uploadService;
     }

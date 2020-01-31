@@ -1,8 +1,6 @@
 {% extends "base.html.twig" %}
 {% block body %}
 
-    {# {% import "macro/form.html.twig" as form %}#}
-
     <div class="container mt-5">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
@@ -18,8 +16,6 @@
         </div>
         <div>
             <div class="m-5 p-3 text-justify">
-
-
             </div>
 
         </div>
@@ -27,12 +23,12 @@
 
             {{ form_start((form)) }}
             <div class="col-md-6  mb-5">
-                {{ user.login }}
-                {{ form_row(form.login,{'value':""}) }}
+
+                {{ form_row(form.login,{"value": user.login}) }}
             </div>
             <div class="col-md-6  mb-5">
-                {{ user.email }}
-                {{ form_row(form.emailUser,{'value':""}) }}
+
+                {{ form_row(form.emailUser,{'value': user.email }) }}
 
             </div>
             <div >
@@ -43,27 +39,24 @@
             </div>
 
             <div class="text col-md-12">
+
                 {{ form_row(form.password) }}
             </div>
+            <div class="text col-md-12">
+                <img src="{{asset(uploaded_user_asset(user.picture )) }}" alt="Image utilisateur"  height="100">
+            </div>
+            <div class="text col-md-12">
+                {{ form_row(form.picture) }}
+            </div>
             <div hidden>
+                {{ form_row(form.id, {'value': user.id}) }}
                 {{ form_rest(form) }}
             </div>
             <div class=" d-flex flex-row-reverse mt-4">
                 <button class="btn btn-primary mx-3">Sauvegarder</button>
                 {{ form_end(form) }}
-                {# <form method="post"  >
-                     #}{#<input type="hidden" name="_method" value="DELETE">#}{#
-                    #}{# <input type="hidden" name="_token" value="{{ csrf_token('delete'~ trick.id) }}">#}{#
-
-                     <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" data-backdrop="static">Supprimer</button>
-                 </form>#}
-
 
             </div>
-
-
-
-
         </div>
 
     </div>

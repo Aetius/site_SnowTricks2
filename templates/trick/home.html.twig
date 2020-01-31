@@ -5,7 +5,7 @@
         <div class="box-background">
             {#  <img src="images\background_image.jpg">#}
             <div class="container">
-                {% include 'template/_message_flash.html.twig' %}
+                {% include '_message_flash.html.twig' %}
 
                 <div class="intro-text">
                     <h2 class="intro-heading text-uppercase h1">SnowTricks</h2>
@@ -32,9 +32,7 @@
         <div class="container-tricks" id="result">
 
 
-            {% include "/template/_home_tricks.html.twig" %}
-
-
+            {% include "/trick/_home_tricks.html.twig" %}
 
         </div>
     </div>
@@ -56,5 +54,5 @@
     </div>
 
 
-    {% include "/template/modal_confirm_close.html.twig" %}
+    {% include "/modal/_modal_confirm_close.html.twig" %}
 {% endblock %}

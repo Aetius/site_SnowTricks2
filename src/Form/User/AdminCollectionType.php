@@ -12,15 +12,10 @@ class AdminCollectionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
            $builder
-            /*   ->get('login')*/
                ->add('users', CollectionType::class, [
                    'entry_type' => AdminType::class,
                     'label'=>""
-
             ]);
-
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

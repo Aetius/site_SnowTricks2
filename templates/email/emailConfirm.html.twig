@@ -1,22 +1,21 @@
-<h1>Welcome {{ login }}!</h1>
+<h1>Hello {{ login }}!</h1>
 
 <p>
-    You signed up as {{ login }} the following email:
+    Tu viens de t'inscrire sur Snowtrick sous le pseudo {{ login }} :
 </p>
-<p><code>{{ login }}</code></p>
 
 <p>
-    {#<form action="{{ url('{{ path("/user/confirm_email/', { id: post.id }) }}" method="post">
-        #}{# the argument of csrf_token() is an arbitrary string used to generate the token #}{#
-        <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+    Pour valider ton inscription, merci de cliquer ou de copier le lien ci dessous. Il permettra à la fois de valider l'email, et de retourner sur le site.
+    Si tu n'es pas à l'origine de cette inscription, n'hésite pas à contacter le webmaster (et à changer ton mot de passe).
+</p>
+<p>
 
-        <button type="submit">Delete item</button>
-    </form>#}
+    <a href="{{ url( url , {token: pass} ) }}">
+        Clique sur ce lien pour confirmer.
+       </a>
+    (Ce lien est valable jusqu'à {{ expiration_date|date('F jS') }})
+</p>
 
-
-   {# <a href="{{ path('confirm_email', {'email':emailTo, 'login':login, 'pass':pass}) }}">#}
-        <a href="https://127.0.0.1:8000/{{ url }}/{{ pass }}">
-        Click here to activate your
-        account</a>
-    (this link is valid until {{ expiration_date|date('F jS') }})
+<p>
+    A bientot sur Snowtrick.
 </p>

@@ -32,4 +32,11 @@ class UserDTO
 
     public $roles;
 
+    /**
+     * @Assert\Image(maxSize="3M")
+     */
+    public $picture;
+
+    public $id;
+
 }

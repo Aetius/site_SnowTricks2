@@ -4,15 +4,10 @@
 namespace App\Twig;
 
 
-use App\Services\Cache\ImageCache;
-use App\Twig\ImageFilter;
-use App\Services\Trick\UploadService;
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
+use App\Services\Upload\Uploader;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension implements ServiceSubscriberInterface
@@ -28,14 +23,15 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function  getUploadService(){
         return $this->container
-            ->get(UploadService::class);
+            ->get(Uploader::class);
     }
 
     public function getFunctions(): array
     {
         return [
             new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath']),
-            new TwigFunction('uploaded_thumbnail_asset', [$this, 'getUploadedThumbnailAssetPath'])
+            new TwigFunction('uploaded_thumbnail_asset', [$this, 'getUploadedThumbnailAssetPath']),
+            new TwigFunction('uploaded_user_asset',[$this, 'getUploadedUserAssetPath'])
         ];
     }
 
@@ -48,19 +44,21 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function getUploadedAssetPath(string $path): string
     {
-
          return $this->getUploadService()
-             ->getPath(UploadService::ARTICLE_IMAGE.'/'.$path);
+             ->getPath(Uploader::ARTICLE_IMAGE.'/'.$path);
     }
 
     public function getUploadedThumbnailAssetPath(string $path)
     {
-
         return  $this->getUploadService()
             ->resizeThumbnail($path)
-            ->getPath(UploadService::THUMBNAIL_IMAGE.'/'.$path);
+            ->getPath(Uploader::THUMBNAIL_IMAGE.'/'.$path);
+    }
 
-
+    public function getUploadedUserAssetPath(string $path)
+    {
+        return $this->getUploadService()
+            ->getPath(Uploader::USER_IMAGE.'/'.$path);
     }
 
     /**
@@ -69,7 +67,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public static function getSubscribedServices()
     {
         return [
-            UploadService::class,
+            Uploader::class,
         ];
     }
 

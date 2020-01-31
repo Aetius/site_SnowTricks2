@@ -55,7 +55,7 @@ class EmailNotification extends AbstractController
 
     }
 
-    public function confirmEmail($user)
+    public function confirmEmail(User $user)
     {
 
         $email = (new TemplatedEmail())
@@ -69,7 +69,7 @@ class EmailNotification extends AbstractController
                 'pass'=>$user->getEmailLinkToken()->getToken(),
                 'login'=>$user->getLogin(),
                 'emailTo'=>$user->getEmail(),
-                'url'=>'user/confirm_email',
+                'url'=>"user_confirm_email",
             ]);
 
         $this->mailer->send($email);
@@ -80,7 +80,7 @@ class EmailNotification extends AbstractController
      * @param string $email
      * @param string $token
      */
-    public function lostPassword($user)
+    public function lostPassword(User $user)
     {
         $email = (new TemplatedEmail())
             ->from(self::FROM)

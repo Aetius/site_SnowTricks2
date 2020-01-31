@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Services\Trick\UploadService;
+use App\Services\Picture\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,12 +67,18 @@ class Trick
      */
     private $picturesPath = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="trick", orphanRemoval=true)
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
         $this->publicated = true;
         $this->pictures = new ArrayCollection();
         $this->datePublication = new \DateTime();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,7 +198,7 @@ class Trick
 
         foreach ($this->getPictures() as $picture)
         {
-            $this->picturesPath[] = UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
+            $this->picturesPath[] = Uploader::ARTICLE_IMAGE.'/'.$picture->getFilename();
         }
         return $this->picturesPath;
     }
@@ -202,5 +209,36 @@ class Trick
     public function setPicturesPath(array $picturesPath): void
     {
         $this->picturesPath = $picturesPath;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
+            }
+        }
+
+        return $this;
     }
 }
