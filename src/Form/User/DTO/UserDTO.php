@@ -37,4 +37,6 @@ class UserDTO
      */
     public $picture;
 
+    public $id;
+
 }

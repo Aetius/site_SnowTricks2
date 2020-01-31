@@ -10,11 +10,11 @@ use App\Form\User\DTO\UserDTO;
 use App\Notification\EmailNotification;
 use App\Repository\UserRepository;
 use App\Security\TokenEmail;
-use App\Services\Picture\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class EditorService extends UserService
+class UserManager
 {
     /**
      * @var UserRepository
@@ -29,12 +29,15 @@ class EditorService extends UserService
      */
     private $token;
     /**
-     * @var UploadService
+     * @var Uploader
      */
     private $uploadService;
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
-     * EditorService constructor.
      * @param UserPasswordEncoderInterface $encoder
      * @param EntityManagerInterface $entityManager
      * @param UserRepository $repository
@@ -42,13 +45,15 @@ class EditorService extends UserService
      */
     public function __construct(UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager,
                                 UserRepository $repository, EmailNotification $notification, TokenEmail $token,
-                                UploadService $uploadService)
+                                Uploader $uploader)
     {
-        parent::__construct($encoder, $entityManager);
         $this->repository = $repository;
         $this->notification = $notification;
         $this->token = $token;
-        $this->uploadService = $uploadService;
+        $this->uploadService = $uploader;
+        $this->encoder = $encoder;
+        $this->entityManager = $entityManager;
+        $this->user = new User;
     }
 
     /**
@@ -56,8 +61,6 @@ class EditorService extends UserService
      */
     public function create(UserDTO $userDTO)
     {
-
-
         $this->user
             ->setLogin($userDTO->login)
             ->setPassword($this->encoder->encodePassword($this->user, $userDTO->password))
@@ -65,7 +68,7 @@ class EditorService extends UserService
             ->setUpdatedat(new \DateTime('now'))
             ->setPicture($this->uploadService->uploadUserImage($userDTO->picture));
 
-        $this->token->create($this->user, 0);
+        $this->token->create($this->user, EmailLinkToken::ACTION_UPDATE_EMAIL);
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
 
@@ -94,6 +97,9 @@ class EditorService extends UserService
             $this->token->create($user, EmailLinkToken::ACTION_UPDATE_EMAIL);
             $this->notification->confirmEmail($this->user);
         }
+        if (!empty($userDTO->picture)){
+            $this->user->setPicture($this->uploadService->uploadUserImage($userDTO->picture));
+        }
 
         $this->user->setUpdatedat(new \DateTime('now'));
         $this->entityManager->persist($this->user);
@@ -101,6 +107,10 @@ class EditorService extends UserService
         return $this->user;
     }
 
+
+    /**
+     * @param User $user
+     */
     public function resetPassword(User $user)
     {
         $this->user = $user;
@@ -109,6 +119,11 @@ class EditorService extends UserService
 
         $this->user->setUpdatedat(new \DateTime('now'));
         $this->entityManager->persist($this->user);
+        $this->entityManager->flush();
+    }
+
+    public function adminEditUser(array $users)
+    {
         $this->entityManager->flush();
     }
 

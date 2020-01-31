@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Picture;
+namespace App\Services\Upload;
 
 
 use Gedmo\Sluggable\Util\Urlizer;
@@ -11,7 +11,7 @@ use Symfony\Component\Asset\Context\RequestStackContext;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploadService
+class Uploader
 {
     const ARTICLE_IMAGE = 'trick_images/1024x768';
     const THUMBNAIL_IMAGE = 'trick_images/thumbnails';

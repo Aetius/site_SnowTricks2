@@ -7,11 +7,12 @@ namespace App\Controller\Picture;
 use App\Entity\Picture;
 use App\Form\Picture\EditType;
 use App\Repository\PictureRepository;
-use App\Services\Picture\EditorService;
-use App\Services\Picture\UploadService;
+use App\Services\Picture\PictureManager;
+use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,9 +24,10 @@ class PictureController extends AbstractController
 
 
     /**
-     * @Route("/edit/images/{id}/delete", name="picture_delete", methods={"GET"})
+     * @Route("/images/{id}/delete", name="picture_delete", methods={"GET"})
+     * @IsGranted("ROLE_EDITOR")
      */
-    public function delete(Picture $picture, Request $request, EditorService $editPhoto)
+    public function delete(Picture $picture, Request $request, PictureManager $editPhoto)
     {
         $trickId = $picture->getTrick()->getId();
         if ($this->isCsrfTokenValid('delete'.$picture->getId(), $request->get('_token'))) {
@@ -36,9 +38,10 @@ class PictureController extends AbstractController
     }
 
     /**
-     * @Route("/edit/images/{id}", name="picture_edit", methods={"GET|POST"})
+     * @Route("/images/{id}", name="picture_edit", methods={"GET|POST"})
+     * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Picture $picture, Request $request, EditorService $editPhoto)
+    public function edit(Picture $picture, Request $request, PictureManager $editPhoto)
     {
         $form = $this->createForm(EditType::class, $picture);
         $form->handleRequest($request);
@@ -58,6 +61,7 @@ class PictureController extends AbstractController
 
     /**
      * @Route("/admin/delete_orphan", name="picture_delete_orphan", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteOrphan(string $uploadsPath, PictureRepository $repository)
     {
@@ -67,23 +71,23 @@ class PictureController extends AbstractController
         {
             $namesDb[] = $file->getFilename();
         }
-        $picturesProject = scandir($uploadsPath.'/'.UploadService::ARTICLE_IMAGE);
+        $picturesProject = scandir($uploadsPath.'/'.Uploader::ARTICLE_IMAGE);
 
        foreach ($picturesProject as $picture){
             if (!in_array($picture, $namesDb)  ){
-               if (!(is_dir($uploadsPath.'/'.UploadService::ARTICLE_IMAGE.'/'.$picture))){
-                   unlink($uploadsPath.'/'.UploadService::ARTICLE_IMAGE.'/'.$picture);
+               if (!(is_dir($uploadsPath.'/'.Uploader::ARTICLE_IMAGE.'/'.$picture))){
+                   unlink($uploadsPath.'/'.Uploader::ARTICLE_IMAGE.'/'.$picture);
                    $filesDeleted =$filesDeleted+1;
                }
             }
         }
 
-        $picturesProjectThumbnails = scandir($uploadsPath.'/'.UploadService::THUMBNAIL_IMAGE);
+        $picturesProjectThumbnails = scandir($uploadsPath.'/'.Uploader::THUMBNAIL_IMAGE);
 
         foreach ($picturesProjectThumbnails as $thumbnail){
             if (!in_array($thumbnail, $namesDb)  ){
-                if (!(is_dir($uploadsPath.'/'.UploadService::THUMBNAIL_IMAGE.'/'.$thumbnail))){
-                    unlink($uploadsPath.'/'.UploadService::THUMBNAIL_IMAGE.'/'.$thumbnail);
+                if (!(is_dir($uploadsPath.'/'.Uploader::THUMBNAIL_IMAGE.'/'.$thumbnail))){
+                    unlink($uploadsPath.'/'.Uploader::THUMBNAIL_IMAGE.'/'.$thumbnail);
                     $filesDeleted =$filesDeleted+1;
                 }
             }

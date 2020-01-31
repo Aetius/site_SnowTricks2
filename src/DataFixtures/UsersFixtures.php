@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Picture;
 use App\Entity\User;
-use App\Services\Picture\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Filesystem\Filesystem;
@@ -20,11 +20,11 @@ class UsersFixtures extends Fixture
      */
     private $encoder;
     /**
-     * @var UploadService
+     * @var Uploader
      */
     private $uploadService;
 
-    public function __construct(UserPasswordEncoderInterface $encoder, UploadService $uploadService)
+    public function __construct(UserPasswordEncoderInterface $encoder, Uploader $uploadService)
     {
         $this -> encoder = $encoder;
         $this->uploadService = $uploadService;

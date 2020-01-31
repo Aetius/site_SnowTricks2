@@ -5,9 +5,7 @@ namespace App\Controller\Comment;
 
 
 use App\Entity\Trick;
-use App\Entity\User;
 use App\Form\Comment\CreateType;
-use App\Form\Comment\DTO\CommentDTO;
 use App\Repository\CommentRepository;
 use App\Repository\UserRepository;
 use App\Services\Comment\CommentService;
@@ -49,7 +47,7 @@ class CommentController extends AbstractController
             $hideButton = true;
         }
 
-        return $this->render('/template/_show_comments.html.twig', [
+        return $this->render('/comment/_show_comments.html.twig', [
             'comments' => $comments,
             'hideButton'=> $hideButton
         ]);

@@ -4,7 +4,7 @@
     {# {% import "macro/form.html.twig" as form %}#}
     {% set picturePath = "" %}
     <div class="container mt-5">
-        {% include 'template/_message_flash.html.twig' %}
+        {% include '_message_flash.html.twig' %}
         <div class="trick-image">
 
             {% for picture in trick.pictures %}
@@ -98,8 +98,8 @@
 
     </div>
 
-{% include "/template/modal_confirm_close.html.twig" %}
-{% include "/template/modal_edit_picture.html.twig" %}
+{% include "/modal/_modal_confirm_close.html.twig" %}
+{% include "/modal/_modal_edit_picture.html.twig" %}
 {#{% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('editTrick') }}

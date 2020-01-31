@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Services\Picture\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -197,7 +198,7 @@ class Trick
 
         foreach ($this->getPictures() as $picture)
         {
-            $this->picturesPath[] = UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
+            $this->picturesPath[] = Uploader::ARTICLE_IMAGE.'/'.$picture->getFilename();
         }
         return $this->picturesPath;
     }

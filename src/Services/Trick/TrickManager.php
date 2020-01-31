@@ -7,21 +7,21 @@ namespace App\Services\Trick;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\TrickDTO;
-use App\Services\Picture\UploadService;
+use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 
-class EditorService
+class TrickManager
 {
     /**
      * @var EntityManagerInterface
      */
     private $entityManager;
     /**
-     * @var UploadService
+     * @var Uploader
      */
     private $uploadService;
 
-    public function __construct(EntityManagerInterface $entityManager, UploadService $uploadService)
+    public function __construct(EntityManagerInterface $entityManager, Uploader $uploadService)
     {
         $this->entityManager = $entityManager;
         $this->uploadService = $uploadService;

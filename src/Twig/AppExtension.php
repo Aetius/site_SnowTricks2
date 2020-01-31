@@ -4,15 +4,10 @@
 namespace App\Twig;
 
 
-use App\Services\Cache\ImageCache;
-use App\Twig\ImageFilter;
-use App\Services\Picture\UploadService;
-use Imagine\Image\Box;
-use Imagine\Image\ImageInterface;
+use App\Services\Upload\Uploader;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Extension\AbstractExtension;
-use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension implements ServiceSubscriberInterface
@@ -28,7 +23,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
 
     public function  getUploadService(){
         return $this->container
-            ->get(UploadService::class);
+            ->get(Uploader::class);
     }
 
     public function getFunctions(): array
@@ -50,20 +45,20 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public function getUploadedAssetPath(string $path): string
     {
          return $this->getUploadService()
-             ->getPath(UploadService::ARTICLE_IMAGE.'/'.$path);
+             ->getPath(Uploader::ARTICLE_IMAGE.'/'.$path);
     }
 
     public function getUploadedThumbnailAssetPath(string $path)
     {
         return  $this->getUploadService()
             ->resizeThumbnail($path)
-            ->getPath(UploadService::THUMBNAIL_IMAGE.'/'.$path);
+            ->getPath(Uploader::THUMBNAIL_IMAGE.'/'.$path);
     }
 
     public function getUploadedUserAssetPath(string $path)
     {
         return $this->getUploadService()
-            ->getPath(UploadService::USER_IMAGE.'/'.$path);
+            ->getPath(Uploader::USER_IMAGE.'/'.$path);
     }
 
     /**
@@ -72,7 +67,7 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
     public static function getSubscribedServices()
     {
         return [
-            UploadService::class,
+            Uploader::class,
         ];
     }
 

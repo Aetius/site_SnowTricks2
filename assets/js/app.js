@@ -122,7 +122,7 @@ let getHTTPRequest = function () {
                     }
                 }
             };
-            httpRequest.open('GET', '/' + numberPage, true);
+            httpRequest.open('GET', '/page/' + numberPage, true);
             httpRequest.send();
 
             link.setAttribute('hidden', 'true');
@@ -190,8 +190,8 @@ let getHTTPRequest = function () {
                     }
                 }
             };
-            console.log(numberPage)
-            let url = this.getAttribute('data-url'); console.log(url);
+
+            let url = this.getAttribute('data-url');
             httpRequest.open('GET', url+numberPage, true);
             httpRequest.send();
             link.setAttribute('hidden', 'true');
