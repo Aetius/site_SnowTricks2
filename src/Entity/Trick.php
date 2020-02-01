@@ -72,6 +72,14 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="trick", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $trickGroup;
+
+
+
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
@@ -241,4 +249,42 @@ class Trick
 
         return $this;
     }
+
+    /**
+    * @return TrickGroup
+     */
+    public function getTrickGroup()
+    {
+        return $this->trickGroup;
+    }
+
+    public function setTrickGroup(TrickGroup $trickGroup): self
+    {
+        $this->trickGroup = $trickGroup;
+
+        return $this;
+    }
+
+ /*   public function addTrickGroup(TrickGroup $trickGroup)
+    {
+        if (!$this->trickGroup->contains($trickGroup)){
+            $this->trickGroup[]= $trickGroup;
+            $trickGroup->addTrick($this);
+        }
+        return $this;
+    }*/
+/*
+    public function removeTrickGroup(TrickGroup $trickGroup)
+    {
+        if ($this->trickGroup->contains($trickGroup)) {
+            $this->trickGroup->removeElement($trickGroup);
+            // set the owning side to null (unless already changed)
+            if ($trickGroup->getName() === $this) {
+                $trickGroup->setName(null);
+            }
+        }
+
+        return $this;
+    }*/
+
 }

@@ -7,6 +7,7 @@ namespace App\Services\Trick;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\Trick\DTO\TrickDTO;
+use App\Services\TrickGroup\TrickGroupManager;
 use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -20,11 +21,17 @@ class TrickManager
      * @var Uploader
      */
     private $uploadService;
+    /**
+     * @var TrickGroupManager
+     */
+    private $trickGroupManager;
 
-    public function __construct(EntityManagerInterface $entityManager, Uploader $uploadService)
+    public function __construct(EntityManagerInterface $entityManager, Uploader $uploadService,
+                                TrickGroupManager $trickGroupManager)
     {
         $this->entityManager = $entityManager;
         $this->uploadService = $uploadService;
+        $this->trickGroupManager = $trickGroupManager;
     }
 
     public function create(TrickDTO $createDTO)
@@ -33,7 +40,8 @@ class TrickManager
         $this->addImage($trick, $createDTO->pictureFiles);
         $trick
             ->setTitle($createDTO->title)
-            ->setDescription($createDTO->description);
+            ->setDescription($createDTO->description)
+            ->setTrickGroup($this->trickGroupManager->manager($createDTO));
 
         $this->entityManager->persist($trick);
         $this->entityManager->flush();

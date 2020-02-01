@@ -3,7 +3,9 @@
 namespace App\Form\Trick;
 
 
+use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -31,6 +33,13 @@ class EditType extends AbstractType
             ->add('pictureFiles', FileType::class, [
                 'multiple'=>true,
                 "required"=>false
+            ])
+            ->add('trickGroup', EntityType::class, [
+                'class' => TrickGroup::class,
+                'choice_label' => 'name',
+                'label'=> 'Choose one of the group',
+                'multiple' => false,
+                'required' => true,
             ])
         ;
     }

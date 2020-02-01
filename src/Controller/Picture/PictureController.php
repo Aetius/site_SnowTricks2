@@ -13,11 +13,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class PictureController extends AbstractController
 {
@@ -37,15 +44,24 @@ class PictureController extends AbstractController
         }
     }
 
+    //using Ajax. problem with @is_granted. create of a token if user have the credentials.
     /**
-     * @Route("/images/{id}", name="picture_edit", methods={"GET|POST"})
-     * @IsGranted("ROLE_EDITOR")
+     * @Route("/images/{id}/{token}", name="picture_edit", methods={"GET|POST"})
      */
-    public function edit(Picture $picture, Request $request, PictureManager $editPhoto)
+    public function edit(Picture $picture, Request $request, PictureManager $editPhoto, TokenStorageInterface $storage, string $token)
     {
+        if (!$this->isCsrfTokenValid('edit'.$picture->getId(), $token )) {
+            return $this->redirectToRoute('home');
+        }
+
         $form = $this->createForm(EditType::class, $picture);
         $form->handleRequest($request);
-
+        //$token = 'edit'. $picture->getTrick()->getId();
+       /* dump($storage->setToken($token, $_csrf_token));
+        dump($_csrf_token);
+        dump($storage);
+dd($request);*/
+        //dd($security->isGranted("ROLE_ADMIN"));
         if ($form->isSubmitted() && $form->isValid()){
             $editPhoto->edit($form->getData(), $form->get('filePicture')->getData());
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
