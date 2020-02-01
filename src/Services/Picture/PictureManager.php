@@ -5,7 +5,8 @@ namespace App\Services\Picture;
 
 
 use App\Entity\Picture;
-use App\Services\Picture\UploadService;
+use App\Entity\Trick;
+use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -17,7 +18,7 @@ class PictureManager
     private $entityManager;
 
     /**
-     * @var UploadService
+     * @var Uploader
      */
     private $uploadService;
 
@@ -27,7 +28,7 @@ class PictureManager
     private $uploadsPath;
 
 
-    public function __construct(string $uploadsPath, EntityManagerInterface $entityManager, UploadService $uploadService)
+    public function __construct(string $uploadsPath, EntityManagerInterface $entityManager, Uploader $uploadService)
     {
         $this->entityManager = $entityManager;
         $this->uploadService = $uploadService;
@@ -53,10 +54,21 @@ class PictureManager
         $this->entityManager->flush();
     }
 
+    public function add(Trick $trick, array $pictures)
+    {
+        foreach ($pictures as $pictureFile) {
+            $picture = new Picture();
+            $namePicture = $this->uploadService->uploadTrickImage($pictureFile);
+            $picture->setFilename($namePicture);
+            $trick->addPicture($picture);
+        }
+        return $trick;
+    }
+
     protected function deleteFile(Picture $picture)
     {
-        $thumbnailPath = $this->uploadsPath.'/'.UploadService::THUMBNAIL_IMAGE.'/'.$picture->getFilename();
-        $imagePath = $this->uploadsPath.'/'.UploadService::ARTICLE_IMAGE.'/'.$picture->getFilename();
+        $thumbnailPath = $this->uploadsPath.'/'.Uploader::THUMBNAIL_IMAGE.'/'.$picture->getFilename();
+        $imagePath = $this->uploadsPath.'/'.Uploader::ARTICLE_IMAGE.'/'.$picture->getFilename();
 
         @unlink(($imagePath));
         @unlink($thumbnailPath);

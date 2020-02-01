@@ -65,7 +65,7 @@ class Uploader
     {
         $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
         $namePicture = $this->upload($uploadedFile, $directory);
-        $this->resizeUserImage($directory.'/'.$namePicture);
+        $this->resize($directory.'/'.$namePicture);
         return $namePicture;
     }
 

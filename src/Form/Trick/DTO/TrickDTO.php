@@ -3,8 +3,11 @@
 
 namespace App\Form\Trick\DTO;
 
+use App\Validator\TrickGroupNotExist;
 use App\Validator\UniqueTrick;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class TrickDTO
 {
@@ -32,5 +35,31 @@ class TrickDTO
      *
      */
     public $id;
+
+    /**
+    *
+     */
+    public $trickGroup;
+
+    /**
+    * @TrickGroupNotExist()
+     */
+    public $trickGroupAdd;
+
+    /**
+     * @Assert\Callback
+     */
+    public function changingPassword(ExecutionContextInterface $context)
+    {
+        if ($this->trickGroupAdd === null) {
+            $context->getMetadata()
+                ->addPropertyConstraint(
+                'trickGroup',
+                new Assert\NotNull());
+
+
+
+        }
+    }
 
 }

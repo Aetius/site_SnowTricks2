@@ -35,7 +35,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     *@Route("/trick/{id}/{pageComment}", name="comment_show_page", methods={"GET"})
+     *@Route("/trick/{id}/page_comment/{pageComment}", name="comment_show_page", methods={"GET"})
      */
     public function show(Trick $trick, string $pageComment, CommentRepository $repository)
     {

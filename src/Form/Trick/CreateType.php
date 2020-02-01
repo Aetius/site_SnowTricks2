@@ -3,8 +3,12 @@
 namespace App\Form\Trick;
 
 use App\Entity\Trick;
+use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
+use App\Form\TrickGroup\TrickGroupType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,6 +30,17 @@ class CreateType extends AbstractType
             ->add('pictureFiles', FileType::class, [
                 'required'=>true,
                 'multiple'=>true,
+            ])
+            ->add('trickGroup', EntityType::class, [
+                'class' => TrickGroup::class,
+                'choice_label' => 'name',
+                'label'=> 'Choose one of the group',
+                'multiple' => false,
+                'required' => false,
+            ])
+            ->add('trickGroupAdd', TextType::class, [
+                'label'=> 'Or create a new group',
+                'required' => false,
             ])
         ;
     }

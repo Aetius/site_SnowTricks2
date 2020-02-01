@@ -153,7 +153,6 @@ let getHTTPRequest = function () {
                         let picture = (document.querySelector("#pictureId"));
                         picture.setAttribute("action", url );
                     }
-
                 };
                 let url = this.getAttribute('data-url');
                 httpRequest.open('GET', url, true);
