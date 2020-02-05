@@ -83,7 +83,6 @@ class UserManager
      */
     public function update(User $user, UserDTO $userDTO)
     {
-
         $this->user = $user;
         if (!empty($userDTO->login)) {
             $this->user->setLogin($userDTO->login);
@@ -102,9 +101,15 @@ class UserManager
         }
 
         $this->user->setUpdatedat(new \DateTime('now'));
+
+        return $this->user;
+    }
+
+
+    public function save(User $user)
+    {
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
-        return $this->user;
     }
 
 

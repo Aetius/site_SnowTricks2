@@ -13,6 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Security;
 use Twig\Environment;
 
@@ -34,14 +35,6 @@ class TrickController extends AbstractController
         $this->twig = $twig;
     }
 
-
-    /**
-     * @Route("/test/test", name="testtest", methods={"GET"})
-     */
-    public function testest()
-    {
-        return $this->render('test.html.twig');
-    }
 
     /**
      * @Route("/", name="home", methods={"GET"})
@@ -95,6 +88,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/delete/{id}", name="trick_delete", methods={"GET"})
+     * @IsGranted("ROLE_EDITOR")
      */
     public function delete(Trick $trick, Request $request, TrickManager $service)
     {
@@ -122,13 +116,12 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/edit/trick/{id}", name="trick_edit", methods={"GET|POST"})
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Trick $trick, Request $request, TrickManager $service)
+    public function edit(Trick $trick, Request $request, TrickManager $service )
     {
         $form = $this->createForm(EditType::class);
         $form->handleRequest($request);
-
 
         if ($form->isSubmitted() && $form->isValid()) {
             $service->edit($form->getData(), $trick, $form->get('pictureFiles')->getData());

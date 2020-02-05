@@ -56,7 +56,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
                 /** @var User $user */
-            $user = $userUpdate->update($user, $form->getData());
+            $userUpdate->update($user, $form->getData());
+            $userUpdate->save($user);
             $this->addFlash('success', "Modifications effectuées");
         }
         return $this->render('user/update.html.twig', [

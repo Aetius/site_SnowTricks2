@@ -40,6 +40,7 @@ class EditType extends AbstractType
                 'label'=> 'Choose one of the group',
                 'multiple' => false,
                 'required' => true,
+                'attr'=>['is_selected'=>'id'],
             ])
         ;
     }

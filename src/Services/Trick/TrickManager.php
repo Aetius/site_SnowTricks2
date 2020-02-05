@@ -10,6 +10,7 @@ use App\Form\Trick\DTO\TrickDTO;
 use App\Services\TrickGroup\TrickGroupManager;
 use App\Services\Upload\Uploader;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 
 class TrickManager
 {
@@ -43,9 +44,7 @@ class TrickManager
             ->setDescription($createDTO->description)
             ->setTrickGroup($this->trickGroupManager->manager($createDTO));
 
-        $this->entityManager->persist($trick);
-        $this->entityManager->flush();
-
+        $this->save($trick);;
     }
 
     public function edit(TrickDTO $dto, Trick $trick, array $uploadedFile)
@@ -56,17 +55,12 @@ class TrickManager
         if ($dto->description) {
             $trick->setDescription($dto->description);
         }
+        if ($dto->trickGroup){
+            $trick->setTrickGroup($dto->trickGroup);
+        }
         $this->addImage($trick, $uploadedFile);
-        $this->entityManager->persist($trick);
-        $this->entityManager->flush();
+        $this->save($trick);;
     }
-
-    public function delete(Trick $trick)
-    {
-        $this->entityManager->remove($trick);
-        $this->entityManager->flush();
-    }
-
 
     private function addImage(Trick $trick, array $pictures)
     {
@@ -76,6 +70,17 @@ class TrickManager
             $picture->setFilename($namePicture);
             $trick->addPicture($picture);
         }
+    }
 
+    public function delete(Trick $trick)
+    {
+        $this->entityManager->remove($trick);
+        $this->entityManager->flush();
+    }
+
+    private function save(Trick $trick)
+    {
+        $this->entityManager->persist($trick);
+        $this->entityManager->flush();
     }
 }
