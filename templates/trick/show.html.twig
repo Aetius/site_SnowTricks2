@@ -13,11 +13,11 @@
                 {% set picturePath = trick.pictures.0.filename %}
             {% endif %}
 
-            <img class="" src="{{ asset( uploaded_asset(picturePath ) ) }}" alt="background image" width="100%" height="100%">
+            <img class="" src="{{ asset( uploaded_asset(picturePath ) ) }}" alt="background image" width="100%"
+                 height="100%">
             <div class="text-center">
                 <h1>{{ trick.title }}</h1>
             </div>
-
 
 
             {% if is_granted('ROLE_EDITOR') %}
@@ -38,82 +38,114 @@
                 </div>
             {% endif %}
         </div>
+        {% if is_granted('ROLE_EDITOR') %}
+            <div class="text-right my-5">
+                <a class="btn btn-primary" href="{{ path('trick_new') }}">
+                    Créer un nouveau trick !!
+                </a>
+            </div>
+        {% endif %}
 
-
-        <div class="mt-5 d-flex row">
-
-        </div>
+        <nav class="navbar navbar-light navbar-expand-lg d-flex justify-content-center">
+            <div class="">
+                <button class="d-lg-none navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#display_medias" aria-controls="display_medias"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    Voir les médias
+                    <span class="dark-blue-text">
+                    <i class="fas fa-bars fa-1x"></i>
+                </span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="display_medias">
+                <ul class="navbar-nav mr-auto">
+                    {% for picture in trick.getPictures %}
+                    <li class="nav-item p-2">
+                        <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="150" width="200"
+                             alt="Image de {{ trick.title }}">
+                    </li>
+                    {% endfor %}
+                    {% for video in trick.getVideos %}
+                    <li class="nav-item p-2">
+                        <iframe frameborder="0" width="200" height="150" src="{{ video.name }}" allowfullscreen
+                                type="text/html" allow="autoplay encrypted-media; gyroscope; picture-in-picture"></iframe>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
 
         <div>
             <div class="m-5 p-3 text-justify">
                 {{ trick.description }}
             </div>
         </div>
-        <div>
-            <div>
+        <div class="row d-flex justify-content-around ">
+            <div class="border pt-2 px-3 m-1">
                 <p>Date de création :
-                {{ trick.dateCreation|date('d-m-Y') }}
+                    {{ trick.dateCreation|date('d-m-Y') }}
                 </p>
             </div>
-            <div>
+            <div class="border pt-2 px-3 m-1">
                 <p>Groupe :
-                {{ trick.trickGroup.name }}
+                    {{ trick.trickGroup.name }}
                 </p>
             </div>
-            <div>
+            <div class="border pt-2 px-3 m-1">
                 <p>Date de modification :
-                {{ trick.dateUpdate|date('d-m-Y') }}
+                    {{ trick.dateUpdate|date('d-m-Y') }}
                 </p>
             </div>
         </div>
-<div>
-    <iframe frameborder="0" width="200" height="200" src="https://www.dailymotion.com/embed/video/x7rdr6a" allowfullscreen allow="autoplay"></iframe>
-</div>
-        <div>
 
-            <iframe width="200" height="200" src="https://www.youtube.com/embed/lJIrF4YjHfQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
     </div>
-{#border#}
+    {#border#}
     <div class="col-md-12 d-flex flex-row justify-content-center">
-        <div class="col-md-6 my-4 pt-5 pb-2 border-top">
+        <div class="col-md-8 my-4 mt-5 pb-2 border-top">
         </div>
     </div>
 
-    {% if (is_granted('ROLE_EDITOR'))  %}
-    <div class="row justify-content-center ">
-        <div class="col-md-4 text-center">
-            {{ form_start(form, {'action': path('comment_create', {'id':trick.id})}) }}
-            {{ form_row(form.content) }}
-            {{ form_rest(form) }}
-        </div>
-        <div class="col-md-2 text-center">
-            <button class="btn btn-primary">Valider</button>
-        </div>
+    {% if (is_granted('ROLE_EDITOR')) %}
+        <div class="row justify-content-center col-md-12 ">
+            <div class="col-md-4 text-center">
+                {{ form_start(form, {'action': path('comment_create', {'id':trick.id})}) }}
+                {{ form_row(form.content) }}
+                {{ form_rest(form) }}
+            </div>
+            <div class="col-md-3 text-center">
+                <button class="btn btn-primary">Valider le commentaire</button>
+            </div>
             {{ form_end(form) }}
-    </div>
+        </div>
     {% else %}
         <div class="row justify-content-center">
-        <div class="col-md-4 text-center">
-            <h3>Désolé, Vous devez être connecté pour pouvoir laisser un commentaire !!</h3>
-        </div>
+            <div class="col-md-4 text-center">
+                <h3>Désolé, Vous devez être connecté pour pouvoir laisser un commentaire !!</h3>
+            </div>
         </div>
     {% endif %}
 
     {#border#}
     <div class="col-md-12 d-flex flex-row justify-content-center">
-        <div class="col-md-6 my-4 pt-5 pb-2 border-bottom">
+        <div class="col-md-8 my-4 pt-2 pb-2 border-bottom">
         </div>
     </div>
+    <div class="d-flex justify-content-center">
+        <h4>Les commentaires</h4>
+    </div>
+
     <div class="col-md d-flex justify-content-center">
-        <div class="d-flex flex-column col-md-5 mt-5">
+
+        <div class="d-flex flex-column col-md-8 mt-5">
             <div id="result">
                 {% include "/comment/_show_comments.html.twig" %}
             </div>
-           {% if comments is not empty %}
+
                 <div class=" d-flex justify-content-center mt-3 pt-3">
+                    {% if comments is not empty %}
                     <div>
-                        <button id="showMoreComments" class="btn btn-primary" data-url="/trick/{{trick.id}}/page_comment/">Voir plus de commentaires</button>
+                        <button id="showMoreComments" class="btn btn-primary"
+                                data-url="/trick/{{ trick.id }}/page_comment/">Voir plus de commentaires
+                        </button>
                     </div>
 
                     <div id='waitButton' hidden>
@@ -121,8 +153,10 @@
                             loop
                         </i>
                     </div>
-                </div>
+                {% else %}
+                        <p>Il n'y a aucun commentaire pour le moment. </p>
             {% endif %}
+                </div>
         </div>
 
     </div>

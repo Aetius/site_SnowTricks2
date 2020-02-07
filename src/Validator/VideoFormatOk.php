@@ -7,11 +7,11 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-class TrickGroupNotExist extends Constraint
+class VideoFormatOk extends Constraint
 {
     /*
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = 'Ce nom de groupe existe déjà';
+    public $message = 'La vidéo doit être une url provenant de Youtube/Dailymotion. ';
 }

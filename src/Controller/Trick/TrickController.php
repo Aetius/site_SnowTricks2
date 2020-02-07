@@ -67,7 +67,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/new", name="new", methods={"GET|POST"})
+     * @Route("/trick/new", name="trick_new", methods={"GET|POST"})
      * @IsGranted("ROLE_EDITOR")
      */
     public function new(Request $request, TrickManager $service, Security $security)

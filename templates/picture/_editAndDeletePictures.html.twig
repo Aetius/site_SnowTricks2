@@ -1,0 +1,21 @@
+{% if is_granted('ROLE_EDITOR') %}
+    <div class="row d-flex justify-content-end px-4 mt-2">
+        <div>
+            <input type="hidden" >
+            <a href="#editPicture" data-toggle="modal"
+               data-content="_token = "
+               data-url="{{ path('picture_edit', {'id':  picture.id }) }}" class="thumbnails">
+                <i class="material-icons thumbnails-modal">edit</i>
+            </a>
+        </div>
+
+        <div class="pl-3">
+            <input type="hidden" value="{{ csrf_token('delete'~ picture.id) }}">
+            <a href="#confirmDelete" data-toggle="modal"
+               data-url="{{ path('picture_delete', {'id': picture.id}) }}">
+                <i class="material-icons trick-delete-modal">delete
+                </i>
+            </a>
+        </div>
+    </div>
+{% endif %}

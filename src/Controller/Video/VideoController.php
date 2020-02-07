@@ -4,48 +4,53 @@
 namespace App\Controller\Video;
 
 
-class VideoController
-{
-/* code JS
-// ---------------------
-// VIDEO YT : clean URL
-    function video_cleanURL_YT($video_url)
-    {
-        if (!empty($video_url)) {
-            $video_url = str_replace('youtu.be/', 'www.youtube.com/embed/', $video_url);
-            $video_url = str_replace('www.youtube.com/watch?v=', 'www.youtube.com/embed/', $video_url);
-        }
-        // -----------------
-        return $video_url;
-    };
-// ---------------------
-// VIDEO YT : iframe
-    function video_iframe_YT($video_url)
-    {
-        $video_iframe = '';
-        // -----------------
-        if (!empty($video_url)) {
-            $video_url = video_cleanURL_YT($video_url);
-            $video_iframe = '<iframe width="560" height="315" src="'.$video_url.'"  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-        }
-        // -----------------
-        return $video_iframe;
-    };
+use App\Entity\Video;
+use App\Form\Video\EditVideoType;
+use App\Services\Video\VideoManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
-}
-
-// VIDEO YT : image de la vidéo
-function video_img_YT($video_url)
+class VideoController extends AbstractController
 {
-    $video_embed_Img = '';
-    if (!empty($video_url)) {
-        $video_url = video_cleanURL_YT($video_url);
-        $video_ID_array = explode('/', $video_url);
-        $video_ID = $video_ID_array[count($video_ID_array) - 1]; // élément de l'URL après le dernier /
-        $video_embed_Img = 'https://i3.ytimg.com/vi/'.$video_ID.'/hqdefault.jpg'; //pass 0,1,2,3 for different sizes like 0.jpg, 1.jpg
+    /**
+     *@Route("/video/edit/{id}", name="video_edit", methods={"GET|POST"})
+     * @IsGranted("ROLE_EDITOR")
+     */
+    public function edit(Video $video, Request $request, VideoManager $manager)
+    {
+        $form = $this->createForm(EditVideoType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+            $manager->edit($video, $form->getData());
+            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+            return $this->redirectToRoute('trick_edit', ['id'=> $video->getTrick()->getId()]);
+        }
+
+        return $this->render('video/_edit.html.twig', [
+            'video' => $video,
+            'form' => $form->createView()
+        ]);
     }
-    // -----------------
-    return '<img src="'.$video_embed_Img.'" />';
-*/
+
+    /**
+     *@Route("/video/delete/{id}", name="video_delete", methods={"GET"})
+     * @IsGranted("ROLE_EDITOR")
+     */
+    public function delete(Video $video, Request $request, VideoManager $manager )
+    {
+        $trickId = $video->getTrick()->getId();
+
+        if ($this->isCsrfTokenValid('delete'.$video->getId(), $request->get('_token'))) {
+            $manager->delete($video);
+            $this->addFlash('success', 'deleting_photo');
+        }
+
+
+        return $this->redirectToRoute("trick_edit", ['id' => $trickId]);
+    }
+
 
 }

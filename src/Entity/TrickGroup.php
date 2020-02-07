@@ -26,11 +26,11 @@ class TrickGroup
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Trick", mappedBy="trickGroup")
      */
-    private $trick;
+    private $tricks;
 
     public function __construct()
     {
-        $this->trick = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,15 +53,15 @@ class TrickGroup
     /**
      * @return Collection|Trick[]
      */
-    public function getTrick(): Collection
+    public function getTricks(): Collection
     {
-        return $this->trick;
+        return $this->tricks;
     }
 
     public function addTrick(Trick $trick): self
     {
-        if (!$this->trick->contains($trick)) {
-            $this->trick[] = $trick;
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
             $trick->setTrickGroup($this);
         }
 
@@ -70,8 +70,8 @@ class TrickGroup
 
     public function removeTrick(Trick $trick): self
     {
-        if ($this->trick->contains($trick)) {
-            $this->trick->removeElement($trick);
+        if ($this->tricks->contains($trick)) {
+            $this->tricks->removeElement($trick);
             // set the owning side to null (unless already changed)
             if ($trick->getTrickGroup() === $this) {
                 $trick->setTrickGroup(null);

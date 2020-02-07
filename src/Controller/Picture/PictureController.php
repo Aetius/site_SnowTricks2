@@ -47,19 +47,21 @@ class PictureController extends AbstractController
     }
 
 
-    //using Ajax. problem with @is_granted. create of a token if user have the credentials.
+
     /**
-     * @Route("/image/{id}", name="picture_edit", methods={"GET|POST"})
+     * @Route("/image/edit/{id}", name="picture_edit", methods={"GET|POST"})
      * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Picture $picture, Request $request, PictureManager $editPhoto, TokenStorageInterface $storage, Session $session)
+    public function edit(Picture $picture, Request $request, PictureManager $editPhoto)
     {
 
         $form = $this->createForm(EditType::class, $picture);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $editPhoto->edit($form->getData(), $form->get('filePicture')->getData());
+            $editPhoto
+                ->edit($picture, $form->get('filePicture')
+                ->getData())->save($picture);
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
             return $this->redirectToRoute('trick_edit', ['id'=> $picture->getTrick()->getId()]);
         }

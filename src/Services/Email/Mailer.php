@@ -34,8 +34,6 @@ class Mailer
             ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_UPDATE_EMAIL)){
             $user->setEmailIsValid(true);
             $user->setRole("ROLE_EDITOR");
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
             return true;
         }
     }
@@ -47,8 +45,12 @@ class Mailer
             ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_RESET_PASSWORD)){
            return true;
         };
+    }
 
-
+    public function save(User $user)
+    {
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
     }
 
 

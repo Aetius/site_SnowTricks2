@@ -7,10 +7,12 @@ use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -41,6 +43,16 @@ class EditType extends AbstractType
                 'multiple' => false,
                 'required' => true,
                 'attr'=>['is_selected'=>'id'],
+            ])
+            ->add('videos', CollectionType::class, [
+                'entry_type'=> UrlType::class,
+                'required'=>false,
+                'allow_add'=>true,
+                'data'=>["required"=>[]],
+                'entry_options' => [
+                    'attr' => ['class' => 'video-box'],
+                ],
+                'prototype'=>true,
             ])
         ;
     }

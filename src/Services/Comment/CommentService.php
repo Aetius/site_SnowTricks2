@@ -30,7 +30,11 @@ class CommentService
             ->setTrick($trick)
             ->setUser($user)
             ->setContent($commentDTO->content);
+        return $comment;
+    }
 
+    public function save(Comment $comment)
+    {
         $this->entityManager->persist($comment);
         $this->entityManager->flush();
     }

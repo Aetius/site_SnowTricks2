@@ -73,10 +73,20 @@ class Trick
     private $comments;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="trick", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\TrickGroup", inversedBy="tricks", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $trickGroup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Video", mappedBy="trick", orphanRemoval=true, cascade={"persist"})
+     */
+    private $videos;
+
+    /**
+     * @var array
+     */
+    private $videosPath =[];
 
 
 
@@ -87,6 +97,7 @@ class Trick
         $this->pictures = new ArrayCollection();
         $this->datePublication = new \DateTime();
         $this->comments = new ArrayCollection();
+        $this->videos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -265,6 +276,37 @@ class Trick
         return $this;
     }
 
+    /**
+     * @return Collection|Video[]
+     */
+    public function getVideos(): Collection
+    {
+        return $this->videos;
+    }
+
+    public function addVideo(Video $video): self
+    {
+        if (!$this->videos->contains($video)) {
+            $this->videos[] = $video;
+            $video->setTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVideo(Video $video): self
+    {
+        if ($this->videos->contains($video)) {
+            $this->videos->removeElement($video);
+            // set the owning side to null (unless already changed)
+            if ($video->getTrick() === $this) {
+                $video->setTrick(null);
+            }
+        }
+
+        return $this;
+    }
+
  /*   public function addTrickGroup(TrickGroup $trickGroup)
     {
         if (!$this->trickGroup->contains($trickGroup)){
@@ -286,5 +328,23 @@ class Trick
 
         return $this;
     }*/
+    /**
+     * @return array
+     */
+    public function getVideosPath(): array
+    {
+        foreach ($this->getVideos() as $video){
+            $this->videosPath[] = $video->getName();
+        }
+        return $this->videosPath;
+    }
+
+    /**
+     * @param array $videosPath
+     */
+    public function setVideosPath(array $videosPath): void
+    {
+        $this->videosPath = $videosPath;
+    }
 
 }

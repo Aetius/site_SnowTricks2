@@ -94,6 +94,7 @@ class UserController extends AbstractController
     {
 
         if ($emailSevice->validationEmail($user) === true) {
+            $emailSevice->save($user);
             $this->addFlash('success', "L'email a bien été enregistré");
         } else {
             $this->addFlash('danger', "L'adresse email n'a pu être enregistrée. Veuillez Réessayer!");
