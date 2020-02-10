@@ -25,6 +25,7 @@ class LostPasswordType extends AbstractType
         $resolver->setDefaults([
             'validation_groups' => false,
             'data_class' => UserDTO::class,
+            'translation_domain'=>'forms',
         ]);
     }
 }

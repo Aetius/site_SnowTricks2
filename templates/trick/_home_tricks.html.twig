@@ -37,7 +37,7 @@
 
         <div class="card">
             <div class="card-body d-flex justify-content-around">
-                <a href="{{ path('trick_show', {'id':  trick.id }) }}">{{ trick.title }}</a>
+                <a href="{{ path('trick_show', {'id': trick.id~'-'~slug[trick.id]  } ) }}">{{ trick.title }}</a>
                 {% if is_granted('ROLE_EDITOR') %}
                     <a href="{{ path('trick_edit', {'id':  trick.id }) }}">
                         <i class="material-icons ">edit</i>
