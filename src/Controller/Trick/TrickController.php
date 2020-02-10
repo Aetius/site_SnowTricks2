@@ -5,6 +5,7 @@ namespace App\Controller\Trick;
 
 use App\Entity\Trick;
 use App\Form\Trick\CreateType;
+use App\Form\Trick\DTO\TrickDTO;
 use App\Form\Trick\EditType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
@@ -13,35 +14,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
-use Twig\Environment;
 
 
 class TrickController extends AbstractController
 {
-
-    /**
-     * @var Environment
-     */
-    private $twig;
-
-
-    /**
-     * @param Environment $twig
-     */
-    public function __construct(Environment $twig)
-    {
-        $this->twig = $twig;
-    }
-
-
-    /**
-     * @Route("/test/test", name="testtest", methods={"GET"})
-     */
-    public function testest()
-    {
-        return $this->render('test.html.twig');
-    }
 
     /**
      * @Route("/", name="home", methods={"GET"})
@@ -74,16 +50,17 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/new", name="new", methods={"GET|POST"})
+     * @Route("/trick/new", name="trick_new", methods={"GET|POST"})
      * @IsGranted("ROLE_EDITOR")
      */
-    public function new(Request $request, TrickManager $service, Security $security)
+    public function new(Request $request, TrickManager $service)
     {
         $form = $this->createForm(CreateType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $service->create($form->getData());
+            $trick = $service->create($form->getData());
+            $service->save($trick);
             $this->addFlash('success', "Le trick a bien été créé!!");
             return $this->redirectToRoute(('home'));
         }
@@ -95,6 +72,7 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/trick/delete/{id}", name="trick_delete", methods={"GET"})
+     * @IsGranted("ROLE_EDITOR")
      */
     public function delete(Trick $trick, Request $request, TrickManager $service)
     {
@@ -122,16 +100,17 @@ class TrickController extends AbstractController
 
     /**
      * @Route("/edit/trick/{id}", name="trick_edit", methods={"GET|POST"})
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Trick $trick, Request $request, TrickManager $service)
+    public function edit(Trick $trick, Request $request, TrickManager $service )
     {
-        $form = $this->createForm(EditType::class);
+        $dto = TrickDTO::createFromTrick($trick);
+        $form = $this->createForm(EditType::class,$dto);
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $service->edit($form->getData(), $trick, $form->get('pictureFiles')->getData());
+            $service->edit($dto, $trick, $form->get('pictureFiles')->getData());
+            $service->save($trick);
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
             return $this->redirectToRoute('trick_edit', ['id' => $trick->getId()]);
         }

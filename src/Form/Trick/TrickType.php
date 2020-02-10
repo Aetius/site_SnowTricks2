@@ -15,10 +15,14 @@ class TrickType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'label'=>'form.title',
+            ])
             ->add('datePublication', TextType::class, [
                 'required'=>false])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'label'=>'form.description',
+            ])
             ->add('publicated', CheckboxType::class, [
                 'required'=>false])
         ;

@@ -50,6 +50,11 @@ class PictureManager
             $namePicture = $this->uploadService->uploadTrickImage($file);
             $picture->setFilename($namePicture);
         }
+        return $this;
+    }
+
+    public function save(Picture $picture)
+    {
         $this->entityManager->persist($picture);
         $this->entityManager->flush();
     }

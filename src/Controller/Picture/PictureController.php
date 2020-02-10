@@ -18,20 +18,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class PictureController extends AbstractController
 {
 
 
     /**
-     * @Route("/images/{id}/delete", name="picture_delete", methods={"GET"})
+     * @Route("/image/{id}/delete", name="picture_delete", methods={"GET"})
      * @IsGranted("ROLE_EDITOR")
      */
     public function delete(Picture $picture, Request $request, PictureManager $editPhoto)
@@ -40,30 +42,26 @@ class PictureController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$picture->getId(), $request->get('_token'))) {
             $editPhoto->delete($picture);
             $this->addFlash('success', 'deleting_photo');
-            return $this->redirectToRoute("trick_edit", ['id' => $trickId]);
         }
+        return $this->redirectToRoute("trick_edit", ['id' => $trickId]);
     }
 
-    //using Ajax. problem with @is_granted. create of a token if user have the credentials.
+
+
     /**
-     * @Route("/images/{id}/{token}", name="picture_edit", methods={"GET|POST"})
+     * @Route("/image/edit/{id}", name="picture_edit", methods={"GET|POST"})
+     * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Picture $picture, Request $request, PictureManager $editPhoto, TokenStorageInterface $storage, string $token)
+    public function edit(Picture $picture, Request $request, PictureManager $editPhoto)
     {
-        if (!$this->isCsrfTokenValid('edit'.$picture->getId(), $token )) {
-            return $this->redirectToRoute('home');
-        }
 
         $form = $this->createForm(EditType::class, $picture);
         $form->handleRequest($request);
-        //$token = 'edit'. $picture->getTrick()->getId();
-       /* dump($storage->setToken($token, $_csrf_token));
-        dump($_csrf_token);
-        dump($storage);
-dd($request);*/
-        //dd($security->isGranted("ROLE_ADMIN"));
+
         if ($form->isSubmitted() && $form->isValid()){
-            $editPhoto->edit($form->getData(), $form->get('filePicture')->getData());
+            $editPhoto
+                ->edit($picture, $form->get('filePicture')
+                ->getData())->save($picture);
             $this->addFlash('success', "Le trick a bien été mis à jour!!");
             return $this->redirectToRoute('trick_edit', ['id'=> $picture->getTrick()->getId()]);
         }

@@ -9,11 +9,11 @@
 require('../css/app.css');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
-// const $ = require('jquery');
+ //const $ = require('jquery');
 $(function(){
 
 //correct the upload bug in bootstrap : show if a file is in standby for upload. (for exemple, images file)
-    (function () {
+   (function () {
         $('.dropdown-toggle').dropdown();
         $(document).on('change','.custom-file-input', function (event) {
             var inputFile = event.currentTarget;
@@ -38,42 +38,82 @@ $(function(){
             });
         });
     })();
-});
 
-//animation arrow home page
-(function () {
-    let element = document.getElementById('arrow-down');
-    if (element !== null){
-        element.addEventListener("click", function (event) {
-            /* event.preventDefault();*/
-            window.scrollTo(0, 75);
-        })
-    }
+    //Ajax request in edit photo
+  /*  (function () {
+        let links = document.querySelectorAll('.thumbnails');
+        for (let i = 0; i<links.length; i++) {
+            if (links[i] !== null){
+                links[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var id = "session_id()";
+                    result.innerHTML = "Chargement";
+                    let url = this.getAttribute('data-url');
+                    $.ajax(url, {
+                        cache : false,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            "PHPSESSID": "ltbseik0a5p64sojptseaq6539"
+                        },
+                        type: 'POST',
+                        beforeSend(xhr){
+                            xhr.withCredentials = true;
+                            xhr.sessionStorage
+                        },
 
-})();
+                        //data:{"_csrf/https-authenticate": {_TOKEN}},
 
 
-//show a modal to confirm the delete of a trick
-(function () {
+                       /!* xhrFields: {
+                            withCredentials:true
+                        },*!/
 
-    //let confirmClick = document.querySelectorAll(".trick-delete-modal");
-    let article = (document.querySelector("#articleId form"));
-
-    let token = document.getElementById("token");
-
-    document.addEventListener("click", function (e) {
-        let searchValueE = e.target.attributes.class.value;
-
-        if (searchValueE.split(" ").find(element => element === "trick-delete-modal")) {
-            let url = (e.target.parentNode.getAttribute("data-url"));
-            let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
-            article.setAttribute("action", url);
-            token.setAttribute("value", idTrick);
+                        complete: function(result) {
+                            document.getElementById('result').innerHTML = result.responseText;
+                            let picture = (document.querySelector("#pictureId"));
+                            picture.setAttribute("action", url);
+                        }
+                    });
+                })
+            }
         }
-    })
-})();
+    })();*/
 
-let getHTTPRequest = function () {
+
+
+    //animation arrow home page
+    (function () {
+        let element = $('arrow-down');
+        if (element !== null){
+            element.click(function (event) {
+                event.preventDefault();
+                window.scrollTo(0, 75);
+            })
+        }
+
+    })();
+
+
+    //show a modal to confirm the delete of a trick
+    (function () {
+
+        document.addEventListener("click", function (e) {
+           if (e.target.attributes.class.value != null){
+               let searchValueE = e.target.attributes.class.value;
+
+               if (searchValueE.split(" ").find(element => element === "trick-delete-modal")) {
+                   let url = (e.target.parentNode.getAttribute("data-url"));
+                   let idTrick = e.target.parentNode.previousElementSibling.getAttribute('value');
+                   $("#articleId form").attr("action", url);
+                   $("#token").attr("value", idTrick);
+               }
+           }
+
+        })
+    })();
+
+/*let getHTTPRequest = function () {
     var httpRequest = false;
 
     if (window.XMLHttpRequest) {
@@ -96,106 +136,145 @@ let getHTTPRequest = function () {
         }
     }
     return httpRequest;
-};
-//home page AJAX
-(function () {
-
-    var link = document.querySelector('#addTricks');
-
-    if (link !== null){
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            let wait = document.getElementById('waitButton');
-            console.log(wait);
-            let numberPage = (document.getElementsByClassName('numberPage')).length;
-            //result.innerHTML = "chargement";
-            let httpRequest = getHTTPRequest();
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState === 4) {
-                    let create = document.createElement("div");
-                    create.setAttribute('class', 'numberPage');
-                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText;
-                    link.removeAttribute('hidden');
-                    wait.setAttribute('hidden', 'true');
-                    if (document.getElementById('hideButton')) {
-                        link.remove();
-                    }
-                }
-            };
-            httpRequest.open('GET', '/page/' + numberPage, true);
-            httpRequest.send();
-
-            link.setAttribute('hidden', 'true');
-            wait.removeAttribute('hidden')
-
-        })
-    }
-})();
-
-//Ajax request in edit photo
-//function MDN to run this request with all browser
-(function () {
-
-
-
-    let links = document.querySelectorAll('.thumbnails');
-    for (let i = 0; i<links.length; i++) {
-        if (links[i] !== null){
-            links[i].addEventListener('click', function (e) {
+};*/
+    //home page AJAX
+    (function () {
+        let link = $('#addTricks');
+        if (link !== null){
+            link.click(function (e) {
                 e.preventDefault();
+                let wait = $('#waitButton');
+                let url = ('/page/'+(($('.numberPage')).length));
 
-                result.innerHTML = "Chargement";
-                let httpRequest = getHTTPRequest();
-                httpRequest.onreadystatechange = function () {
-                    if (httpRequest.readyState === 4) {
+                link.attr('hidden', 'true');
+                wait.removeAttr('hidden');
 
-                        document.getElementById('result').innerHTML = httpRequest.responseText;
-                        let picture = (document.querySelector("#pictureId"));
-                        picture.setAttribute("action", url );
+                $.ajax(url, {
+                    complete: function(result){
+                        let create = document.createElement("div");
+                        create.setAttribute('class', 'numberPage');
+                        document.getElementById('result').appendChild(create).innerHTML = result.responseText;
+                        link.removeAttr('hidden');
+                        wait.attr('hidden', 'true');
+                        if (document.getElementById('hideButton')) {
+                            link.remove();
+                        }
                     }
-                };
-                let url = this.getAttribute('data-url');
-                httpRequest.open('GET', url, true);
-                httpRequest.send();
+                })
             })
         }
-    }
-})();
-
-//show trick's comments AJAX
-(function () {
+    })();
 
 
+    //Ajax request in edit photo
+    //function MDN to run this request with all browser
+    (function () {
 
-    var link = document.querySelector('#showMoreComments');
+        let links = $('.thumbnails');
+        for (let i = 0; i<links.length; i++) {
+            if (links[i] !== null){
+                links[i].addEventListener('click', function (e) {
+                    e.preventDefault();
+                    result.innerHTML = "Chargement";
+                    let url = this.getAttribute('data-url');
 
-    if (link !== null){
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            let wait = document.getElementById('waitButton');
+                    $.ajax(url, {
+                        complete: function(result){
+                            document.getElementById('result').innerHTML= result.responseText;
+                            let picture = (document.querySelector("#pictureId"));
+                            picture.setAttribute("action", url );
+                        }
+                    })
+                })
+            }
+        }
+    })();
 
-            let numberPage = (document.getElementsByClassName('numberPage')).length;
-            //result.innerHTML = "chargement";
-            let httpRequest = getHTTPRequest();
-            httpRequest.onreadystatechange = function () {
-                if (httpRequest.readyState === 4) {
-                    let create = document.createElement("div");
-                    create.setAttribute('class', 'numberPage');
-                    document.getElementById('result').appendChild(create).innerHTML = httpRequest.responseText;
-                    link.removeAttribute('hidden');
-                    wait.setAttribute('hidden', 'true');
-                    if (document.getElementById('hideButton')) {
-                        link.remove();
+    //Ajax request in edit videos
+    (function () {
+        let links = $('.thumbnails');
+        for (let i = 0; i<links.length; i++) {
+            if (links[i] !== null){
+                links[i].addEventListener('click', function (e) {console.log(links[i]);
+                    e.preventDefault();
+                    resultVideos.innerHTML = "Chargement";
+                    let url = this.getAttribute('data-url');
+
+                    $.ajax(url, {
+                        complete: function(result){
+                            document.getElementById('resultVideos').innerHTML= result.responseText;
+
+                        }
+                    })
+                })
+            }
+        }
+    })();
+
+    //show trick's comments AJAX
+    (function () {
+        let link = $('#showMoreComments');
+
+        if (link !== null){
+            link.click( function (e) {
+                e.preventDefault();
+                let wait = document.getElementById('waitButton');
+
+                let numberPage = (document.getElementsByClassName('numberPage')).length;
+                let url = (this.getAttribute('data-url'))+numberPage;
+                link.attr('hidden', 'true');
+                wait.removeAttribute('hidden')
+
+                $.ajax(url, {
+                    complete: function(result){
+                        let create = document.createElement("div");
+                        create.setAttribute('class', 'numberPage');
+                        document.getElementById('result').appendChild(create).innerHTML = result.responseText;
+                        link.removeAttr('hidden');
+                        wait.setAttribute('hidden', 'true');
+                        if (document.getElementById('hideButton')) {
+                            link.remove();
+                        }
                     }
-                }
-            };
+                })
+            })
+        }
+    })();
 
-            let url = this.getAttribute('data-url');
-            httpRequest.open('GET', url+numberPage, true);
-            httpRequest.send();
-            link.setAttribute('hidden', 'true');
-            wait.removeAttribute('hidden')
 
-        })
-    }
-})();
+
+    //prototype video create trick
+    (function(){
+        $('.add-another-collection-widget').click(function (e) {
+            var list = jQuery(jQuery(this).attr('data-list-selector'));
+            // Try to find the counter of the list or use the length of the list
+            var counter = list.data('widget-counter') || list.children().length;
+
+            // grab the prototype template
+            var newWidget = list.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, counter);
+            // Increase the counter
+            counter++;
+            // And store it, the length cannot be used if deleting widgets is allowed
+            list.data('widget-counter', counter);
+
+            // create a new list element and add it to the list
+            var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
+            newElem.appendTo(list);
+        });
+
+    })();
+
+    (function(){
+        $('.delete-another-collection-widget').click(function (e) {
+            $('li.add_widget:last').remove() ;
+
+        });
+    })();
+
+
+
+});

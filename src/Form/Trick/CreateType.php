@@ -2,16 +2,15 @@
 
 namespace App\Form\Trick;
 
-use App\Entity\Trick;
 use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
-use App\Form\TrickGroup\TrickGroupType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,25 +22,37 @@ class CreateType extends AbstractType
         $builder
             ->add('description', TextareaType::class,  [
                 'required'=> true,
+                'label'=>'form.description',
             ])
             ->add('title', TextType::class, [
                 'required'=> true,
+                'label'=>'form.title',
             ])
             ->add('pictureFiles', FileType::class, [
                 'required'=>true,
                 'multiple'=>true,
+                'label'=>'form.picture',
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => TrickGroup::class,
                 'choice_label' => 'name',
-                'label'=> 'Choose one of the group',
+                'label'=> 'form.trickGroup',
                 'multiple' => false,
-                'required' => false,
+                'required' => true,
             ])
-            ->add('trickGroupAdd', TextType::class, [
-                'label'=> 'Or create a new group',
-                'required' => false,
+
+            ->add('videos', CollectionType::class, [
+                'entry_type'=> TextType::class,
+                'label'=>'form.videos',
+                'required'=>true,
+                'allow_add'=>true,
+                'data'=>["required"=>[]],
+                'entry_options' => [
+                    'attr' => ['class' => 'video-box'],
+                ],
+                'prototype'=>true,
             ])
+
         ;
     }
 
@@ -51,6 +62,9 @@ class CreateType extends AbstractType
         $resolver->setDefaults([
             'data_class' => TrickDTO::class,
             'translation_domain'=>'forms',
+            'error_mapping'=>[
+                'videos'=>'videos.required',
+            ]
         ]);
     }
 

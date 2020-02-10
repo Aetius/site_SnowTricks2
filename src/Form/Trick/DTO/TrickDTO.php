@@ -3,8 +3,10 @@
 
 namespace App\Form\Trick\DTO;
 
-use App\Validator\TrickGroupNotExist;
+
+use App\Entity\Trick;
 use App\Validator\UniqueTrick;
+use App\Validator\VideoFormatOk;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -20,7 +22,6 @@ class TrickDTO
 
     /**
      * @Assert\Length(min=10)
-     * @UniqueTrick()
      */
     public $description;
 
@@ -37,29 +38,25 @@ class TrickDTO
     public $id;
 
     /**
-    *
+     * @Assert\NotBlank()
      */
     public $trickGroup;
 
-    /**
-    * @TrickGroupNotExist()
-     */
-    public $trickGroupAdd;
 
     /**
-     * @Assert\Callback
+     * @VideoFormatOk()
      */
-    public function changingPassword(ExecutionContextInterface $context)
+    public $videos;
+
+
+    static function createFromTrick(Trick $trick): TrickDTO
     {
-        if ($this->trickGroupAdd === null) {
-            $context->getMetadata()
-                ->addPropertyConstraint(
-                'trickGroup',
-                new Assert\NotNull());
-
-
-
-        }
+        $dto = new TrickDTO();
+        $dto->title = $trick->getTitle();
+        $dto->description = $trick->getDescription();
+        $dto->trickGroup = $trick->getTrickGroup();
+        $dto->id = $trick->getId();
+        return $dto;
     }
 
 }

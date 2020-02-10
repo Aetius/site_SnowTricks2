@@ -1,20 +1,24 @@
 <?php
 
-namespace App\Form\User;
 
+namespace App\Form\Video;
+
+
+use App\Form\Video\DTO\VideoDTO;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AdminCollectionType extends AbstractType
+class EditVideoType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-           $builder
-               ->add('users', CollectionType::class, [
-                   'entry_type' => AdminType::class,
-                    'label'=>"users"
+        $builder
+            ->add('name', TextType::class, [
+                'label'=>'form.video'
             ]);
     }
 
@@ -22,7 +26,7 @@ class AdminCollectionType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'forms',
-
+            'data_class'=> VideoDTO::class,
         ]);
     }
 }

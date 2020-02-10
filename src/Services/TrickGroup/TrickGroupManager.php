@@ -24,8 +24,6 @@ class TrickGroupManager
        $trickGroup->setName($trickDTO->trickGroupAdd);
 
        return $trickGroup;
-
-
     }
 
 }

@@ -28,7 +28,8 @@ class CommentController extends AbstractController
         $user = $userRepository->findOneBy(['id'=>$userInterface->getId()]);
 
         if ($form->isSubmitted() && $form->isValid()){
-            $service->create($form->getData(), $trick, $user);
+            $comment = $service->create($form->getData(), $trick, $user);
+            $service->save($comment);
             $this->addFlash('success', "Le commentaire a bien été créé!!");
         }
         return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);

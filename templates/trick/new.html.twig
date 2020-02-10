@@ -40,11 +40,12 @@
             <div class="col-md-6  mb-5">
                 {{ form_row(form.pictureFiles, { attr: {'placeholder': 'Selectionner un fichier'}}) }}
             </div>
+            <div>
+                {% include ("/video/_addVideos.html.twig") %}
+
+            </div>
             <div >
                 {{ form_row(form.trickGroup) }}
-            </div>
-            <div>
-                {{ form_row(form.trickGroupAdd) }}
             </div>
 
             <div hidden>

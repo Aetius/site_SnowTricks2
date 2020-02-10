@@ -21,73 +21,68 @@
                     <h1>{{ trick.title }}
                     </h1>
                 </div>
-
-
             </div>
-
-            <div class="mt-5 d-flex row">
-                {% for picture in trick.getPictures %}
-                <div class="mr-3">
-                    <div>
-                        <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="100" alt="">
+                <nav class="navbar navbar-light navbar-expand-lg d-flex justify-content-center">
+                    <div class="">
+                        <button class="d-lg-none navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#display_medias" aria-controls="display_medias"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            Voir les médias
+                            <span class="dark-blue-text">
+                    <i class="fas fa-bars fa-1x"></i>
+                </span>
+                        </button>
                     </div>
-
-                    {% if is_granted('ROLE_EDITOR') %}
-                    <div class="row d-flex justify-content-end px-4 mt-2">
-                        <div>
-                            <input type="hidden" value="">
-                            <a href="#editPicture" data-toggle="modal"
-                               data-content="_token = "
-                                data-url="{{ path('picture_edit', {'id':  picture.id, 'token': csrf_token('edit'~ picture.id) }) }}" class="thumbnails">
-                                <i class="material-icons thumbnails-modal">edit</i>
-                            </a>
-                        </div>
-
-                        <div class="pl-3">
-                            <input type="hidden" value="{{ csrf_token('delete'~ picture.id) }}">
-                            <a href="#confirmDelete" data-toggle="modal"
-                                data-url="{{ path('picture_delete', {'id': picture.id}) }}">
-                                <i class="material-icons trick-delete-modal">delete
-                                </i>
-                            </a>
-                        </div>
+                    <div class="collapse navbar-collapse" id="display_medias">
+                        <ul class="navbar-nav mr-auto">
+                            {% for picture in trick.getPictures %}
+                                <li class="nav-item p-2">
+                                    <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="150" width="200"
+                                         alt="Image de {{ trick.title }}">
+                                    {% include "picture/_editAndDeletePictures.html.twig" %}
+                                </li>
+                            {% endfor %}
+                            {% for video in trick.getVideos %}
+                                <li class="nav-item p-2">
+                                    <iframe frameborder="0" width="200" height="150" src="{{ video.name }}" allowfullscreen
+                                            type="text/html" allow="autoplay encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                    {% include "video/_editAndDeleteVideos.html.twig" %}
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
+                </nav>
 
-            <div>
-                <div class="m-5 p-3 text-justify">
-                </div>
-            </div>
-            <div class="col-md-12 trickEdit">
+            <div class="col-md-12 trickEdit mt-4">
                 {{ form_start((form)) }}
+
+
+                        <div class="col-md-8">
+                            {{ form_row(form.title) }}
+                        </div>
+               
                     <div class="text col-md-12">
-                        {{ form_row(form.pictureFiles) }}
+                        {{ form_row(form.description) }}
                     </div>
-                    <div class="col-md-6  mb-5">
-                        {{ form_row(form.title, {'value':trick.title}) }}
+                    <div class="text col-md-4 mb-3">
+                        {{ form_row(form.trickGroup) }}
                     </div>
-                    <div class="text col-md-12">
-                        {{ form_row(form.description, {'value':trick.description}) }}
+
+                    <div class=" col-md-12 column no-gutters ">
+                        <div class="col-md-6">
+                            {{ form_row(form.pictureFiles) }}
+                        </div>
+                        <div class="col-md-6 ">
+                            {% include ("/video/_addVideos.html.twig") %}
+                        </div>
                     </div>
-                    <div class="text col-md-12">
-                        {{ form_row(form.trickGroup, {'value': trick.trickGroup.id}) }}
-                    </div>
+
                     <div hidden>
-                        {{ form_row(form.id, {'value':trick.id}) }}
                         {{ form_rest(form) }}
                     </div>
                     <div class=" d-flex flex-row justify-content-end mt-4">
                         <button class="btn btn-primary mx-3 mr-4">Sauvegarder</button>
                 {{ form_end(form) }}
-    {# <form method="post"  >
-    #}{#<input type="hidden" name="_method" value="DELETE">#}{#
-    #}{# <input type="hidden" name="_token" value="{{ csrf_token('delete'~ trick.id) }}">#}{#
 
-    <button class="btn btn-danger" data-toggle="modal" data-target="#confirmDelete" data-backdrop="static">Supprimer</button>
-    </form>#}
 
                 <div class="">
                     <a href="#confirmDelete" data-toggle="modal"
@@ -104,9 +99,6 @@
 
 {% include "/modal/_modal_confirm_close.html.twig" %}
 {% include "/modal/_modal_edit_picture.html.twig" %}
-{#{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('editTrick') }}
-{% endblock %}#}
+{% include "/modal/_modal_edit_video.html.twig" %}
 
 {% endblock %}

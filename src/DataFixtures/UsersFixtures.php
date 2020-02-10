@@ -15,6 +15,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UsersFixtures extends Fixture
 {
 
+    public const USERS = "getUsers";
+
     /**
      * @var UserPasswordEncoderInterface
      */
@@ -24,6 +26,12 @@ class UsersFixtures extends Fixture
      */
     private $uploadService;
 
+    private $picturePath = '/images/montagne.jpg';
+
+    private $targetPath = '/montagne.jpg';
+
+
+
     public function __construct(UserPasswordEncoderInterface $encoder, Uploader $uploadService)
     {
         $this -> encoder = $encoder;
@@ -32,28 +40,49 @@ class UsersFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
+
         for ($i = 0; $i <20; $i++){
             $user = new User();
-            $this->addPicture();
+
             $user->setLogin('sim'.$i)
                 ->setPassword($this->encoder->encodePassword($user, 'demo'))
                 ->setEmail("sim$i@yahoo.fr")
                 ->setPicture($this->addPicture());
 
+            $this->addReference("user".$i, $user);
+
             $manager->persist($user);
             $manager->flush();
         }
+
     }
 
-    private function addPicture(){
-        //$picture = new Picture();
-        $filesystem = new Filesystem();
-        $file = new File(__DIR__.'/images/montagne.jpg');
 
-        $targetPath = sys_get_temp_dir().'/montagne.jpg';
+
+    private function addPicture(): string
+    {
+        $picture = new Picture();
+
+        $filesystem = new Filesystem();
+        $file = new File(__DIR__.$this->picturePath);
+
+        $targetPath = sys_get_temp_dir().$this->targetPath;
         $filesystem->copy($file, $targetPath, true);
 
-        return $this->uploadService->uploadTrickImage(new File($targetPath));
+        $namePicture=$this->uploadService->uploadUserImage(new File($targetPath));
+        $picture
+            ->setFilename($namePicture)
+            ->setSelectedPicture(false);
+
+        return $namePicture;
 
     }
+
+
+
+
+
+
+
+
 }

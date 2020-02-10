@@ -28,7 +28,7 @@ class UniqueTrickValidator extends ConstraintValidator
         }
 
         if ( $result = $this->repository->findOneBy(['title' => $value])){
-            if (($result->getId() !=$this->context->getObject()->id)){
+            if (($result->getId() != $this->context->getObject()->id)){
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('value', $value)
                     ->addViolation();
@@ -36,16 +36,3 @@ class UniqueTrickValidator extends ConstraintValidator
         }
     }
 }
-
-/*if (null === $value || '' === $value) {
-    return;
-}
-$result = $this->repository->findOneBy(['title' => $value]);
-
-if ($result->getTitle() === $value && $result->getId() !== $this->context->getObject()->id) {
-    $this->context->buildViolation($constraint->message)
-        ->setParameter('value', $value)
-        ->addViolation();
-}*/
-
-

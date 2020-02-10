@@ -7,10 +7,12 @@ use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,21 +27,36 @@ class EditType extends AbstractType
                 'required'=>true
             ])
             ->add('description', TextareaType::class, [
+                'label'=>'form.description',
                 "required"=>false
             ])
             ->add('title', TextType::class, [
+                'label'=>'form.title',
                 "required"=>false
             ])
             ->add('pictureFiles', FileType::class, [
                 'multiple'=>true,
+                'label'=>'form.picture',
                 "required"=>false
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => TrickGroup::class,
                 'choice_label' => 'name',
-                'label'=> 'Choose one of the group',
+                'label'=> 'form.trickGroup',
                 'multiple' => false,
                 'required' => true,
+                'attr'=>['is_selected'=>'id'],
+            ])
+            ->add('videos', CollectionType::class, [
+                'entry_type'=> TextType::class,
+                'label'=>'form.videos',
+                'required'=>false,
+                'allow_add'=>true,
+                'data'=>["required"=>[]],
+                'entry_options' => [
+                    'attr' => ['class' => 'video-box'],
+                ],
+                'prototype'=>true,
             ])
         ;
     }

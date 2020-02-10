@@ -11,53 +11,50 @@
         {% endfor %}
 
 
-        <div class="mt-5 d-flex row">
-
+        <div class="mt-5 text-center">
+            <h1>Mon espace perso</h1>
         </div>
-        <div>
-            <div class="m-5 p-3 text-justify">
+   <div class="row mt-5">
+       <div class="col-md-12 ">
+
+           {{ form_start((form)) }}
+           <div class="row d-flex justify-content-around">
+               <div class="col-md-4  mb-5">
+                   {{ form_row(form.login) }}
+               </div>
+               <div class="col-md-4  mb-5">
+                   {{ form_row(form.emailUser) }}
+               </div>
+           </div>
+            <div class="row d-flex justify-content-around">
+                <div class="text col-md-4">
+                    {{ form_row(form.currentPassword) }}
+                </div>
+                <div class="text col-md-4">
+                    {{ form_row(form.password) }}
+                </div>
             </div>
 
-        </div>
-        <div class="col-md-12 ">
+           <div class="row d-flex justify-content-around">
+               <div class="text col-md-4">
+                   <img src="{{asset(uploaded_user_asset(user.picture )) }}" alt="Image utilisateur"  height="100">
+               </div>
+               <div class="text col-md-4">
+                   {{ form_row(form.picture) }}
+               </div>
+           </div>
 
-            {{ form_start((form)) }}
-            <div class="col-md-6  mb-5">
+           <div hidden>
+               {{ form_rest(form) }}
+           </div>
+           <div class=" d-flex justify-content-center mt-4">
+               <button class="btn btn-primary mx-3">Sauvegarder</button>
+               {{ form_end(form) }}
 
-                {{ form_row(form.login,{"value": user.login}) }}
-            </div>
-            <div class="col-md-6  mb-5">
+           </div>
+       </div>
+   </div>
 
-                {{ form_row(form.emailUser,{'value': user.email }) }}
-
-            </div>
-            <div >
-
-            </div>
-            <div class="text col-md-12">
-                {{ form_row(form.currentPassword) }}
-            </div>
-
-            <div class="text col-md-12">
-
-                {{ form_row(form.password) }}
-            </div>
-            <div class="text col-md-12">
-                <img src="{{asset(uploaded_user_asset(user.picture )) }}" alt="Image utilisateur"  height="100">
-            </div>
-            <div class="text col-md-12">
-                {{ form_row(form.picture) }}
-            </div>
-            <div hidden>
-                {{ form_row(form.id, {'value': user.id}) }}
-                {{ form_rest(form) }}
-            </div>
-            <div class=" d-flex flex-row-reverse mt-4">
-                <button class="btn btn-primary mx-3">Sauvegarder</button>
-                {{ form_end(form) }}
-
-            </div>
-        </div>
 
     </div>
 

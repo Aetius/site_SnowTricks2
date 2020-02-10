@@ -3,7 +3,7 @@
 
 //Ajax request in edit photo
 //function MDN to run this request with all browser
-(function () {
+/*(function () {
 
     let getHTTPRequest = function(){
         var httpRequest = false;
@@ -53,7 +53,7 @@
             httpRequest.send();
         })
     }
-})();
+})();*/
 
 /*
 //change action in images modal
@@ -69,3 +69,47 @@
 
 })();*/
 
+(function () {
+
+    let links = document.querySelectorAll('.thumbnails');
+    for (let i = 0; i<links.length; i++) {
+        if (links[i] !== null){
+            links[i].addEventListener('click', function (e) {
+                e.preventDefault();
+
+                result.innerHTML = "Chargement";
+                let url = this.getAttribute('data-url');
+
+                $.ajax(url, {
+
+                    /*  beforeSend(xhr, settings){
+                          xhr.withCredentials = true;
+
+                      },*/
+                    data:{"_csrf/https-authenticate": {_TOKEN}},
+                    cache: true,
+
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+
+                    type: 'GET',
+                    xhrFields: {
+                        withCredentials: true
+                    },
+
+
+                    complete: function(result) {
+                        document.getElementById('result').innerHTML = result.responseText;
+                        let picture = (document.querySelector("#pictureId"));
+                        picture.setAttribute("action", url);
+                    }
+
+
+                } );
+
+            })
+        }
+    }
+})();
