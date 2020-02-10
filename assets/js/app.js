@@ -143,11 +143,11 @@ $(function(){
         if (link !== null){
             link.click(function (e) {
                 e.preventDefault();
-                let wait = $('waitButton');
+                let wait = $('#waitButton');
                 let url = ('/page/'+(($('.numberPage')).length));
 
                 link.attr('hidden', 'true');
-                wait.removeAttr('hidden')
+                wait.removeAttr('hidden');
 
                 $.ajax(url, {
                     complete: function(result){

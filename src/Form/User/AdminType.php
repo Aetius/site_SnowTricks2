@@ -14,7 +14,7 @@ class AdminType extends AbstractType
     {
         $builder
             ->add('isActivate', null, [
-            'label' => 'Is active ?'
+            'label' => 'isActivate'
             ])
             ->add('role', ChoiceType::class, [
                 'choices'=>[
@@ -23,7 +23,7 @@ class AdminType extends AbstractType
                    'Administrator'=> 'ROLE_ADMIN'
                 ],
                'invalid_message' => 'roles.invalidMessage',
-               'label' => 'label_roles',
+               'label' => 'role',
             ]);
         }
 

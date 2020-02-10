@@ -53,27 +53,18 @@
                 </nav>
 
             <div class="col-md-12 trickEdit mt-4">
-
                 {{ form_start((form)) }}
 
 
                         <div class="col-md-8">
-                            {{ form_row(form.title, {'value':trick.title}) }}
+                            {{ form_row(form.title) }}
                         </div>
-
+               
                     <div class="text col-md-12">
-                        {{ form_row(form.description, {'value':trick.description}) }}
+                        {{ form_row(form.description) }}
                     </div>
                     <div class="text col-md-4 mb-3">
-                        <fieldset>
-                            {{ form_label(form.trickGroup) }}
-                            {{ form_errors(form.trickGroup) }}
-                            <select name="edit[trickGroup]" id="edit_trickGroup" class="form-control">
-                                {% for choice in  form.trickGroup.vars.choices%}
-                                    <option value="{{choice.value}}" {% if choice.value == trick.trickGroup.id %} selected="selected" {% endif %} >{{ choice.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </fieldset>
+                        {{ form_row(form.trickGroup) }}
                     </div>
 
                     <div class=" col-md-12 column no-gutters ">
@@ -83,11 +74,9 @@
                         <div class="col-md-6 ">
                             {% include ("/video/_addVideos.html.twig") %}
                         </div>
-
                     </div>
 
                     <div hidden>
-                        {{ form_row(form.id, {'value':trick.id}) }}
                         {{ form_rest(form) }}
                     </div>
                     <div class=" d-flex flex-row justify-content-end mt-4">
@@ -111,9 +100,5 @@
 {% include "/modal/_modal_confirm_close.html.twig" %}
 {% include "/modal/_modal_edit_picture.html.twig" %}
 {% include "/modal/_modal_edit_video.html.twig" %}
-{#{% block javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('editTrick') }}
-{% endblock %}#}
 
 {% endblock %}

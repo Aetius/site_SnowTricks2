@@ -5,6 +5,8 @@ namespace App\Controller\User;
 use App\Entity\EmailLinkToken;
 use App\Entity\User;
 use App\Form\User\AdminCollectionType;
+use App\Form\User\DTO\EditUserDTO;
+use App\Form\User\DTO\UserDTO;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
@@ -51,11 +53,12 @@ class UserController extends AbstractController
      */
     public function update(Request $request, UserInterface $user, UserManager $userUpdate)
     {
-        $form = $this->createForm(EditUserType::class);
+        /** @var User $user */
+        $dto = EditUserDTO::createFromUser($user);
+        $form = $this->createForm(EditUserType::class, $dto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-                /** @var User $user */
             $userUpdate->update($user, $form->getData());
             $userUpdate->save($user);
             $this->addFlash('success', "Modifications effectuées");

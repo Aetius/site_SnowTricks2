@@ -18,7 +18,7 @@ class CreateType extends AbstractType
         $builder
             ->add('content', TextareaType::class, [
                 'required'=>true,
-                'label'=>false,
+                'label'=>"form.contentComment",
                 'attr'=>
                 ['style'=> 'height: 35px']
             ]);

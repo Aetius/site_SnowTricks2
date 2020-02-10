@@ -28,7 +28,17 @@ class VideoManager
         if (!strpbrk('https', $videoPath)){
             str_replace('http://', 'https://', $videoPath);
         }
-        dump($videoPath);
+        if (preg_match('#^<iframe#', $videoPath)){
+            $array = explode(" ", $videoPath);
+            foreach ($array as $value){
+                if (strstr($value, 'src=') )
+                {
+                    $value=str_replace("src=","", $value );
+                    $value=str_replace('"',"", $value );
+                    return $value;
+                }
+            }
+        }
        if (strpbrk('youtu', $videoPath)){
            $videoPath = str_replace('youtu.be/', 'www.youtube.com/embed/', $videoPath);
            $videoPath = str_replace('www.youtube.com/watch?v=', 'www.youtube.com/embed/', $videoPath);
@@ -40,6 +50,7 @@ class VideoManager
            $videoPath = str_replace('www.dailymotion.com/video/', 'www.dailymotion.com/embed/video/', $videoPath);
            return $videoPath;
        };
+
        return null;
 
     }

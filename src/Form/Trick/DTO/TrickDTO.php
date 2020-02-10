@@ -4,6 +4,7 @@
 namespace App\Form\Trick\DTO;
 
 
+use App\Entity\Trick;
 use App\Validator\UniqueTrick;
 use App\Validator\VideoFormatOk;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
@@ -46,5 +47,16 @@ class TrickDTO
      * @VideoFormatOk()
      */
     public $videos;
+
+
+    static function createFromTrick(Trick $trick): TrickDTO
+    {
+        $dto = new TrickDTO();
+        $dto->title = $trick->getTitle();
+        $dto->description = $trick->getDescription();
+        $dto->trickGroup = $trick->getTrickGroup();
+        $dto->id = $trick->getId();
+        return $dto;
+    }
 
 }

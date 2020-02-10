@@ -27,25 +27,29 @@ class EditType extends AbstractType
                 'required'=>true
             ])
             ->add('description', TextareaType::class, [
+                'label'=>'form.description',
                 "required"=>false
             ])
             ->add('title', TextType::class, [
+                'label'=>'form.title',
                 "required"=>false
             ])
             ->add('pictureFiles', FileType::class, [
                 'multiple'=>true,
+                'label'=>'form.picture',
                 "required"=>false
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => TrickGroup::class,
                 'choice_label' => 'name',
-                'label'=> 'Choose one of the group',
+                'label'=> 'form.trickGroup',
                 'multiple' => false,
                 'required' => true,
                 'attr'=>['is_selected'=>'id'],
             ])
             ->add('videos', CollectionType::class, [
-                'entry_type'=> UrlType::class,
+                'entry_type'=> TextType::class,
+                'label'=>'form.videos',
                 'required'=>false,
                 'allow_add'=>true,
                 'data'=>["required"=>[]],

@@ -28,7 +28,7 @@ class EditUserType extends AbstractType
             ->add('currentPassword', PasswordType::class, [
                 'invalid_message' => 'currentPassword.invalidMessage',
                 'required' => false,
-                'label' => 'label.currentPassword'
+                'label' => 'form.currentPassword'
             ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -36,6 +36,7 @@ class EditUserType extends AbstractType
                 'required' => false,
                 'first_options' => ['label' => "label.password"],
                 'validation_groups'=> ["test"],
+                'label'=>'form.password',
                 'second_options' => ['label' => "label.passwordConfirm"]
             ])
             ->add('emailUser', EmailType::class, [
@@ -43,7 +44,8 @@ class EditUserType extends AbstractType
                 'label' => 'form.email'
             ])
             ->add('picture', FileType::class, [
-                "required"=>false
+                "required"=>false,
+                'label'=>'form.picture',
             ]);
     }
 

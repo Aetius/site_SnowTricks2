@@ -2,14 +2,10 @@
 
 namespace App\Form\Picture;
 
-use App\Entity\Picture;
-use App\Entity\Trick;
-use App\Form\Trick\DTO\CreateDTO;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
@@ -25,10 +21,12 @@ class EditType extends AbstractType
                 'choices'=>[
                     'Yes'=> 1,
                     'No'=> 0
-                ]
+                ],
+                'label'=>'form.selectedPicture',
             ])
             ->add('filePicture', FileType::class, [
                 'mapped'=>false,
+                'label'=>'form.filePicture',
                 'required'=>false,
                 'constraints'=>
                 [new Image( ['maxSize'=>"3M"])]

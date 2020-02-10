@@ -12,7 +12,6 @@ use App\Services\TrickGroup\TrickGroupManager;
 use App\Services\Upload\Uploader;
 use App\Services\Video\VideoManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Entity;
 
 class TrickManager
 {
@@ -51,8 +50,7 @@ class TrickManager
             ->setTitle($createDTO->title)
             ->setDescription($createDTO->description)
             ->setTrickGroup($this->trickGroupManager->manager($createDTO));
-
-        $this->save($trick);;
+        return $trick;
     }
 
     public function edit(TrickDTO $dto, Trick $trick, array $uploadedFile)
@@ -63,16 +61,29 @@ class TrickManager
         if ($dto->description) {
             $trick->setDescription($dto->description);
         }
-        if ($dto->trickGroup){
+        if ($dto->trickGroup) {
             $trick->setTrickGroup($dto->trickGroup);
         }
-        if ($dto->pictureFiles){
+        if ($dto->pictureFiles) {
             $this->addImage($trick, $uploadedFile);
         }
-       if($dto->videos['required'] !== null){
-           $this->addVideo($trick, $dto->videos);
-       }
-        $this->save($trick);;
+        if ($dto->videos['required'] !== null) {
+            $this->addVideo($trick, $dto->videos);
+        }
+       return $trick;
+    }
+
+
+    public function delete(Trick $trick)
+    {
+        $this->entityManager->remove($trick);
+        $this->entityManager->flush();
+    }
+
+    public function save(Trick $trick)
+    {
+        $this->entityManager->persist($trick);
+        $this->entityManager->flush();
     }
 
     private function addImage(Trick $trick, array $pictures)
@@ -92,17 +103,5 @@ class TrickManager
             $video->setName($this->videoManager->cleanUrl($videoPath));
             $trick->addVideo($video);
         }
-    }
-
-    public function delete(Trick $trick)
-    {
-        $this->entityManager->remove($trick);
-        $this->entityManager->flush();
-    }
-
-    private function save(Trick $trick)
-    {
-        $this->entityManager->persist($trick);
-        $this->entityManager->flush();
     }
 }

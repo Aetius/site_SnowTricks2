@@ -2,12 +2,9 @@
 
 namespace App\Form\Trick;
 
-use App\Entity\Trick;
 use App\Entity\TrickGroup;
 use App\Form\Trick\DTO\TrickDTO;
-use App\Form\TrickGroup\TrickGroupType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Form\Video\EditVideoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -25,28 +22,31 @@ class CreateType extends AbstractType
         $builder
             ->add('description', TextareaType::class,  [
                 'required'=> true,
+                'label'=>'form.description',
             ])
             ->add('title', TextType::class, [
                 'required'=> true,
+                'label'=>'form.title',
             ])
             ->add('pictureFiles', FileType::class, [
                 'required'=>true,
                 'multiple'=>true,
+                'label'=>'form.picture',
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => TrickGroup::class,
                 'choice_label' => 'name',
-                'label'=> 'Choose one of the group',
+                'label'=> 'form.trickGroup',
                 'multiple' => false,
                 'required' => true,
             ])
 
             ->add('videos', CollectionType::class, [
-                'entry_type'=> UrlType::class,
+                'entry_type'=> TextType::class,
+                'label'=>'form.videos',
                 'required'=>true,
                 'allow_add'=>true,
                 'data'=>["required"=>[]],
-
                 'entry_options' => [
                     'attr' => ['class' => 'video-box'],
                 ],

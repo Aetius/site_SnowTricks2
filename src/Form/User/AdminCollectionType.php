@@ -14,7 +14,7 @@ class AdminCollectionType extends AbstractType
            $builder
                ->add('users', CollectionType::class, [
                    'entry_type' => AdminType::class,
-                    'label'=>""
+                    'label'=>"users"
             ]);
     }
 
