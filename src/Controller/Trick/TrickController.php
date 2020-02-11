@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 class TrickController extends AbstractController
@@ -22,22 +23,31 @@ class TrickController extends AbstractController
     /**
      * @Route("/", name="home", methods={"GET"})
      */
-    public function index(TrickRepository $repository)
+    public function index(TrickRepository $repository, SluggerInterface $slugger)
     {
         $tricks = $repository->findBy(["publicated" => "1"], ["id" => 'DESC'], "10");
+        foreach ($tricks as $trick){
+            $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
+        }
         return $this->render('trick/home.html.twig', [
-            'tricks' => $tricks
+            'tricks' => $tricks,
+            'slug'=>$slugs
         ]);
     }
 
     /**
      * @Route("/page/{id}", name="home_tricks", methods={"GET"})
      */
-    public function showTricksHomePage(int $id, TrickRepository $repository)
+    public function showTricksHomePage(int $id, TrickRepository $repository, SluggerInterface $slugger)
     {
         $min = 10 + ($id * 10);
         $hideButton = false;
         $tricks = $repository->findByMinMax($min);
+
+        foreach ($tricks as $trick){
+            /** @var Trick $trick */
+            $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
+        }
 
         if (count($tricks) < 10) {
             $hideButton = true;
@@ -45,7 +55,8 @@ class TrickController extends AbstractController
 
         return $this->render('/trick/_home_tricks.html.twig', [
             'tricks' => $tricks,
-            'hideButton' => $hideButton
+            'hideButton' => $hideButton,
+            'slug'=>$slugs
         ]);
     }
 
@@ -85,15 +96,17 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
-    public function showOneTrick(Trick $trick, CommentRepository $commentRepository)
+    public function showOneTrick(Trick $trick, CommentRepository $commentRepository, SluggerInterface $slugger)
     {
         $form = $this->createForm(\App\Form\Comment\CreateType::class);
         $comments = $commentRepository->findBy(['trick' => $trick->getId()], ["dateCreation" => "DESC"], 2);
+        $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
-            'comments' => $comments
+            'comments' => $comments,
+            'slug'=>$slugs
         ]);
     }
 

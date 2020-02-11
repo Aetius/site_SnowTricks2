@@ -54,7 +54,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
                 ->setSelectedPicture(false);
 
             $trick
-                ->setTitle($this->datas->getTitle().$i)
+                ->setTitle($this->datas->getTitle()." ".$i)
                 ->setDescription($this->datas->description())
                 ->setPublicated(true)
                 ->setDatePublication(new \DateTime())
