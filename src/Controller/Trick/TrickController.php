@@ -35,8 +35,6 @@ class TrickController extends AbstractController
         ]);
     }
 
-
-
     /**
      * @Route("/page/{id}", name="home_tricks", methods={"GET"})
      */
@@ -57,7 +55,8 @@ class TrickController extends AbstractController
 
         return $this->render('/trick/_home_tricks.html.twig', [
             'tricks' => $tricks,
-            'hideButton' => $hideButton
+            'hideButton' => $hideButton,
+            'slug'=>$slugs
         ]);
     }
 
@@ -97,15 +96,17 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/{id}", name="trick_show", methods={"GET"})
      */
-    public function showOneTrick(Trick $trick, CommentRepository $commentRepository)
-    {   //$url = $this->generateUrl("trick_show", ['id'=>$trick->getId(), 'test'=>'test']); dd($url);
+    public function showOneTrick(Trick $trick, CommentRepository $commentRepository, SluggerInterface $slugger)
+    {
         $form = $this->createForm(\App\Form\Comment\CreateType::class);
         $comments = $commentRepository->findBy(['trick' => $trick->getId()], ["dateCreation" => "DESC"], 2);
+        $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
-            'comments' => $comments
+            'comments' => $comments,
+            'slug'=>$slugs
         ]);
     }
 

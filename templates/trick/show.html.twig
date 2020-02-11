@@ -24,7 +24,7 @@
                 <div class="block-editDelete border">
                     <div class="p-1 d-flex justify-content-center">
                         <div class="pr-2">
-                            <a href="{{ path('trick_edit', {'id':  trick.id }) }}"><i
+                            <a href="{{ path('trick_edit', {'id':  trick.id~'-'~slug[trick.id] }) }}"><i
                                         class="material-icons ">edit</i></a>
                         </div>
                         <div class="">
