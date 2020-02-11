@@ -41,7 +41,7 @@ class PictureController extends AbstractController
         $trickId = $picture->getTrick()->getId();
         if ($this->isCsrfTokenValid('delete'.$picture->getId(), $request->get('_token'))) {
             $editPhoto->delete($picture);
-            $this->addFlash('success', 'deleting_photo');
+            $this->addFlash('success', 'flash.picture.delete');
         }
         return $this->redirectToRoute("trick_edit", ['id' => $trickId]);
     }
@@ -62,7 +62,7 @@ class PictureController extends AbstractController
             $editPhoto
                 ->edit($picture, $form->get('filePicture')
                 ->getData())->save($picture);
-            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+            $this->addFlash('success', "flash.trick.edit");
             return $this->redirectToRoute('trick_edit', ['id'=> $picture->getTrick()->getId()]);
         }
 

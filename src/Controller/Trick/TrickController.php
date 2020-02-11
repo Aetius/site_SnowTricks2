@@ -40,6 +40,7 @@ class TrickController extends AbstractController
      */
     public function showTricksHomePage(int $id, TrickRepository $repository, SluggerInterface $slugger)
     {
+        $slugs = null;
         $min = 10 + ($id * 10);
         $hideButton = false;
         $tricks = $repository->findByMinMax($min);
@@ -72,7 +73,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $service->create($form->getData());
             $service->save($trick);
-            $this->addFlash('success', "Le trick a bien été créé!!");
+            $this->addFlash('success', "flash.trick.create");
             return $this->redirectToRoute(('home'));
         }
 
@@ -124,7 +125,7 @@ class TrickController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $service->edit($dto, $trick, $form->get('pictureFiles')->getData());
             $service->save($trick);
-            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+            $this->addFlash('success', "flash.trick.edit");
             return $this->redirectToRoute('trick_edit', ['id' => $trick->getId()]);
         }
 

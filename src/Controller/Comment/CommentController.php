@@ -30,7 +30,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $comment = $service->create($form->getData(), $trick, $user);
             $service->save($comment);
-            $this->addFlash('success', "Le commentaire a bien été créé!!");
+            $this->addFlash('success', "flash.comment.create");
         }
         return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);
     }
