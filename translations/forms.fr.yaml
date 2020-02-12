@@ -15,9 +15,13 @@ form.trickGroup: Groupe
 form.videos: Vidéo(s) à télécharger
 form.video: Vidéo
 form.users: Utilisateurs
-form.isActive: Utilisateur actif?
+form.isActivate: Utilisateur actif?
 form.role: Rôle de l'utilisateur
 form.picture: Image
+form.roles.invalidMessage: Role invalide
+form.ROLE_USER: Utilisateur non validé
+form.ROLE_EDITOR: Utilisateur validé
+form.ROLE_ADMIN: Administrateur
 
 
 

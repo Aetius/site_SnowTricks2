@@ -31,13 +31,7 @@ class AppTest extends WebTestCase
     }
 
 
-//à définir
-    /*public function testH1Page($url)
-    {
-        $client = static::createClient();
-        $crawler = $client->request('GET', $url);
-        $this->assertSelectorExists('h1');
-    }*/
+
 
     public function testPermanentRedirection()
     {
@@ -84,13 +78,15 @@ class AppTest extends WebTestCase
     }
 
 
+
     public function urlProviderAccessPublicPage()
     {
         yield ['/'];
         yield ['/trick/2'];
         yield ['/login'];
-
         yield ['trick/4/page_comment/2'];
+        yield ['/user/inscription'];
+        yield ['/password_lost'];
     }
 
     public function urlProviderRoleUser()
@@ -117,13 +113,35 @@ class AppTest extends WebTestCase
         yield ['http://localhost/trick/3/page_comment/2'];
     }
 
+    public function urlProviderPostMethodOnly()
+    {
+        yield ['/trick/1/comment/new'];
+    }
 
-// 405 -> POST  yield ['/trick/1/comment/new'];
+
+
+//à définir
+    /*public function testH1Page($url)
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', $url);
+        $this->assertSelectorExists('h1');
+    }*/
+
+
+    /**
+     *@dataProvider urlProviderPostMethodOnly
+     */
+    /* public function testPostMethodOnly($url)
+     {
+         $client = static::createClient();
+         $client->request('POST', $url);
+         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+     }*/
+
 
 
 //token :  yield ['/confirm_email/{token}'];
 //token :  yield ['/password_reset/{token}'];
 
-//erreur 500 yield ['/user/inscription'];
-//erreur 500  yield ['/password_lost'];
 }
