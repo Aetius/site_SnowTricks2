@@ -13,7 +13,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         self::bootKernel();
             $users = self::$container->get(UserRepository::class)->count([]);
-            $this->assertEquals(10, $users);
+            $this->assertEquals(20, $users);
 
     }
 

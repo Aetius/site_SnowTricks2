@@ -39,7 +39,7 @@ trait NeedLogin
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', "/");
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
     }

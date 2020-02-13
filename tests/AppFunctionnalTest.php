@@ -28,7 +28,7 @@ class AppFunctionnalTest extends WebTestCase
     }
 
 
-
+/*
     public function testFailedConnectionPageIsRestricted()
     {
         $client = static::createClient();
@@ -37,7 +37,7 @@ class AppFunctionnalTest extends WebTestCase
 
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-    }
+    }*/
 
 
 

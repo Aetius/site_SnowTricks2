@@ -28,7 +28,7 @@ class TrickController extends AbstractController
         $tricks = $repository->findBy(["publicated" => "1"], ["id" => 'DESC'], "10");
         foreach ($tricks as $trick){
             $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
-        }
+        };
         return $this->render('trick/home.html.twig', [
             'tricks' => $tricks,
             'slug'=>$slugs
@@ -69,7 +69,7 @@ class TrickController extends AbstractController
     {
         $form = $this->createForm(CreateType::class);
         $form->handleRequest($request);
-
+//dd($form->getData());
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $service->create($form->getData());
             $service->save($trick);

@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class TrickTest extends WebTestCase
 {
     use NeedLogin;
+    use TrickRepository;
 
     protected $client;
 
@@ -18,26 +19,31 @@ class TrickTest extends WebTestCase
         $this->client = static::createClient();
     }
 
+    public function testHome()
+    {
+        $this->client->request('GET', '/');
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
 
     /**
      *@dataProvider targetProviderHomePage
      */
-    public function testHomePage($target)
+    public function testTargetHomePage($target)
     {
         $this->client->request('GET', '/');
-        $crawler = $this->client->clickLink($target);
+        $this->client->clickLink($target);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
     /**
      *@dataProvider targetProviderHomePageUserAccess
      */
-    public function testHomePageWithRoleUser($url)
+    public function testTargetHomePageWithRoleUser($target)
     {
         $this->Login($this->client, UserTest::ROLE_USER);
         $this->client->request('GET', '/');
         $this->client->followRedirects(false);
-       ($this->client->clickLink($url));
+        $this->client->clickLink($target);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
@@ -50,23 +56,134 @@ class TrickTest extends WebTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
+    /**
+     * @dataProvider targetProviderRedirectHomeUserAccess
+     */
+    public function testRedirectionHomePageWithRoleUser($target)
+    {
+        $this->Login($this->client, UserTest::ROLE_USER);
+        $this->client->request('GET', '/');
+        $this->client->followRedirects(false);
+        ($this->client->clickLink($target));
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
 
+    /**
+     * @dataProvider targetProviderRedirectHomeUserAccess
+     * @dataProvider targetProviderHomePageUserAccess
+     * @dataProvider targetProviderHomePageEditorAccess
+     * @dataProvider targetProviderHomePageAdminAccess
+     *
+     */
+    public function testAccessTargetNotAllowed($target)
+    {
+        $this->client->request('GET', $target);
+        $this->assertEquals(404, $this->client->getResponse()->getStatusCode());
+    }
+
+
+//New trick
+    public function testFormNewTrickOK()
+    {
+        $title = $this->defineTitle($this->client);
+        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $crawler = $this->client->request('GET', '/trick/new');
+        $button = $crawler->selectButton('Sauvegarder');
+
+        $form = $button->form();
+        $form['create[trickGroup]']->select('2');
+        $form['create[title]']= $title;
+        $form['create[description]']= ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer bibendum id 
+        dolor ut viverra. ';
+         $form['create[videos][required]']='https://www.youtube.com/embed/V9xuy-rVj9w';
+         $form[ 'create[pictureFiles][0]']=__DIR__."/images/montagne.jpg";
+
+        $this->client->submit($form);
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue(
+            $crawler = $this->client->getResponse()->isRedirect('/')
+        );
+    }
+
+    public function testFormNewTrickNonOkTitleAlreadyUsed()
+    {
+        $title = $this->findLastTrick($this->client)->getTitle();
+        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $crawler = $this->client->request('GET', '/trick/new');
+        $button = $crawler->selectButton('Sauvegarder');
+
+        $form = $button->form();
+        $form->disableValidation();
+        $form['create[trickGroup]']->select('Invalid value');
+        $form['create[title]']= $title;
+        $form['create[description]']= " ";
+        $form['create[videos][required]']='https://www.you3tube.com/embed/V9xuy-rVj9w';
+        $form[ 'create[pictureFiles][0]']->upload(' ');
+
+        $crawler = $this->client->submit($form);
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertGreaterThan( //title
+            0,
+            $crawler->filter('html:contains("Ce nom est déjà utilisé.")')->count(),
+            $crawler->filter('html:contains("Cette chaîne est trop courte. Elle doit avoir au minimum 5 caractères.")')->count()
+        );
+        $this->assertGreaterThan( //description
+            0,
+            $crawler->filter('html:contains("Cette valeur ne doit pas être nulle.")')->count(),
+            $crawler->filter('html:contains("Cette chaîne est trop courte. Elle doit avoir au minimum 10 caractères.")')->count()
+        );
+        $this->assertEquals( //video
+            1,
+            $crawler->filter('html:contains("La vidéo doit être une url provenant de Youtube/Dailymotion. ")')->count()
+        );
+        $this->assertGreaterThan( //image
+            0,
+            $crawler->filter('html:contains("The value "image" is not valid.")')->count()
+            );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Edit Page
+
+
+
+
+//home page
     public function targetProviderHomePage()
     {
         yield ['Les tricks'];
         yield ['Accueil'];
         yield ["S'identifier"];
-        //yield ['Créer un compte'];
+        yield ['Créer un compte'];
         yield ['Vulcan 18'];
+    }
+
+    public function targetProviderRedirectHomeUserAccess()
+    {
+        yield ['Se déconnecter'];
     }
 
     public function targetProviderHomePageUserAccess()
     {
         yield ['Mon espace'];
-        yield ['Se déconnecter'];
+
     }
     public function targetProviderHomePageEditorAccess()
     {
+        yield ['Nouveau trick'];
         yield ['edit'];
         yield ['delete'];
     }

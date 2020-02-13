@@ -5,6 +5,7 @@ namespace App\Form\Trick\DTO;
 
 
 use App\Entity\Trick;
+use App\Validator\PicturesCollectionNotNull;
 use App\Validator\UniqueTrick;
 use App\Validator\VideoFormatOk;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
@@ -15,6 +16,7 @@ class TrickDTO
 {
     /**
      * @Assert\Length(min=5, max=100)
+     * @Assert\NotNull()
      * @UniqueTrick()
      */
     public $title;
@@ -22,13 +24,16 @@ class TrickDTO
 
     /**
      * @Assert\Length(min=10)
+     * @Assert\NotNull()
      */
     public $description;
 
     /**
      * @Assert\All({
-     *     @Assert\Image(maxSize="3M")
+     *     @Assert\Image(
+     *     maxSize="3M")
      *     })
+     * @PicturesCollectionNotNull()
      */
     public $pictureFiles;
 
@@ -39,6 +44,7 @@ class TrickDTO
 
     /**
      * @Assert\NotBlank()
+     * @Assert\NotNull()
      */
     public $trickGroup;
 

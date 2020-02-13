@@ -31,7 +31,6 @@ class UserTest extends WebTestCase
 
     public function testLoginSubmitForm()
     {
-
         $crawler = $this->client->request('GET', '/login');
         $form = $crawler->selectButton('Connexion')->form([
             'login'=>'sim1',
@@ -40,11 +39,8 @@ class UserTest extends WebTestCase
        $this->client->submit($form);
 
         $this->assertResponseRedirects('/');
-        $this->client->followRedirect();
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
-
     }
+
     public function testLoginSubmitFailedForm()
     {
         $crawler = $this->client->request('GET', '/login');
@@ -59,10 +55,12 @@ class UserTest extends WebTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
-//pb avec une erreur 500 pour connexion admin.
+
+
     public function testAdministratorAccessAdminOk()
     {
        $this->Login($this->client, self::ROLE_ADMIN);
+
         $crawler = $this->client->request('GET', '/admin');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
 

@@ -16,7 +16,7 @@
                             {% set picturePath = picture.filename %}
                         {% endif %}
                     {% endfor %}
-                    {% if picturePath == "" %}
+                    {% if picturePath == "" and trick.pictures.0 is defined %}
                         {% set picturePath = trick.pictures.0.filename %}
                     {% endif %}
                     {% if trick.PicturesPath != null %}

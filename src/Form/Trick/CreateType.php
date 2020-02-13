@@ -26,6 +26,7 @@ class CreateType extends AbstractType
             ])
             ->add('title', TextType::class, [
                 'required'=> true,
+                'data'=>[],
                 'label'=>'form.title',
             ])
             ->add('pictureFiles', FileType::class, [
