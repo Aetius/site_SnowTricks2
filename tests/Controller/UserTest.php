@@ -63,8 +63,16 @@ class UserTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/admin');
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-
     }
+
+    public function testAdministratorAccessAdminNok()
+    {
+        $this->Login($this->client, self::ROLE_EDITOR);
+
+        $crawler = $this->client->request('GET', '/admin');
+        $this->assertEquals(403, $this->client->getResponse()->getStatusCode());
+    }
+
 
 
 

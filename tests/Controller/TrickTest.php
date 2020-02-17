@@ -4,7 +4,9 @@
 namespace App\Tests\Controller;
 
 
+use App\Entity\Trick;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class TrickTest extends WebTestCase
 {
@@ -46,6 +48,31 @@ class TrickTest extends WebTestCase
         $this->client->clickLink($target);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
+    /**
+     *@dataProvider targetProviderHomePageEditorAccess
+     */
+    public function testTargetHomePageWithRoleEditor($target)
+    {
+        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $this->client->request('GET', '/');
+        //$this->client->followRedirects(false);
+        $this->client->clickLink($target);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     *@dataProvider targetProviderHomePageAdminAccess
+     */
+    public function testTargetHomePageWithRoleAdmin($target)
+    {
+        $this->Login($this->client, UserTest::ROLE_ADMIN);
+        $this->client->request('GET', '/');
+        $this->client->followRedirects(false);
+        $this->client->clickLink($target);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
+
 
     /**
      *@dataProvider urlProviderAjax
@@ -64,7 +91,7 @@ class TrickTest extends WebTestCase
         $this->Login($this->client, UserTest::ROLE_USER);
         $this->client->request('GET', '/');
         $this->client->followRedirects(false);
-        ($this->client->clickLink($target));
+        $this->client->clickLink($target);
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
 
@@ -73,7 +100,6 @@ class TrickTest extends WebTestCase
      * @dataProvider targetProviderHomePageUserAccess
      * @dataProvider targetProviderHomePageEditorAccess
      * @dataProvider targetProviderHomePageAdminAccess
-     *
      */
     public function testAccessTargetNotAllowed($target)
     {
@@ -145,6 +171,51 @@ class TrickTest extends WebTestCase
     }
 
 
+//Delete Trick
+    public function testDeleteTrickOk()
+    {
+
+        self::bootKernel();
+        $token = self::$container->get(CsrfTokenManagerInterface::class)->getToken('delete_1')->getValue();
+        /*$title = $this->findLastTrick($this->client);
+        $this->Login($this->client, UserTest::ROLE_EDITOR);
+         $crawler = $this->client->request('GET', '/');
+
+        //$crawler =$this->client->clickLink('delete');
+        dd($crawler->filter('.delete_30'));
+        dd($crawler->filter('body > delete_44 '));*/
+
+        //$this->execu
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+        //$linkForm = $crawler->selectLink('delete')->link();
+        dd($this->client->clickLink('delete')->siblings());
+        dd($crawler->selectButton('Supprimer'));
+        ($test = $linkForm->getNode()->parentNode->getElementsByTagName('input'));
+       dd($test->item(0));
+        $button = $crawler->selectButton('Supprimer');
+        $form = $button->form(); dd($form);
+        $this->client->submit($form);*/
+
+       /* $this->client->clickLink('delete');
+
+
+        $test = $this->client->submitForm('Supprimer');
+*/
+
+        //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
 
 
 
@@ -190,7 +261,7 @@ class TrickTest extends WebTestCase
 
     public function targetProviderHomePageAdminAccess()
     {
-        yield ['Espace Admin'];
+        yield ['Espace admin'];
 
     }
 

@@ -14,7 +14,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    const MAXIMUM_RESULT = 2;
+    const MAXIMUM_COMMENTS_BY_PAGE = 2;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
@@ -24,7 +24,7 @@ class CommentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->where("p.trick=$trick")
-            ->setMaxResults(self::MAXIMUM_RESULT)
+            ->setMaxResults(self::MAXIMUM_COMMENTS_BY_PAGE)
             ->setFirstResult($min)
             ->orderBy('p.id', 'DESC')
             ->getQuery()
@@ -59,4 +59,15 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findCommentsByTrickId(int $trickId)
+    {
+        return $this->createQueryBuilder('p')
+            ->where("p.trick=$trickId")
+            ->orderBy('p.dateCreation', 'DESC')
+            ->setMaxResults(self::MAXIMUM_COMMENTS_BY_PAGE)
+            ->getQuery()
+            ->getResult();
+
+        //$comments = $commentRepository->findBy(['trick' => $trick->getId()], ["dateCreation" => "DESC"], 2);
+    }
 }

@@ -33,7 +33,7 @@ class TrickDTO
      *     @Assert\Image(
      *     maxSize="3M")
      *     })
-     * @PicturesCollectionNotNull()
+     * @Assert\NotBlank()
      */
     public $pictureFiles;
 

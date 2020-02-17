@@ -37,6 +37,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userCreator->create($form->getData());
+            $userCreator->save($user);
             $notification->confirmEmail($user);
             $this->addFlash('success', "flash.user.registration");
             $this->login($user);

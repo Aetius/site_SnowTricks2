@@ -20,8 +20,8 @@ class NewPasswordType extends AbstractType
                 'invalid_message' => 'La confirmation du mot de passe est incorrecte',
                 'label'=>'form.password',
                 'required' => false,
-                'first_options' => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmation du mot de passe']
+                'first_options' => ['label' => 'form.password'],
+                'second_options' => ['label' => 'form.passwordConfirm']
             ])
         ;
     }

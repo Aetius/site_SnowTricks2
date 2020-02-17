@@ -50,7 +50,7 @@ class AppTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', $url);
         $this->assertTrue(
-            $client->getResponse()->isRedirect('http://localhost/login')
+            $client->getResponse()->isRedirect()
         );
     }
 
@@ -63,7 +63,7 @@ class AppTest extends WebTestCase
         $client->xmlHttpRequest('GET', $url);
         //$this->assertEquals(200, $client->getResponse()->getStatusCode());
         $this->assertTrue(
-            $client->getResponse()->isRedirect('http://localhost/login')
+            $client->getResponse()->isRedirect()
         );
     }
 
@@ -104,13 +104,13 @@ class AppTest extends WebTestCase
 
     public function urlProviderAjaxRoleUser()
     {
-        yield ['http://localhost/video/edit/5'];
+        yield ['/video/edit/5'];
     }
 
     public function urlProviderAjax()
     {
-        yield ['http://localhost/page/2'];
-        yield ['http://localhost/trick/3/page_comment/2'];
+        yield ['/page/2'];
+        yield ['/trick/3/page_comment/2'];
     }
 
     public function urlProviderPostMethodOnly()

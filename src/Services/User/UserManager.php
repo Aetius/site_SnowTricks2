@@ -69,8 +69,6 @@ class UserManager
             ->setPicture($this->uploadService->uploadUserImage($userDTO->picture));
 
         $this->token->create($this->user, EmailLinkToken::ACTION_UPDATE_EMAIL);
-        $this->entityManager->persist($this->user);
-        $this->entityManager->flush();
 
         return ($this->user);
 

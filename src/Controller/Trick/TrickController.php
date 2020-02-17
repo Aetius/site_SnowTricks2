@@ -25,13 +25,14 @@ class TrickController extends AbstractController
      */
     public function index(TrickRepository $repository, SluggerInterface $slugger)
     {
-        $tricks = $repository->findBy(["publicated" => "1"], ["id" => 'DESC'], "10");
-        foreach ($tricks as $trick){
-            $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
+        $tricks = $repository->getFirstPublicatedTricksPage();
+        /** @var Trick $trick */
+        foreach ($tricks as $trick) {
+            $slugs[$trick->getId()] = $slugger->slug($trick->getTitle());
         };
         return $this->render('trick/home.html.twig', [
             'tricks' => $tricks,
-            'slug'=>$slugs
+            'slug' => $slugs
         ]);
     }
 
@@ -41,23 +42,23 @@ class TrickController extends AbstractController
     public function showTricksHomePage(int $id, TrickRepository $repository, SluggerInterface $slugger)
     {
         $slugs = null;
-        $min = 10 + ($id * 10);
+        $min = TrickRepository::MAXIMUM_RESULT_BY_PAGE + ($id * TrickRepository::MAXIMUM_RESULT_BY_PAGE);
         $hideButton = false;
         $tricks = $repository->findByMinMax($min);
 
-        foreach ($tricks as $trick){
+        foreach ($tricks as $trick) {
             /** @var Trick $trick */
-            $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
+            $slugs[$trick->getId()] = $slugger->slug($trick->getTitle());
         }
 
-        if (count($tricks) < 10) {
+        if (count($tricks) < TrickRepository::MAXIMUM_RESULT_BY_PAGE) {
             $hideButton = true;
         }
 
         return $this->render('/trick/_home_tricks.html.twig', [
             'tricks' => $tricks,
             'hideButton' => $hideButton,
-            'slug'=>$slugs
+            'slug' => $slugs
         ]);
     }
 
@@ -69,7 +70,6 @@ class TrickController extends AbstractController
     {
         $form = $this->createForm(CreateType::class);
         $form->handleRequest($request);
-//dd($form->getData());
         if ($form->isSubmitted() && $form->isValid()) {
             $trick = $service->create($form->getData());
             $service->save($trick);
@@ -100,14 +100,14 @@ class TrickController extends AbstractController
     public function showOneTrick(Trick $trick, CommentRepository $commentRepository, SluggerInterface $slugger)
     {
         $form = $this->createForm(\App\Form\Comment\CreateType::class);
-        $comments = $commentRepository->findBy(['trick' => $trick->getId()], ["dateCreation" => "DESC"], 2);
-        $slugs[$trick->getId()]= $slugger->slug($trick->getTitle());
+        $comments = $commentRepository->findCommentsByTrickId($trick->getId());
+        $slugs[$trick->getId()] = $slugger->slug($trick->getTitle());
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
             'form' => $form->createView(),
             'comments' => $comments,
-            'slug'=>$slugs
+            'slug' => $slugs
         ]);
     }
 
@@ -116,10 +116,10 @@ class TrickController extends AbstractController
      * @Route("/edit/trick/{id}", name="trick_edit", methods={"GET|POST"})
      * @IsGranted("ROLE_EDITOR")
      */
-    public function edit(Trick $trick, Request $request, TrickManager $service )
+    public function edit(Trick $trick, Request $request, TrickManager $service)
     {
         $dto = TrickDTO::createFromTrick($trick);
-        $form = $this->createForm(EditType::class,$dto);
+        $form = $this->createForm(EditType::class, $dto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -135,7 +135,5 @@ class TrickController extends AbstractController
         ]);
 
     }
-
-
 
 }

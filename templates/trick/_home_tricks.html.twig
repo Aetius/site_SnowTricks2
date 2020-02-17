@@ -8,7 +8,7 @@
         <div class="card ">
 
             <div class="mb-3 card-img-top d-flex justify-content-center">
-                <a href="{{ path('trick_show', {'id': trick.id}) }}">
+                <a href="{{ path('trick_show', {'id': trick.id~'-'~slug[trick.id] }) }}">
 
                     {% set picturePath = "" %}
                     {% for picture in trick.pictures %}
@@ -42,11 +42,12 @@
                     <a href="{{ path('trick_edit', {'id':  trick.id~'-'~slug[trick.id] }) }}">
                         <i class="material-icons ">edit</i>
                     </a>
-                    <div class="">
+                    <div class="delete_{{ trick.id }}">
                         <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
                         <a href="#confirmDelete" data-toggle="modal"
                            data-url="{{ path('trick_delete', {'id': trick.id}) }}">
                             <i class="material-icons trick-delete-modal">delete</i>
+
                         </a>
                     </div>
                 {% endif %}

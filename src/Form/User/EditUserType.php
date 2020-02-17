@@ -34,10 +34,10 @@ class EditUserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => "password.invalidMessage",
                 'required' => false,
-                'first_options' => ['label' => "label.password"],
+                'first_options' => ['label' => "form.password"],
                 'validation_groups'=> ["test"],
                 'label'=>'form.password',
-                'second_options' => ['label' => "label.passwordConfirm"]
+                'second_options' => ['label' => "form.passwordConfirm"]
             ])
             ->add('emailUser', EmailType::class, [
                 'required' => false,

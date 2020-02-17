@@ -29,7 +29,6 @@ trait NeedLogin
             ->findOneBy(['login'=>$user]);
 
         /** @var User $user */
-        //$this->loginTest($user);
 
         $session = $client->getContainer()->get('session');
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
@@ -38,9 +37,6 @@ trait NeedLogin
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
-
-        $crawler = $client->request('GET', "/");
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
     }
 }
