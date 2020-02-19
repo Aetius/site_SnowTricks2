@@ -31,7 +31,7 @@ class Mailer
         $limitDateConfirmation = new \DateTime('-7 days');
 
         if (($limitDateConfirmation < $user->getEmailLinkToken()->getDateCreation()) &&
-            ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_UPDATE_EMAIL)){
+            ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_UPDATE_EMAIL)) {
             $user->setEmailIsValid(true);
             $user->setRole("ROLE_EDITOR");
             return true;
@@ -42,8 +42,8 @@ class Mailer
     {
         $limitDateConfirmation = new \DateTime('-7 days');
         if ((($user->getEmailLinkToken()->getDateCreation()) > $limitDateConfirmation) &&
-            ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_RESET_PASSWORD)){
-           return true;
+            ($user->getEmailLinkToken()->getAction() === EmailLinkToken::ACTION_RESET_PASSWORD)) {
+            return true;
         };
     }
 

@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -27,7 +26,7 @@ class TrickRepository extends ServiceEntityRepository
 
     public function findByMinMax(int $min)
     {
-      return $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->where('p.publicated=true')
             ->setMaxResults(self::MAXIMUM_RESULT_BY_PAGE)
             ->setFirstResult($min)
@@ -39,13 +38,11 @@ class TrickRepository extends ServiceEntityRepository
     public function findLast()
     {
         return $this->createQueryBuilder('p')
-
             ->orderBy('p.id', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }
-
 
 
     public function getFirstPublicatedTricksPage()

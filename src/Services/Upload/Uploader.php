@@ -40,27 +40,6 @@ class Uploader
         return $namePicture;
     }
 
-
- /*   public function uploadTrickImage(File $uploadedFile)
-    {
-        $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
-
-        if ($uploadedFile instanceof UploadedFile) {
-            $originalNamePicture = $uploadedFile->getClientOriginalName();
-        } else {
-            $originalNamePicture = $uploadedFile->getFilename();
-        }
-
-        $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
-
-        $uploadedFile->move(
-            $directory,
-            $namePicture);
-
-        $this->resize($directory.'/'.$namePicture);
-        return $namePicture;
-    }*/
-
     public function uploadTrickImage(File $uploadedFile)
     {
         $directory = $this->uploadsPath.'/'.self::ARTICLE_IMAGE;
@@ -99,7 +78,8 @@ class Uploader
             $originalNamePicture = $uploadedFile->getFilename();
         }
 
-        $namePicture = Urlizer::urlize(pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
+        $namePicture = Urlizer::urlize(
+                pathinfo($originalNamePicture, PATHINFO_FILENAME)).'-'.uniqid().'.'.$uploadedFile->guessExtension();
 
         $uploadedFile->move(
             $directory,

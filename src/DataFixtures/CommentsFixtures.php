@@ -14,7 +14,7 @@ class CommentsFixtures extends Fixture implements DependentFixtureInterface
 
     private $content;
 
-    const NB_COMMENTS = 50;
+    const NB_COMMENTS = 200;
 
     /**
      * @param ObjectManager $manager

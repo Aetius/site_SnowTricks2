@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Tests\Controller;
+namespace App\Tests\Repository;
 
 
 use App\Entity\Trick;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
-trait TrickRepository
+trait TrickRepositoryTest
 {
     public function defineTitle(KernelBrowser $client)
     {

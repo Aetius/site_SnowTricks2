@@ -22,6 +22,8 @@ form.roles.invalidMessage: Role invalide
 form.ROLE_USER: Utilisateur non validé
 form.ROLE_EDITOR: Utilisateur validé
 form.ROLE_ADMIN: Administrateur
+form.selectFile: Sélectionner un fichier
+
 
 
 

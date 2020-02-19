@@ -28,10 +28,10 @@ class EditUserDTO extends UserDTO
      */
     public function changingPassword(ExecutionContextInterface $context)
     {
-       if ($this->password !== null) {
+        if ($this->password !== null) {
             $context->getMetadata()->addPropertyConstraint(
-               'currentPassword',
-               new UserPassword());
+                'currentPassword',
+                new UserPassword());
         }
     }
 

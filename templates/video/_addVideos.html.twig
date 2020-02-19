@@ -1,23 +1,24 @@
-
-    {{ form_label(form.videos) }}
+{{ form_label(form.videos) }}
     {{ (form_errors(form.videos)) }}
-    <ul id="video-fields-list" class="list-unstyled"
-        data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}"
-        data-widget-tags="{{ '<li class="add_widget"></li>'|e }}"
-        data-widget-counter="{{ form.videos|length }}">
+<ul id="video-fields-list" class="list-unstyled"
+    data-prototype="{{ form_widget(form.videos.vars.prototype)|e }}"
+    data-widget-tags="{{ '<li class="add_widget"></li>'|e }}"
+    data-widget-counter="{{ form.videos|length }}">
 
-        {% for videoField in form.videos %}
-            <li>
-                {{ form_errors(videoField) }}
-                {{ form_widget(videoField) }}
-            </li>
-        {% endfor %}
-    </ul>
+    {% for videoField in form.videos %}
+        <li>
+            {{ form_errors(videoField) }}
+            {{ form_widget(videoField) }}
+        </li>
+    {% endfor %}
+</ul>
 
-    <button type="button"
-            class="add-another-collection-widget btn btn-outline-secondary btn-sm m-1"
-            data-list-selector="#video-fields-list">Ajouter une nouvelle vidéo.</button>
-    <button type="button"
-            class="delete-another-collection-widget btn btn-outline-secondary btn-sm m-1"
-    >Supprimer le champ</button>
+<button type="button"
+        class="add-another-collection-widget btn btn-outline-secondary btn-sm m-1"
+        data-list-selector="#video-fields-list">Ajouter une nouvelle vidéo.
+</button>
+<button type="button"
+        class="delete-another-collection-widget btn btn-outline-secondary btn-sm m-1">
+    Supprimer le champ
+</button>
 

@@ -65,7 +65,7 @@ class UserManager
             ->setLogin($userDTO->login)
             ->setPassword($this->encoder->encodePassword($this->user, $userDTO->password))
             ->setEmail($userDTO->emailUser)
-            ->setUpdatedat(new \DateTime('now'))
+            ->setUpdatedAt(new \DateTime('now'))
             ->setPicture($this->uploadService->uploadUserImage($userDTO->picture));
 
         $this->token->create($this->user, EmailLinkToken::ACTION_UPDATE_EMAIL);
@@ -94,11 +94,11 @@ class UserManager
             $this->token->create($user, EmailLinkToken::ACTION_UPDATE_EMAIL);
             $this->notification->confirmEmail($this->user);
         }
-        if (!empty($userDTO->picture)){
+        if (!empty($userDTO->picture)) {
             $this->user->setPicture($this->uploadService->uploadUserImage($userDTO->picture));
         }
 
-        $this->user->setUpdatedat(new \DateTime('now'));
+        $this->user->setUpdatedAt(new \DateTime('now'));
 
         return $this->user;
     }
@@ -120,7 +120,7 @@ class UserManager
         $this->token->create($this->user, EmailLinkToken::ACTION_RESET_PASSWORD);
         $this->notification->lostPassword($this->user);
 
-        $this->user->setUpdatedat(new \DateTime('now'));
+        $this->user->setUpdatedAt(new \DateTime('now'));
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
     }

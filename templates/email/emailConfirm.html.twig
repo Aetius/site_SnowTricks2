@@ -1,18 +1,22 @@
-<h1>Hello {{ login }}!</h1>
+<h1>
+    Hello {{ login }}!
+</h1>
 
 <p>
     Tu viens de t'inscrire sur Snowtrick sous le pseudo {{ login }} :
 </p>
 
 <p>
-    Pour valider ton inscription, merci de cliquer ou de copier le lien ci dessous. Il permettra à la fois de valider l'email, et de retourner sur le site.
-    Si tu n'es pas à l'origine de cette inscription, n'hésite pas à contacter le webmaster (et à changer ton mot de passe).
+    Pour valider ton inscription, merci de cliquer ou de copier le lien ci dessous. Il permettra à la fois de valider
+    l'email, et de retourner sur le site.
+    Si tu n'es pas à l'origine de cette inscription, n'hésite pas à contacter le webmaster (et à changer ton mot de
+    passe).
 </p>
 <p>
 
     <a href="{{ url( url , {token: pass} ) }}">
         Clique sur ce lien pour confirmer.
-       </a>
+    </a>
     (Ce lien est valable jusqu'à {{ expiration_date|date('F jS') }})
 </p>
 

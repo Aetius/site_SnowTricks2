@@ -73,6 +73,10 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
             throw new CustomUserMessageAuthenticationException('Le couple login/mot de passe est incorrect !');
         }
 
+        if ($user->getIsActivate() == false){
+            throw new CustomUserMessageAuthenticationException("Ce login est désactivé. Veuillez contacter l'administrateur du site !");
+        }
+
         return $user;
     }
 

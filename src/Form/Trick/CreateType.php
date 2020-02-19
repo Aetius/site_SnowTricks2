@@ -10,9 +10,9 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CreateType extends AbstractType
 {
@@ -20,41 +20,45 @@ class CreateType extends AbstractType
     {
 
         $builder
-            ->add('description', TextareaType::class,  [
-                'required'=> true,
-                'label'=>'form.description',
+            ->add('description', TextareaType::class, [
+                'required' => true,
+                'label' => 'form.description',
+                'constraints'=> new NotBlank(),
             ])
             ->add('title', TextType::class, [
-                'required'=> true,
-                'data'=>[],
-                'label'=>'form.title',
+                'required' => true,
+                'data' => [],
+                'label' => 'form.title',
+                'constraints'=> new NotBlank(),
             ])
             ->add('pictureFiles', FileType::class, [
-                'required'=>true,
-                'multiple'=>true,
-                'label'=>'form.picture',
+                'required' => true,
+                'multiple' => true,
+                'label' => 'form.picture',
+                'attr' => ['placeholder' => 'form.selectFile'],
+                'constraints'=> new NotBlank(),
             ])
             ->add('trickGroup', EntityType::class, [
                 'class' => TrickGroup::class,
                 'choice_label' => 'name',
-                'label'=> 'form.trickGroup',
+                'label' => 'form.trickGroup',
                 'multiple' => false,
                 'required' => true,
+                'constraints'=> new NotBlank(),
             ])
-
             ->add('videos', CollectionType::class, [
-                'entry_type'=> TextType::class,
-                'label'=>'form.videos',
-                'required'=>true,
-                'allow_add'=>true,
-                'data'=>["required"=>[]],
+                'entry_type' => TextType::class,
+                'label' => 'form.videos',
+                'required' => true,
+                'allow_add' => true,
+                'data' => ["required" => []],
                 'entry_options' => [
-                    'attr' => ['class' => 'video-box'],
+                    'attr' => [
+                        'class' => 'video-box',
+                        'placeholder' => 'form.selectFile'],
                 ],
-                'prototype'=>true,
-            ])
-
-        ;
+                'prototype' => true,
+            ]);
     }
 
 
@@ -62,9 +66,9 @@ class CreateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => TrickDTO::class,
-            'translation_domain'=>'forms',
-            'error_mapping'=>[
-                'videos'=>'videos.required',
+            'translation_domain' => 'forms',
+            'error_mapping' => [
+                'videos' => 'videos.required',
             ]
         ]);
     }

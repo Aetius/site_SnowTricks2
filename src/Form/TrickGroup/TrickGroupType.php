@@ -14,10 +14,10 @@ class TrickGroupType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-       $builder
-           ->add('name', TextType::class, [
-               'label'=>'form.trickGroup',
-           ]);
+        $builder
+            ->add('name', TextType::class, [
+                'label' => 'form.trickGroup',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

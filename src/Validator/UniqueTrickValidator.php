@@ -27,8 +27,8 @@ class UniqueTrickValidator extends ConstraintValidator
             return;
         }
 
-        if ( $result = $this->repository->findOneBy(['title' => $value])){
-            if (($result->getId() != $this->context->getObject()->id)){
+        if ($result = $this->repository->findOneBy(['title' => $value])) {
+            if (($result->getId() != $this->context->getObject()->id)) {
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('value', $value)
                     ->addViolation();

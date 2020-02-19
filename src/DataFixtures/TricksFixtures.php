@@ -23,8 +23,8 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
     private $uploadService;
 
 
-    private $title = ["Switch", "180°", "Scarecrow – 360°", "Indy Glide", "Mobydick", "Scarecrow", "HeelSide 360°", "Hellside 360°",
-        "Backroll", "Ollie 180° Front – 180°", "Ollie 360°", "Backroll", "Raley", "S-Bend", "Raley", "Vulcan", "backmob",
+    private $title = ["Switch", "180°", "Scarecrow – 360°", "Indy Glide", "Mobydick", "Scarecrow", "Hellside 360°",
+        "Backroll", "Ollie 180°", "Front 180°", "Ollie 360°", "Backroll", "S-Bend", "Raley", "Vulcan", "backmob",
         "Switch 313 front", "Wakeskate Ollie North", "Shove it", "Boardslide 360° sur rooftop", "360° rewind"];
 
 
@@ -67,7 +67,7 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
             $picture = $this->picture();
 
             $trick
-                ->setTitle($this->getTitle()." ".$i)
+                ->setTitle($this->title[$i])
                 ->setDescription($this->description)
                 ->setPublicated(true)
                 ->setDatePublication(new \DateTime())
@@ -131,15 +131,6 @@ class TricksFixtures extends Fixture implements DependentFixtureInterface
     {
         $target = (sys_get_temp_dir().$this->pictureTargetPath);
         return $target;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        $number = rand(0, (count($this->title)) - 1);
-        return $this->title[$number];
     }
 
     /**

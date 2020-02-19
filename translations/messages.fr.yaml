@@ -8,3 +8,4 @@ flash.comment.create: Le commentaire a bien été créé!!
 flash.picture.delete: Image supprimée
 flash.trick.edit: Le trick a bien été mis à jour!!
 flash.trick.create: Le trick a bien été créé!!
+flash.comment.create.error: Echec lors de l'enregistrement du commentaire.

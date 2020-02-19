@@ -14,30 +14,29 @@ class EditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder,$options);
+        parent::buildForm($builder, $options);
 
         $builder
             ->add('selectedPicture', ChoiceType::class, [
-                'choices'=>[
-                    'Yes'=> 1,
-                    'No'=> 0
+                'choices' => [
+                    'Yes' => 1,
+                    'No' => 0
                 ],
-                'label'=>'form.selectedPicture',
+                'label' => 'form.selectedPicture',
             ])
             ->add('filePicture', FileType::class, [
-                'mapped'=>false,
-                'label'=>'form.filePicture',
-                'required'=>false,
-                'constraints'=>
-                [new Image( ['maxSize'=>"3M"])]
-            ])
-        ;
+                'mapped' => false,
+                'label' => 'form.filePicture',
+                'required' => false,
+                'constraints' =>
+                    [new Image(['maxSize' => "3M"])]
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'translation_domain'=>'forms',
+            'translation_domain' => 'forms',
         ]);
     }
 

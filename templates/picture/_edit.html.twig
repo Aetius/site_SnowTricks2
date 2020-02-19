@@ -1,36 +1,25 @@
-
-
 <div id="" class=" container d-flex">
     <div class="col-md-8 text-center">
-        <div >
+        <div>
             <img src="{{ asset(uploaded_asset(picture.filename)) }}" height="300" alt=""/>
-
         </div>
     </div>
-    <div class="col-md-4" >
+    <div class="col-md-4">
         {{ form_start(form, {'attr': {'id':"pictureId"}}) }}
         <div class="my-5">
-            <div >
-
+            <div>
                 {{ form_row(form.filePicture) }}
                 {{ form_row(form.selectedPicture) }}
             </div>
-
-
             <div class="hidden">
                 {{ form_rest(form) }}
             </div>
-            </div>
+        </div>
         <div class="text-center mt-4">
-
-            <div >
-
+            <div>
                 <button type="submit" class="btn btn-primary">Sauvegarder</button>
             </div>
-
         </div>
         {{ form_end(form) }}
     </div>
-
-
 </div>

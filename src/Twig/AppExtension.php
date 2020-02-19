@@ -21,7 +21,8 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         $this->container = $container;
     }
 
-    public function  getUploadService(){
+    public function getUploadService()
+    {
         return $this->container
             ->get(Uploader::class);
     }
@@ -31,26 +32,20 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
         return [
             new TwigFunction('uploaded_asset', [$this, 'getUploadedAssetPath']),
             new TwigFunction('uploaded_thumbnail_asset', [$this, 'getUploadedThumbnailAssetPath']),
-            new TwigFunction('uploaded_user_asset',[$this, 'getUploadedUserAssetPath'])
+            new TwigFunction('uploaded_user_asset', [$this, 'getUploadedUserAssetPath'])
         ];
     }
 
-   /* public function getFilters()
-    {
-        return [
-            new TwigFilter('test', [$this, 'getTest'])
-        ];
-    }*/
 
     public function getUploadedAssetPath(string $path): string
     {
-         return $this->getUploadService()
-             ->getPath(Uploader::ARTICLE_IMAGE.'/'.$path);
+        return $this->getUploadService()
+            ->getPath(Uploader::ARTICLE_IMAGE.'/'.$path);
     }
 
     public function getUploadedThumbnailAssetPath(string $path)
     {
-        return  $this->getUploadService()
+        return $this->getUploadService()
             ->resizeThumbnail($path)
             ->getPath(Uploader::THUMBNAIL_IMAGE.'/'.$path);
     }
@@ -70,19 +65,5 @@ class AppExtension extends AbstractExtension implements ServiceSubscriberInterfa
             Uploader::class,
         ];
     }
-
-    /*public function getTest($path)
-    {
-        return $this->cache->create($path);
-
-       $imagine = new \Imagine\Gd\Imagine();
-        $image = $imagine->open($path);
-        $size = new Box(100, 100);
-        $mode    = ImageInterface::THUMBNAIL_INSET;
-        return( $image
-            ->thumbnail($size, $mode)
-            ->show('png')
-            );
-    }*/
 
 }

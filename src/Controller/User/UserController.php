@@ -6,14 +6,12 @@ use App\Entity\EmailLinkToken;
 use App\Entity\User;
 use App\Form\User\AdminCollectionType;
 use App\Form\User\DTO\EditUserDTO;
-use App\Form\User\DTO\UserDTO;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
 use App\Form\User\RegistrationUserType;
 use App\Notification\EmailNotification;
 use App\Repository\UserRepository;
-use App\Security\TokenEmail;
 use App\Services\Email\Mailer;
 use App\Services\User\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -84,7 +82,7 @@ class UserController extends AbstractController
             if ($user = $userRepository->findOneBy(['login' => $form->getData()->login])) {
                 $editor->resetPassword($user);
             }
-            $this->addFlash('success', 'flash.user.passwordLost');
+            $this->addFlash('success',"flash.user.passwordLost");
         }
         return $this->render('user/password_lost.html.twig', [
             'form' => $form->createView()
@@ -94,9 +92,8 @@ class UserController extends AbstractController
     /**
      * @Route ("/confirm_email/{token}", name="user_confirm_email",  methods={"GET"})
      */
-    public function confirmEmail(User $user, Mailer $emailSevice)
+    public function confirmEmail(EmailLinkToken $emailLinkToken, User $user, Mailer $emailSevice)
     {
-
         if ($emailSevice->validationEmail($user) === true) {
             $emailSevice->save($user);
             $this->addFlash('success', "flash.user.confirmEmail.success");
@@ -109,7 +106,7 @@ class UserController extends AbstractController
     /**
      * @Route ("/password_reset/{token}", name="user_password_reset",  methods={"GET|POST"})
      */
-    public function resetPassword(User $user, Request $request, Mailer $emailSevice, UserManager $userEditor)
+    public function resetPassword(EmailLinkToken $emailLinkToken, User $user, Request $request, Mailer $emailSevice, UserManager $userEditor)
     {
         if ($emailSevice->lostPassword($user) === true) {
             $form = $this->createForm(NewPasswordType::class);

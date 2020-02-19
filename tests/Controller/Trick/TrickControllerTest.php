@@ -1,17 +1,20 @@
 <?php
 
 
-namespace App\Tests\Controller;
+namespace App\Tests\Controller\Trick;
 
 
 use App\Entity\Trick;
+use App\Tests\Controller\NeedLogin;
+use App\Tests\Controller\User\UserControllerTest;
+use App\Tests\Repository\TrickRepositoryTest;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
-class TrickTest extends WebTestCase
+class TrickControllerTest extends WebTestCase
 {
     use NeedLogin;
-    use TrickRepository;
+    use TrickRepositoryTest;
 
     protected $client;
 
@@ -21,11 +24,6 @@ class TrickTest extends WebTestCase
         $this->client = static::createClient();
     }
 
-    public function testHome()
-    {
-        $this->client->request('GET', '/');
-        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-    }
 
     /**
      *@dataProvider targetProviderHomePage
@@ -42,7 +40,7 @@ class TrickTest extends WebTestCase
      */
     public function testTargetHomePageWithRoleUser($target)
     {
-        $this->Login($this->client, UserTest::ROLE_USER);
+        $this->Login($this->client, UserControllerTest::ROLE_USER);
         $this->client->request('GET', '/');
         $this->client->followRedirects(false);
         $this->client->clickLink($target);
@@ -53,7 +51,7 @@ class TrickTest extends WebTestCase
      */
     public function testTargetHomePageWithRoleEditor($target)
     {
-        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
         $this->client->request('GET', '/');
         //$this->client->followRedirects(false);
         $this->client->clickLink($target);
@@ -65,7 +63,7 @@ class TrickTest extends WebTestCase
      */
     public function testTargetHomePageWithRoleAdmin($target)
     {
-        $this->Login($this->client, UserTest::ROLE_ADMIN);
+        $this->Login($this->client, UserControllerTest::ROLE_ADMIN);
         $this->client->request('GET', '/');
         $this->client->followRedirects(false);
         $this->client->clickLink($target);
@@ -88,7 +86,7 @@ class TrickTest extends WebTestCase
      */
     public function testRedirectionHomePageWithRoleUser($target)
     {
-        $this->Login($this->client, UserTest::ROLE_USER);
+        $this->Login($this->client, UserControllerTest::ROLE_USER);
         $this->client->request('GET', '/');
         $this->client->followRedirects(false);
         $this->client->clickLink($target);
@@ -112,7 +110,7 @@ class TrickTest extends WebTestCase
     public function testFormNewTrickOK()
     {
         $title = $this->defineTitle($this->client);
-        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
         $crawler = $this->client->request('GET', '/trick/new');
         $button = $crawler->selectButton('Sauvegarder');
 
@@ -122,7 +120,7 @@ class TrickTest extends WebTestCase
         $form['create[description]']= ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer bibendum id 
         dolor ut viverra. ';
          $form['create[videos][required]']='https://www.youtube.com/embed/V9xuy-rVj9w';
-         $form[ 'create[pictureFiles][0]']=__DIR__."/images/montagne.jpg";
+         $form[ 'create[pictureFiles][0]']= __DIR__."/images/montagne.jpg";
 
         $this->client->submit($form);
 
@@ -132,10 +130,10 @@ class TrickTest extends WebTestCase
         );
     }
 
-    public function testFormNewTrickNonOkTitleAlreadyUsed()
+    public function testFormNewTrickNok()
     {
         $title = $this->findLastTrick($this->client)->getTitle();
-        $this->Login($this->client, UserTest::ROLE_EDITOR);
+        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
         $crawler = $this->client->request('GET', '/trick/new');
         $button = $crawler->selectButton('Sauvegarder');
 
@@ -162,11 +160,11 @@ class TrickTest extends WebTestCase
         );
         $this->assertEquals( //video
             1,
-            $crawler->filter('html:contains("La vidéo doit être une url provenant de Youtube/Dailymotion. ")')->count()
+            $crawler->filter('html:contains("La vidéo doit être une url provenant de Youtube/Dailymotion.")')->count()
         );
         $this->assertGreaterThan( //image
             0,
-            $crawler->filter('html:contains("The value "image" is not valid.")')->count()
+            $crawler->filter('html:contains("Cette valeur ne doit pas être vide.")')->count()
             );
     }
 
@@ -174,62 +172,20 @@ class TrickTest extends WebTestCase
 //Delete Trick
     public function testDeleteTrickOk()
     {
+        $trick = $this->findLastTrick($this->client)->getId();
+        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
 
-        self::bootKernel();
-        $token = self::$container->get(CsrfTokenManagerInterface::class)->getToken('delete_1')->getValue();
-        /*$title = $this->findLastTrick($this->client);
-        $this->Login($this->client, UserTest::ROLE_EDITOR);
-         $crawler = $this->client->request('GET', '/');
+        $client = self::bootKernel();
+        $token = self::$container->get(CsrfTokenManagerInterface::class)->getToken('delete'.$trick)->getValue();
 
-        //$crawler =$this->client->clickLink('delete');
-        dd($crawler->filter('.delete_30'));
-        dd($crawler->filter('body > delete_44 '));*/
+        $this->client->request('GET',"/trick/delete/$trick",
+            ['request'=>[
+                "_token" => $token,
+                "_method" => "GET"]]
+        );
 
-        //$this->execu
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-        //$linkForm = $crawler->selectLink('delete')->link();
-        dd($this->client->clickLink('delete')->siblings());
-        dd($crawler->selectButton('Supprimer'));
-        ($test = $linkForm->getNode()->parentNode->getElementsByTagName('input'));
-       dd($test->item(0));
-        $button = $crawler->selectButton('Supprimer');
-        $form = $button->form(); dd($form);
-        $this->client->submit($form);*/
-
-       /* $this->client->clickLink('delete');
-
-
-        $test = $this->client->submitForm('Supprimer');
-*/
-
-        //$this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
-
-
-
-
-
-
-
-
-
-
-
-//Edit Page
-
-
 
 
 //home page
@@ -267,7 +223,7 @@ class TrickTest extends WebTestCase
 
     public function urlProviderAjax()
     {
-        yield ['http://localhost/page/2'];
+        yield ['/page/2'];
     }
 
 

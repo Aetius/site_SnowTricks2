@@ -16,23 +16,22 @@ class TrickType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                'label'=>'form.title',
+                'label' => 'form.title',
             ])
             ->add('datePublication', TextType::class, [
-                'required'=>false])
+                'required' => false])
             ->add('description', TextareaType::class, [
-                'label'=>'form.description',
+                'label' => 'form.description',
             ])
             ->add('publicated', CheckboxType::class, [
-                'required'=>false])
-        ;
+                'required' => false]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Trick::class,
-            'translation_domain'=>'forms'
+            'translation_domain' => 'forms'
         ]);
     }
 }

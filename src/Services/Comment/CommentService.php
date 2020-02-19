@@ -9,7 +9,6 @@ use App\Entity\Trick;
 use App\Entity\User;
 use App\Form\Comment\DTO\CommentDTO;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommentService
 {
@@ -23,7 +22,7 @@ class CommentService
         $this->entityManager = $entityManager;
     }
 
-    public function create (CommentDTO $commentDTO, Trick $trick, User $user)
+    public function create(CommentDTO $commentDTO, Trick $trick, User $user)
     {
         $comment = new Comment();
         $comment

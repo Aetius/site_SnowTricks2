@@ -12,7 +12,7 @@ class TokenEmail
 
     public function create(User $user, int $action)
     {
-        if ($user->getEmailLinkToken() === null){
+        if ($user->getEmailLinkToken() === null) {
             $emailToken = new EmailLinkToken();
             $user->setEmailLinkToken($emailToken);
         }

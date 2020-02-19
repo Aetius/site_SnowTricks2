@@ -44,7 +44,7 @@ class UsersFixtures extends Fixture
         for ($i = 0; $i < self::NB_USERS; $i++) {
             $user = new User();
 
-            $user->setLogin('sim'.$i)
+            $user->setLogin('sim'.' '.$i)
                 ->setPassword($this->encoder->encodePassword($user, 'demo'))
                 ->setEmail("sim$i@yahoo.fr")
                 ->setPicture($this->addPicture());

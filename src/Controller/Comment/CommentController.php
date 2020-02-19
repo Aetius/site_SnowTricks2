@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommentController extends AbstractController
 {
-    const NUMBER_OF_COMMENT_BY_VIEW = 2;
+    const NUMBER_OF_COMMENT_BY_VIEW = 10;
     /**
      *@Route("/trick/{id}/comment/new", name="comment_create", methods={"POST"})
      */
@@ -31,6 +31,8 @@ class CommentController extends AbstractController
             $comment = $service->create($form->getData(), $trick, $user);
             $service->save($comment);
             $this->addFlash('success', "flash.comment.create");
+        }else{
+            $this->addFlash('danger', "flash.comment.create.error");
         }
         return $this->redirectToRoute('trick_show', ['id'=>$trick->getId()]);
     }
