@@ -1,7 +1,6 @@
 {% extends "base.html.twig" %}
 {% block body %}
 
-    {# {% import "macro/form.html.twig" as form %}#}
     {% set picturePath = "" %}
     <div class="container mt-5">
         {% include '_message_flash.html.twig' %}
@@ -17,88 +16,84 @@
             {% endif %}
 
             <img src="{{ asset( uploaded_asset(picturePath ) ) }}" alt="background image" width="100%" height="100%">
-                <div class="text-center">
-                    <h1>{{ trick.title }}
-                    </h1>
-                </div>
+            <div class="text-center">
+                <h1>{{ trick.title }}
+                </h1>
             </div>
-                <nav class="navbar navbar-light navbar-expand-lg d-flex justify-content-center">
-                    <div class="">
-                        <button class="d-lg-none navbar-toggler toggler-example" type="button" data-toggle="collapse" data-target="#display_medias" aria-controls="display_medias"
-                                aria-expanded="false" aria-label="Toggle navigation">
-                            Voir les médias
-                            <span class="dark-blue-text">
+        </div>
+        <nav class="navbar navbar-light navbar-expand-lg d-flex justify-content-center">
+            <div class="">
+                <button class="d-lg-none navbar-toggler toggler-example" type="button" data-toggle="collapse"
+                        data-target="#display_medias" aria-controls="display_medias"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    Voir les médias
+                    <span class="dark-blue-text">
                     <i class="fas fa-bars fa-1x"></i>
                 </span>
-                        </button>
-                    </div>
-                    <div class="collapse navbar-collapse" id="display_medias">
-                        <ul class="navbar-nav mr-auto">
-                            {% for picture in trick.getPictures %}
-                                <li class="nav-item p-2">
-                                    <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="150" width="200"
-                                         alt="Image de {{ trick.title }}">
-                                    {% include "picture/_editAndDeletePictures.html.twig" %}
-                                </li>
-                            {% endfor %}
-                            {% for video in trick.getVideos %}
-                                <li class="nav-item p-2">
-                                    <iframe frameborder="0" width="200" height="150" src="{{ video.name }}" allowfullscreen
-                                            type="text/html" allow="autoplay encrypted-media; gyroscope; picture-in-picture"></iframe>
-                                    {% include "video/_editAndDeleteVideos.html.twig" %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </nav>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="display_medias">
+                <ul class="navbar-nav mr-auto">
+                    {% for picture in trick.getPictures %}
+                        <li class="nav-item p-2">
+                            <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="150" width="200"
+                                 alt="Image de {{ trick.title }}">
+                            {% include "picture/_editAndDeletePictures.html.twig" %}
+                        </li>
+                    {% endfor %}
+                    {% for video in trick.getVideos %}
+                        <li class="nav-item p-2">
+                            <iframe frameborder="0" width="200" height="150" src="{{ video.name }}" allowfullscreen
+                                    type="text/html"
+                                    allow="autoplay encrypted-media; gyroscope; picture-in-picture"></iframe>
+                            {% include "video/_editAndDeleteVideos.html.twig" %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </nav>
 
-            <div class="col-md-12 trickEdit mt-4">
-                {{ form_start((form)) }}
+        <div class="col-md-12 trickEdit mt-4">
+            {{ form_start((form)) }}
+            <div class="col-md-8">
+                {{ form_row(form.title) }}
+            </div>
+            <div class="text col-md-12">
+                {{ form_row(form.description) }}
+            </div>
+            <div class="text col-md-4 mb-3">
+                {{ form_row(form.trickGroup) }}
+            </div>
 
+            <div class=" col-md-12 column no-gutters ">
+                <div class="col-md-6">
+                    {{ form_row(form.pictureFiles) }}
+                </div>
+                <div class="col-md-6 ">
+                    {% include ("/video/_addVideos.html.twig") %}
+                </div>
+            </div>
 
-                        <div class="col-md-8">
-                            {{ form_row(form.title) }}
-                        </div>
-               
-                    <div class="text col-md-12">
-                        {{ form_row(form.description) }}
-                    </div>
-                    <div class="text col-md-4 mb-3">
-                        {{ form_row(form.trickGroup) }}
-                    </div>
-
-                    <div class=" col-md-12 column no-gutters ">
-                        <div class="col-md-6">
-                            {{ form_row(form.pictureFiles) }}
-                        </div>
-                        <div class="col-md-6 ">
-                            {% include ("/video/_addVideos.html.twig") %}
-                        </div>
-                    </div>
-
-                    <div hidden>
-                        {{ form_rest(form) }}
-                    </div>
-                    <div class=" d-flex flex-row justify-content-end mt-4">
-                        <button class="btn btn-primary mx-3 mr-4">Sauvegarder</button>
+            <div hidden>
+                {{ form_rest(form) }}
+            </div>
+            <div class=" d-flex flex-row justify-content-end mt-4">
+                <button class="btn btn-primary mx-3 mr-4">Sauvegarder</button>
                 {{ form_end(form) }}
-
 
                 <div class="">
                     <a href="#confirmDelete" data-toggle="modal"
-                                  data-url="{{ path('trick_delete', {'id': trick.id}) }}">
-                    <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
+                       data-url="{{ path('trick_delete', {'id': trick.id}) }}">
+                        <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
                         <div class="btn btn-danger trick-delete-modal">Supprimer</div>
-
                     </a>
                 </div>
             </div>
         </div>
-
     </div>
 
-{% include "/modal/_modal_confirm_close.html.twig" %}
-{% include "/modal/_modal_edit_picture.html.twig" %}
-{% include "/modal/_modal_edit_video.html.twig" %}
+    {% include "/modal/_modal_confirm_close.html.twig" %}
+    {% include "/modal/_modal_edit_picture.html.twig" %}
+    {% include "/modal/_modal_edit_video.html.twig" %}
 
 {% endblock %}

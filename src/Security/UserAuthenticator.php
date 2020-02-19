@@ -29,7 +29,8 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
     private $csrfTokenManager;
     private $passwordEncoder;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator,
+                                CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
@@ -70,6 +71,10 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
         if (!$user) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Le couple login/mot de passe est incorrect !');
+        }
+
+        if ($user->getIsActivate() == false){
+            throw new CustomUserMessageAuthenticationException("Ce login est désactivé. Veuillez contacter l'administrateur du site !");
         }
 
         return $user;

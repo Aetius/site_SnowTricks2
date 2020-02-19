@@ -16,6 +16,7 @@ class UsersFixtures extends Fixture
 {
 
     public const USERS = "getUsers";
+    const NB_USERS = 20;
 
     /**
      * @var UserPasswordEncoderInterface
@@ -31,20 +32,19 @@ class UsersFixtures extends Fixture
     private $targetPath = '/montagne.jpg';
 
 
-
     public function __construct(UserPasswordEncoderInterface $encoder, Uploader $uploadService)
     {
-        $this -> encoder = $encoder;
+        $this->encoder = $encoder;
         $this->uploadService = $uploadService;
     }
 
     public function load(ObjectManager $manager)
     {
 
-        for ($i = 0; $i <20; $i++){
+        for ($i = 0; $i < self::NB_USERS; $i++) {
             $user = new User();
 
-            $user->setLogin('sim'.$i)
+            $user->setLogin('sim'.' '.$i)
                 ->setPassword($this->encoder->encodePassword($user, 'demo'))
                 ->setEmail("sim$i@yahoo.fr")
                 ->setPicture($this->addPicture());
@@ -54,22 +54,22 @@ class UsersFixtures extends Fixture
             $manager->persist($user);
             $manager->flush();
         }
-
     }
 
 
-
+    /**
+     * @return string
+     */
     private function addPicture(): string
     {
         $picture = new Picture();
-
         $filesystem = new Filesystem();
         $file = new File(__DIR__.$this->picturePath);
 
         $targetPath = sys_get_temp_dir().$this->targetPath;
         $filesystem->copy($file, $targetPath, true);
 
-        $namePicture=$this->uploadService->uploadUserImage(new File($targetPath));
+        $namePicture = $this->uploadService->uploadUserImage(new File($targetPath));
         $picture
             ->setFilename($namePicture)
             ->setSelectedPicture(false);
@@ -77,12 +77,4 @@ class UsersFixtures extends Fixture
         return $namePicture;
 
     }
-
-
-
-
-
-
-
-
 }

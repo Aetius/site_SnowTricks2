@@ -27,7 +27,7 @@ class LoginNotExistValidator extends ConstraintValidator
         }
 
         if ($result = $this->repository->findOneBy(['login' => $value])) {
-            if (($result->getId() !=$this->context->getObject()->id)) {
+            if (($result->getId() != $this->context->getObject()->id)) {
                 $this->context->buildViolation($constraint->message)
                     ->setParameter('value', $value)
                     ->addViolation();

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Services\Picture\UploadService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,23 +44,14 @@ class User implements UserInterface, \Serializable
     private $isActivate;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Email", inversedBy="user",  cascade={"persist"})
-     */
-    //private $email;
-
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
-
-
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
-
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\EmailLinkToken", inversedBy="user",cascade={"persist"},  orphanRemoval=true,)
@@ -91,7 +81,7 @@ class User implements UserInterface, \Serializable
 
     public function __construct()
     {
-        $this->isActivate = false;
+        $this->isActivate = true;
         $this->roles = ['ROLE_USER'];
         $this->createdAt = new \DateTime();
         $this->emailIsValid = false;
@@ -117,8 +107,6 @@ class User implements UserInterface, \Serializable
     }
 
     /**
-     * A visual identifier that represents this user.
-     *
      * @see UserInterface
      */
     public function getUsername(): string
@@ -209,7 +197,7 @@ class User implements UserInterface, \Serializable
             $this->login,
             $this->password,
             $this->roles,
-            $this->isActivate
+            $this->isActivate,
         ]);
     }
 
@@ -223,7 +211,7 @@ class User implements UserInterface, \Serializable
             $this->login,
             $this->password,
             $this->roles,
-            $this->isActivate
+            $this->isActivate,
         ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
@@ -246,12 +234,12 @@ class User implements UserInterface, \Serializable
 
 
 
-    public function getUpdatedat(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedat(?\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

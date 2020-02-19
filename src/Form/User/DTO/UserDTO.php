@@ -4,7 +4,6 @@
 namespace App\Form\User\DTO;
 
 
-use App\Entity\User;
 use App\Validator\LoginNotExist;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,7 +27,7 @@ class UserDTO
     public $emailUser;
 
     /**
-    **/
+     **/
     public $isActivate;
 
     public $roles;
@@ -39,7 +38,6 @@ class UserDTO
     public $picture;
 
     public $id;
-
 
 
 }

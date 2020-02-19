@@ -2,13 +2,12 @@
 
 namespace App\Entity;
 
-use App\Services\Picture\UploadService;
 use App\Services\Upload\Uploader;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TrickRepository")
@@ -22,8 +21,6 @@ class Trick
      * @ORM\Column(type="integer")
      */
     private $id;
-
-
 
     /**
      * @ORM\Column(type="string")
@@ -86,8 +83,7 @@ class Trick
     /**
      * @var array
      */
-    private $videosPath =[];
-
+    private $videosPath = [];
 
 
     public function __construct()
@@ -200,7 +196,6 @@ class Trick
     {
         if ($this->pictures->contains($picture)) {
             $this->pictures->removeElement($picture);
-            // set the owning side to null (unless already changed)
             if ($picture->getTrick() === $this) {
                 $picture->setTrick(null);
             }
@@ -209,14 +204,10 @@ class Trick
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getPicturesPath(): array
     {
 
-        foreach ($this->getPictures() as $picture)
-        {
+        foreach ($this->getPictures() as $picture) {
             $this->picturesPath[] = Uploader::ARTICLE_IMAGE.'/'.$picture->getFilename();
         }
         return $this->picturesPath;
@@ -244,7 +235,6 @@ class Trick
             $this->comments[] = $comment;
             $comment->setTrick($this);
         }
-
         return $this;
     }
 
@@ -252,7 +242,6 @@ class Trick
     {
         if ($this->comments->contains($comment)) {
             $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
             if ($comment->getTrick() === $this) {
                 $comment->setTrick(null);
             }
@@ -262,7 +251,7 @@ class Trick
     }
 
     /**
-    * @return TrickGroup
+     * @return TrickGroup
      */
     public function getTrickGroup()
     {
@@ -298,7 +287,6 @@ class Trick
     {
         if ($this->videos->contains($video)) {
             $this->videos->removeElement($video);
-            // set the owning side to null (unless already changed)
             if ($video->getTrick() === $this) {
                 $video->setTrick(null);
             }
@@ -307,33 +295,12 @@ class Trick
         return $this;
     }
 
- /*   public function addTrickGroup(TrickGroup $trickGroup)
-    {
-        if (!$this->trickGroup->contains($trickGroup)){
-            $this->trickGroup[]= $trickGroup;
-            $trickGroup->addTrick($this);
-        }
-        return $this;
-    }*/
-/*
-    public function removeTrickGroup(TrickGroup $trickGroup)
-    {
-        if ($this->trickGroup->contains($trickGroup)) {
-            $this->trickGroup->removeElement($trickGroup);
-            // set the owning side to null (unless already changed)
-            if ($trickGroup->getName() === $this) {
-                $trickGroup->setName(null);
-            }
-        }
-
-        return $this;
-    }*/
     /**
      * @return array
      */
     public function getVideosPath(): array
     {
-        foreach ($this->getVideos() as $video){
+        foreach ($this->getVideos() as $video) {
             $this->videosPath[] = $video->getName();
         }
         return $this->videosPath;

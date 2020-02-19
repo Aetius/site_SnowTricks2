@@ -16,47 +16,48 @@
                 </div>
             {% endif %}
             <div class="m-5 p-3 text-center">
-            <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+                <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
             </div>
 
-            <div class="col-md-12  ">
-                <div class="d-flex justify-content-center">
+            <div class=" row ">
+                <div class="d-flex justify-content-center col-md-12">
                     <div class="text-center border">
 
-                        <div class="mt-5 d-flex justify-content-center">
-                            <div class="col-md-10 d-flex flex-column">
-                                <div class="col-md-12  mb-3 ">
-
-
-                                <label for="inputLogin">Login</label>
-                                <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" required
-                   autofocus>
-
-                                </div>
-                                <div class="col-md-12  mb-3 ">
-            <label for="inputPassword">Mot de passe</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" required>
-                                </div>
-                                <div hidden>
-                                    <input type="hidden" name="_csrf_token"
-                                           value="{{ csrf_token('authenticate') }}">
-                                </div>
-                                <div class="p-3">
-                                    <div class="my-3 d-none d-md-block">
-                                        <a href="{{ path('user_password_lost') }}" >Mot de passe oublié ?</a>
+                        <div class="mt-5 d-flex justify-content-center row">
+                            <div class="col-md-8 d-flex flex-column">
+                                <div class="row">
+                                    <div class="col-md-12  mb-3 ">
+                                        <label for="inputLogin">Login</label>
+                                        <input type="text" value="{{ last_username }}" name="login" id="inputLogin"
+                                               class="form-control" required
+                                               autofocus>
                                     </div>
-                                    <div class="my-3">
-                                        <button class="btn btn-primary" type="submit">
-                                            Connexion
-                                        </button>
+                                    <div class="col-md-12  mb-3 ">
+                                        <label for="inputPassword">Mot de passe</label>
+                                        <input type="password" name="password" id="inputPassword" class="form-control"
+                                               required>
                                     </div>
-                                    <div class="my-3 d-md-block d-lg-none">
-                                        <a href="{{ path('user_password_lost') }}" >Inscription ?</a>
+                                    <div hidden>
+                                        <input type="hidden" name="_csrf_token"
+                                               value="{{ csrf_token('authenticate') }}">
                                     </div>
-                                    <div class="my-3 d-md-block d-lg-none">
-                                        <a href="{{ path('user_password_lost') }}" >Mot de passe oublié ?</a>
-                                    </div>
+                                    <div class="col-md-12 p-3">
+                                        <div class="my-3 d-none d-md-block">
+                                            <a href="{{ path('user_password_lost') }}">Mot de passe oublié ?</a>
+                                        </div>
 
+                                        <div class="my-3 ">
+                                            <button class="btn btn-primary" type="submit">
+                                                Connexion
+                                            </button>
+                                        </div>
+                                        <div class="my-3 d-md-block d-lg-none">
+                                            <a href="{{ path('user_new') }}">Inscription ?</a>
+                                        </div>
+                                        <div class="my-3 d-md-block d-lg-none">
+                                            <a href="{{ path('user_password_lost') }}">Mot de passe oublié ?</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,8 +65,6 @@
                 </div>
             </div>
         </form>
-
-
     </div>
 
 {% endblock %}

@@ -6,14 +6,12 @@ use App\Entity\EmailLinkToken;
 use App\Entity\User;
 use App\Form\User\AdminCollectionType;
 use App\Form\User\DTO\EditUserDTO;
-use App\Form\User\DTO\UserDTO;
 use App\Form\User\EditUserType;
 use App\Form\User\LostPasswordType;
 use App\Form\User\NewPasswordType;
 use App\Form\User\RegistrationUserType;
 use App\Notification\EmailNotification;
 use App\Repository\UserRepository;
-use App\Security\TokenEmail;
 use App\Services\Email\Mailer;
 use App\Services\User\UserManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -26,6 +24,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserController extends AbstractController
 {
+
     /**
      * @Route ("/user/inscription", name="user_new", methods={"GET|POST"})
      */
@@ -36,9 +35,10 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $userCreator->create($form->getData());
+            $userCreator->save($user);
             $notification->confirmEmail($user);
-            $this->addFlash('success', "flash.registration.success");
-            $this->Login($user);
+            $this->addFlash('success', "flash.user.registration");
+            $this->login($user);
             return $this->redirectToRoute('home');
         }
         return $this->render('user/new.html.twig', [
@@ -48,7 +48,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route ("/user/profile", name="user_update", methods={"GET|POST"})
+     * @Route ("/profile", name="user_update", methods={"GET|POST"})
      * @IsGranted("ROLE_USER")
      */
     public function update(Request $request, UserInterface $user, UserManager $userUpdate)
@@ -61,7 +61,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $userUpdate->update($user, $form->getData());
             $userUpdate->save($user);
-            $this->addFlash('success', "Modifications effectuées");
+            $this->addFlash('success', "flash.user.update");
         }
         return $this->render('user/update.html.twig', [
             'form' => $form->createView(),
@@ -73,8 +73,7 @@ class UserController extends AbstractController
     /**
      * @Route ("/password_lost", name="user_password_lost", methods={"GET|POST"})
      */
-    public function lostPassword(Request $request, EmailNotification $emailNotification, UserRepository $userRepository,
-                                 TokenEmail $token, UserManager $editor)
+    public function lostPassword(Request $request, UserRepository $userRepository, UserManager $editor)
     {
         $form = $this->createForm(LostPasswordType::class);
         $form->handleRequest($request);
@@ -83,7 +82,7 @@ class UserController extends AbstractController
             if ($user = $userRepository->findOneBy(['login' => $form->getData()->login])) {
                 $editor->resetPassword($user);
             }
-            $this->addFlash('success', "Demande effectuée");
+            $this->addFlash('success',"flash.user.passwordLost");
         }
         return $this->render('user/password_lost.html.twig', [
             'form' => $form->createView()
@@ -95,12 +94,11 @@ class UserController extends AbstractController
      */
     public function confirmEmail(EmailLinkToken $emailLinkToken, User $user, Mailer $emailSevice)
     {
-
         if ($emailSevice->validationEmail($user) === true) {
             $emailSevice->save($user);
-            $this->addFlash('success', "L'email a bien été enregistré");
+            $this->addFlash('success', "flash.user.confirmEmail.success");
         } else {
-            $this->addFlash('danger', "L'adresse email n'a pu être enregistrée. Veuillez Réessayer!");
+            $this->addFlash('danger', "flash.user.confirmEmail.danger");
         }
         return $this->redirectToRoute('home');
     }
@@ -108,8 +106,7 @@ class UserController extends AbstractController
     /**
      * @Route ("/password_reset/{token}", name="user_password_reset",  methods={"GET|POST"})
      */
-    public function resetPassword(EmailLinkToken $emailLinkToken, User $user, Request $request,
-                                  Mailer $emailSevice, UserManager $userEditor)
+    public function resetPassword(EmailLinkToken $emailLinkToken, User $user, Request $request, Mailer $emailSevice, UserManager $userEditor)
     {
         if ($emailSevice->lostPassword($user) === true) {
             $form = $this->createForm(NewPasswordType::class);
@@ -139,7 +136,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
             $userManager->adminEditUser($form->getData());
-            $this->addFlash('success', 'Modifications effectuées');
+            $this->addFlash('success', 'flash.user.admin');
         }
         return $this->render('admin/AdminTrick.html.twig', [
             'form'=>$form->createView(),
@@ -149,7 +146,7 @@ class UserController extends AbstractController
 
 
 
-    protected function Login($user)
+    protected function login(User $user)
     {
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->container->get('security.token_storage')->setToken($token);

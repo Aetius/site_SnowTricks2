@@ -24,20 +24,15 @@ class TrickManager
      */
     private $uploadService;
     /**
-     * @var TrickGroupManager
-     */
-    private $trickGroupManager;
-    /**
      * @var VideoManager
      */
     private $videoManager;
 
     public function __construct(EntityManagerInterface $entityManager, Uploader $uploadService,
-                                TrickGroupManager $trickGroupManager, VideoManager $videoManager)
+                                VideoManager $videoManager)
     {
         $this->entityManager = $entityManager;
         $this->uploadService = $uploadService;
-        $this->trickGroupManager = $trickGroupManager;
         $this->videoManager = $videoManager;
     }
 
@@ -49,7 +44,7 @@ class TrickManager
         $trick
             ->setTitle($createDTO->title)
             ->setDescription($createDTO->description)
-            ->setTrickGroup($this->trickGroupManager->manager($createDTO));
+            ->setTrickGroup(($createDTO->trickGroup));
         return $trick;
     }
 
@@ -70,7 +65,7 @@ class TrickManager
         if ($dto->videos['required'] !== null) {
             $this->addVideo($trick, $dto->videos);
         }
-       return $trick;
+        return $trick;
     }
 
 

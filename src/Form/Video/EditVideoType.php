@@ -6,9 +6,7 @@ namespace App\Form\Video;
 
 use App\Form\Video\DTO\VideoDTO;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,7 +16,7 @@ class EditVideoType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label'=>'form.video'
+                'label' => 'form.video'
             ]);
     }
 
@@ -26,7 +24,7 @@ class EditVideoType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'forms',
-            'data_class'=> VideoDTO::class,
+            'data_class' => VideoDTO::class,
         ]);
     }
 }

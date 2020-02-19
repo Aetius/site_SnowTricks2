@@ -1,2 +1,5 @@
-password.invalidMessage: 'La confirmation du mot de passe est incorrecte'
 currentPassword.invalidMessage: 'Le mot de passe est incorrect'
+Constraint.LoginExist: Ce login existe déjà.
+Constraint.TrickExist: Ce nom est déjà utilisé.
+Constraint.VideoFormatNok: La vidéo doit être une url provenant de Youtube/Dailymotion.
+validator.password.invalidMessage: La confirmation du mot de passe est incorrecte

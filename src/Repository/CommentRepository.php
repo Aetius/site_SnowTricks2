@@ -14,7 +14,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    const MAXIMUM_RESULT = 2;
+    const MAXIMUM_COMMENTS_BY_PAGE = 2;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
@@ -24,39 +25,20 @@ class CommentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->where("p.trick=$trick")
-            ->setMaxResults(self::MAXIMUM_RESULT)
+            ->setMaxResults(self::MAXIMUM_COMMENTS_BY_PAGE)
             ->setFirstResult($min)
             ->orderBy('p.id', 'DESC')
             ->getQuery()
             ->getResult();
     }
 
-    // /**
-    //  * @return Comment[] Returns an array of Comment objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findCommentsByTrickId(int $trickId)
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
+        return $this->createQueryBuilder('p')
+            ->where("p.trick=$trickId")
+            ->orderBy('p.dateCreation', 'DESC')
+            ->setMaxResults(self::MAXIMUM_COMMENTS_BY_PAGE)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Comment
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

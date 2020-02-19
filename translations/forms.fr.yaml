@@ -1,23 +1,29 @@
 Title: Titre
 Content: Description
-form.email: 'Email'
-form.login: 'Login'
-form.currentPassword: 'Mot de passe actuel'
-form.password: 'Mot de passe'
-form.passwordConfirm: 'Confirmation du mot de passe'
-form.contentComment: "Commentaire"
-form.selectedPicture: "Fichier à sélectionner"
-form.filePicture: "Fichier à télécharger"
-form.description: "Contenu du trick"
-form.title: "Nom du trick"
-form.pictureFiles: "Image à télécharger"
-form.trickGroup: "Groupe"
-form.videos: "Vidéo(s) à télécharger"
-form.video: "Vidéo"
-form.users: "Utilisateurs"
-form.isActive: "Utilisateur actif?"
-form.role: "Rôle de l'utilisateur"
-form.picture: "Image"
+form.email: Email
+form.login: Login
+form.currentPassword: Mot de passe actuel
+form.password: Mot de passe
+form.passwordConfirm: Confirmation du mot de passe
+form.contentComment: Commentaire
+form.selectedPicture: Fichier à sélectionner
+form.filePicture: Fichier à télécharger
+form.description: Contenu du trick
+form.title: Nom du trick
+form.pictureFiles: Image à télécharger
+form.trickGroup: Groupe
+form.videos: Vidéo(s) à télécharger
+form.video: Vidéo
+form.users: Utilisateurs
+form.isActivate: Utilisateur actif?
+form.role: Rôle de l'utilisateur
+form.picture: Image
+form.roles.invalidMessage: Role invalide
+form.ROLE_USER: Utilisateur non validé
+form.ROLE_EDITOR: Utilisateur validé
+form.ROLE_ADMIN: Administrateur
+form.selectFile: Sélectionner un fichier
+
 
 
 

@@ -25,7 +25,7 @@ class VideoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()){
             $manager->edit($video, $form->getData());
-            $this->addFlash('success', "Le trick a bien été mis à jour!!");
+            $this->addFlash('success', "flash.trick.edit");
             return $this->redirectToRoute('trick_edit', ['id'=> $video->getTrick()->getId()]);
         }
 

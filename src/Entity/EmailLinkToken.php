@@ -13,10 +13,6 @@ class EmailLinkToken
     const ACTION_UPDATE_EMAIL = 0;
     const ACTION_RESET_PASSWORD = 1;
 
-//    const ACTION = [
-//        0 => 'update_email',
-//        1 => 'reset_password'
-//    ];
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -42,13 +38,7 @@ class EmailLinkToken
     /**
      * @ORM\Column(type="integer")
      */
-    //private $user;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
     private $action;
-
 
 
     public function __construct()
@@ -97,18 +87,6 @@ class EmailLinkToken
         return $this;
     }
 
-   /* public function getUser(): ?int
-    {
-        return $this->user;
-    }
-
-    public function setUser(int $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }*/
-
     public function getAction(): ?int
     {
         return $this->action;
@@ -121,8 +99,4 @@ class EmailLinkToken
         return $this;
     }
 
-   /* public function addAction (int $action): self
-    {
-        return $this->setAction( [self::ACTION[$action]]);
-    }*/
 }

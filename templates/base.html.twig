@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
     <meta name="author" content="Thomas">
 
     <title>{% block title %}SnowTricks {% endblock %}</title>
@@ -17,29 +16,29 @@
     {% endblock %}
 
 </head>
-    <body>
-        <div class="d-none d-md-block">
-            <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
-                <h5 class="my-0 mr-md-auto font-weight-normal">SnowTrick</h5>
-                <nav class="my-2 my-md-0 mr-md-3">
-                    <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
-                    <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
-                    {% if is_granted ('ROLE_USER') %}
-                        <a class="p-2 text-dark mr-2" href="{{ path('trick_new') }}">Nouveau trick</a>
-                    {% endif %}
-                    {% if is_granted ('ROLE_USER') %}
-                        <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
-                        <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
-                    {% else %}
-                        <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
-                        <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
-                    {% endif %}
-                    {% if is_granted ('ROLE_ADMIN') %}
-                        <a class="btn btn-outline-primary mr-2 ml-5" href="{{ path('user_admin') }}">Espace admin</a>
-                    {% endif %}
-                </nav>
-            </div>
-        </div>
+<body>
+<div class="d-none d-md-block">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">SnowTrick</h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <a class="p-2 text-dark mr-2" href="{{ path('home') }}">Accueil</a>
+            <a class="p-2 text-dark mr-2" href="/#tricks">Les tricks</a>
+            {% if is_granted ('ROLE_EDITOR') %}
+                <a class="p-2 text-dark mr-2" href="{{ path('trick_new') }}">Nouveau trick</a>
+            {% endif %}
+            {% if is_granted ('ROLE_USER') %}
+                <a class="btn btn-outline-primary mr-2" href="{{ path('user_update') }}">Mon espace</a>
+                <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Se déconnecter</a>
+            {% else %}
+                <a class="btn btn-outline-primary mr-2" href="{{ path('app_login') }}">S'identifier</a>
+                <a class="btn btn-outline-primary" href="{{ path('user_new') }}">Créer un compte</a>
+            {% endif %}
+            {% if is_granted ('ROLE_ADMIN') %}
+                <a class="btn btn-outline-primary mr-2 ml-5" href="{{ path('user_admin') }}">Espace admin</a>
+            {% endif %}
+        </nav>
+    </div>
+</div>
 
 
 {% block body %} {% endblock %}
@@ -49,7 +48,6 @@
         </div>
     </div>
     <div class=" p-3 px-md-4 bg-white  shadow-sm">
-
         <nav class="my-2 my-md-0 mr-md-3 d-flex d-flex justify-content-around home-icons">
             <a href="{{ path('home') }}">
                 <i class="material-icons">house</i>
@@ -81,18 +79,14 @@
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
             <div class="col-12 col-md">
-
                 <small class="d-block mb-3 text-muted">&copy; 2019</small>
             </div>
             <div class="col-6 col-md">
                 <p>Mentions légales</p>
-
             </div>
             <div class="col-6 col-md">
                 <p>Politique de confidentialité</p>
-
             </div>
-
         </div>
     </footer>
 </div>

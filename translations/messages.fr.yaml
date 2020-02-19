@@ -1,1 +1,11 @@
-flash.registration.success: 'Votre compte a bien été créé.'
+flash.user.registration: Votre compte a bien été créé.
+flash.user.passwordLost: Demande effectuée
+flash.user.update: Mise à jour effectuée
+flash.user.confirmEmail.success: L'email a bien été enregistré
+flash.user.confirmEmail.danger: L'adresse email n'a pu être enregistrée. Veuillez Réessayer!
+flash.user.admin: Modifications des utilisateurs effectuées
+flash.comment.create: Le commentaire a bien été créé!!
+flash.picture.delete: Image supprimée
+flash.trick.edit: Le trick a bien été mis à jour!!
+flash.trick.create: Le trick a bien été créé!!
+flash.comment.create.error: Echec lors de l'enregistrement du commentaire.

@@ -15,7 +15,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class TrickRepository extends ServiceEntityRepository
 {
 
-    const MAXIMUM_RESULT = 10;
+    const MAXIMUM_RESULT_BY_PAGE = 10;
 
 
     public function __construct(ManagerRegistry $registry)
@@ -26,11 +26,31 @@ class TrickRepository extends ServiceEntityRepository
 
     public function findByMinMax(int $min)
     {
-      return $this->createQueryBuilder('p')
+        return $this->createQueryBuilder('p')
             ->where('p.publicated=true')
-            ->setMaxResults(self::MAXIMUM_RESULT)
+            ->setMaxResults(self::MAXIMUM_RESULT_BY_PAGE)
             ->setFirstResult($min)
             ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findLast()
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function getFirstPublicatedTricksPage()
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.publicated=true')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults(self::MAXIMUM_RESULT_BY_PAGE)
             ->getQuery()
             ->getResult();
     }

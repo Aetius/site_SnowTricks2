@@ -14,18 +14,18 @@ class AdminType extends AbstractType
     {
         $builder
             ->add('isActivate', null, [
-            'label' => 'isActivate'
+                'label' => 'form.isActivate'
             ])
             ->add('role', ChoiceType::class, [
-                'choices'=>[
-                   'User'=> 'ROLE_USER',
-                   'Editor'=> 'ROLE_EDITOR',
-                   'Administrator'=> 'ROLE_ADMIN'
+                'choices' => [
+                    'form.ROLE_USER' => 'ROLE_USER',
+                    'form.ROLE_EDITOR' => 'ROLE_EDITOR',
+                    'form.ROLE_ADMIN' => 'ROLE_ADMIN'
                 ],
-               'invalid_message' => 'roles.invalidMessage',
-               'label' => 'role',
+                'invalid_message' => 'form.roles.invalidMessage',
+                'label' => 'form.role',
             ]);
-        }
+    }
 
     public function configureOptions(OptionsResolver $resolver)
     {

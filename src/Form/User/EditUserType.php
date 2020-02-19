@@ -19,7 +19,7 @@ class EditUserType extends AbstractType
     {
         $builder
             ->add('id', HiddenType::class, [
-                'required'=>true
+                'required' => true
             ])
             ->add('login', TextType::class, [
                 'required' => false,
@@ -34,18 +34,18 @@ class EditUserType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => "password.invalidMessage",
                 'required' => false,
-                'first_options' => ['label' => "label.password"],
-                'validation_groups'=> ["test"],
-                'label'=>'form.password',
-                'second_options' => ['label' => "label.passwordConfirm"]
+                'first_options' => ['label' => "form.password"],
+                'validation_groups' => ["test"],
+                'label' => 'form.password',
+                'second_options' => ['label' => "form.passwordConfirm"]
             ])
             ->add('emailUser', EmailType::class, [
                 'required' => false,
                 'label' => 'form.email'
             ])
             ->add('picture', FileType::class, [
-                "required"=>false,
-                'label'=>'form.picture',
+                "required" => false,
+                'label' => 'form.picture',
             ]);
     }
 
@@ -53,7 +53,7 @@ class EditUserType extends AbstractType
     {
         $resolver->setDefaults([
             'translation_domain' => 'forms',
-            'data_class'=> EditUserDTO::class,
+            'data_class' => EditUserDTO::class,
 
         ]);
     }

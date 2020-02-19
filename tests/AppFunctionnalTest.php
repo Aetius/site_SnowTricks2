@@ -5,70 +5,105 @@ namespace App\Tests;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class AppFunctionnalTest extends WebTestCase
 {
     /**
-     * @dataProvider urlProvider
+     * @dataProvider urlProviderRoleUser
      */
-    public function testPageIsSuccessful($url)
+    public function testFailedConnectionPageIsRestricted($url)
     {
         $client = static::createClient();
-        $client->request('GET', $url);
-
-       $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        //$client->followRedirects(false);
+        $crawler = $client->request('GET', $url);
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 
-
-    public function testFailedConnectionPageIsRestricted()
+    /**
+     * @dataProvider urlProviderRoleUser
+     */
+    public function testRedirectionToLogin($url)
     {
         $client = static::createClient();
-        $client->request('GET', "/user/profile");
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        $crawler = $client->request('GET', $url);
+        $this->assertTrue(
+            $client->getResponse()->isRedirect()
+        );
     }
 
-  /*  public function testRedirectToLogin()
+    public function urlProviderRoleUser()
     {
-        $client = static::createClient();
-        $client->request('GET', '/user/profile');
-        $this->assertResponseRedirects('/login');
-    }*/
-
-    public function urlProvider2()
-    {
-        yield ['/edit/trick/new'];
+        yield ['/image/3/delete'];
+        yield ['/image/edit/4'];
+        yield ['/trick/delete/5'];
+        yield ['/profile'];
         yield ['/admin'];
-        yield ['/user/profile'];
-        yield ['/user/inscription'];
+        yield ['/video/delete/5'];
+        yield ['/trick/new'];
+        yield ['/edit/trick/3'];
     }
 
-    public function urlProvider()
+    /**
+     * @dataProvider urlProviderAccessPublicPage
+     */
+    public function testAccessPublicPage($url)
     {
-        yield ['/test/test'];
-        yield ['/'];
-        yield ['/trick/22'];
-        //yield ['/edit/images/{id}'];
-     /*   yield ['/edit/images/{id}/delete'];
-
-        yield ['/edit/images/{id}'];
-        yield ['/trick/{id}/{pageComment}'];
-        yield['/trick/{id}/comment/new'];
-        yield ['/admin/delete_orphan'];
-        yield ['/login'];
-        yield ['/logout'];
-        yield ['/{id}'];
-
-
-        yield ['/edit/trick/{id}'];
-        yield ['/edit/trick/{id}/delete'];
-
-
-
-        yield ['/user/confirm_email/{token}'];
-        yield ['/user/password_reset/{token}'];*/
-
-
+        $client = static::createClient();
+        $crawler = $client->request('GET', $url);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
+
+    public function urlProviderAccessPublicPage()
+    {
+        yield ['/'];
+        yield ['/trick/2'];
+        yield ['/login'];
+        yield ['trick/4/page_comment/2'];
+        yield ['/user/inscription'];
+        yield ['/password_lost'];
+    }
+
+
+    public function testPermanentRedirection()
+    {
+        $client = static::createClient();
+        $client->request('GET', '/logout');
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * @dataProvider urlProviderAjaxRoleUser
+     */
+    public function testAjaxRequestWithNoCredentials($url)
+    {
+        $client = static::createClient();
+        $client->xmlHttpRequest('GET', $url);
+        //$this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertTrue(
+            $client->getResponse()->isRedirect()
+        );
+    }
+
+
+    public function urlProviderAjaxRoleUser()
+    {
+        yield ['/video/edit/5'];
+    }
+
+    /**
+     * @dataProvider urlProviderAjax
+     */
+    public function testAjaxRequest($url)
+    {
+        $client = static::createClient();
+        $client->xmlHttpRequest('GET', $url);
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function urlProviderAjax()
+    {
+        yield ['/page/2'];
+        yield ['/trick/3/page_comment/2'];
+    }
+
 }
