@@ -17,9 +17,9 @@ class UserControllerTest extends WebTestCase
     use NeedLogin;
     use UserRepositoryTest;
 
-    const ROLE_USER = 'sim0';
-    const ROLE_ADMIN = 'sim1';
-    const ROLE_EDITOR = 'sim2';
+    const ROLE_USER = 'sim 0';
+    const ROLE_ADMIN = 'sim 1';
+    const ROLE_EDITOR = 'sim 2';
 
 
     protected $client;

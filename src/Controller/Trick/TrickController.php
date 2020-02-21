@@ -90,6 +90,7 @@ class TrickController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$trick->getId(), $request->get('_token'))) {
             $service->delete($trick);
+            $this->addFlash('success', "flash.trick.delete");
         }
         return $this->redirectToRoute('home');
     }

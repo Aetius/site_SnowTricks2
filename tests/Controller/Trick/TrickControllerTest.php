@@ -35,6 +35,14 @@ class TrickControllerTest extends WebTestCase
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
 
+    public function testTargetHomePageSearchTrick()
+    {
+        $trick = $this->findLastTrick($this->client)->getTitle();
+        $this->client->request('GET', '/');
+        $this->client->clickLink($trick);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+    }
+
     /**
      *@dataProvider targetProviderHomePageUserAccess
      */
@@ -53,7 +61,6 @@ class TrickControllerTest extends WebTestCase
     {
         $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
         $this->client->request('GET', '/');
-        //$this->client->followRedirects(false);
         $this->client->clickLink($target);
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }
@@ -168,26 +175,6 @@ class TrickControllerTest extends WebTestCase
             );
     }
 
-
-//Delete Trick
-    public function testDeleteTrickOk()
-    {
-        $trick = $this->findLastTrick($this->client)->getId();
-        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
-
-        $client = self::bootKernel();
-        $token = self::$container->get(CsrfTokenManagerInterface::class)->getToken('delete'.$trick)->getValue();
-
-        $this->client->request('GET',"/trick/delete/$trick",
-            ['request'=>[
-                "_token" => $token,
-                "_method" => "GET"]]
-        );
-
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
-    }
-
-
 //home page
     public function targetProviderHomePage()
     {
@@ -195,7 +182,6 @@ class TrickControllerTest extends WebTestCase
         yield ['Accueil'];
         yield ["S'identifier"];
         yield ['Créer un compte'];
-        yield ['Vulcan 18'];
     }
 
     public function targetProviderRedirectHomeUserAccess()

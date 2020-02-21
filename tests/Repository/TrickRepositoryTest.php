@@ -17,9 +17,9 @@ trait TrickRepositoryTest
         /** @var Trick $trick */
         if ($trick !== null){
             $name = explode(" ", $trick->getTitle());
-           return ($name[0]." ".($name[1]+1));
+           return ($name[0]." ".($name[1]."1"));
         }
-        return  'Raley 21';
+        return  'Raley';
 
     }
 

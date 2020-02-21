@@ -47,7 +47,7 @@
         {% endif %}
 
         <nav class="navbar navbar-light navbar-expand-lg d-flex justify-content-center">
-            <div class="">
+            <div class="pt-2">
                 <button class="d-lg-none navbar-toggler toggler-example" type="button" data-toggle="collapse"
                         data-target="#display_medias" aria-controls="display_medias"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
                 </button>
             </div>
             <div class="collapse navbar-collapse" id="display_medias">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto d-flex flex-wrap">
                     {% for picture in trick.getPictures %}
                         <li class="nav-item p-2">
                             <img src="{{ asset(uploaded_thumbnail_asset(picture.filename)) }}" height="150" width="200"
