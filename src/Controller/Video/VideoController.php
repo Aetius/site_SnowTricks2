@@ -5,6 +5,7 @@ namespace App\Controller\Video;
 
 
 use App\Entity\Video;
+use App\Form\Video\DTO\VideoDTO;
 use App\Form\Video\EditVideoType;
 use App\Services\Video\VideoManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,13 +21,18 @@ class VideoController extends AbstractController
      */
     public function edit(Video $video, Request $request, VideoManager $manager)
     {
-        $form = $this->createForm(EditVideoType::class);
+        $dto = VideoDTO::createFromTrick($video);
+        $form = $this->createForm(EditVideoType::class, $dto);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()){
             $manager->edit($video, $form->getData());
             $this->addFlash('success', "flash.trick.edit");
             return $this->redirectToRoute('trick_edit', ['id'=> $video->getTrick()->getId()]);
+        }
+        if ($form->isSubmitted()){
+            $this->addFlash('danger', "flash.video.edit.failed");
+             return $this->redirectToRoute('trick_edit', ['id'=> $video->getTrick()->getId()]);
         }
 
         return $this->render('video/_edit.html.twig', [
@@ -45,7 +51,7 @@ class VideoController extends AbstractController
 
         if ($this->isCsrfTokenValid('delete'.$video->getId(), $request->get('_token'))) {
             $manager->delete($video);
-            $this->addFlash('success', 'deleting_photo');
+            $this->addFlash('success', 'flash.deleting.video');
         }
 
 

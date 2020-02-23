@@ -10,3 +10,5 @@ flash.trick.edit: Le trick a bien été mis à jour!!
 flash.trick.create: Le trick a bien été créé!!
 flash.comment.create.error: Echec lors de l'enregistrement du commentaire.
 flash.trick.delete: Le trick a bien été supprimé
+flash.deleting.video: La vidéo a bien été supprimée
+flash.video.edit.failed: La vidéo n'a pu être enregistrée. Les videos doivent provenir de Dailymotion ou de Youtube.

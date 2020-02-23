@@ -19,44 +19,82 @@ class VideoFormatOkValidator extends ConstraintValidator
             return;
         }
 
-        foreach ($value as $key => $url) {
-            if (preg_match('#^https://youtu.be/#', $url)) {
-                return;
-            }
-            if (preg_match('#^https://www.youtube.com/#', $url)) {
-                return;
-            }
-            if (preg_match('#^https://dai.ly/#', $url)) {
-                return;
-            }
+        if (is_array($value)) {
+            foreach ($value as $key => $url) {
+                if (preg_match('#^https://youtu.be/#', $url)) {
+                    return;
+                }
+                if (preg_match('#^https://www.youtube.com/#', $url)) {
+                    return;
+                }
+                if (preg_match('#^https://dai.ly/#', $url)) {
+                    return;
+                }
 
-            if (preg_match('#^https://www.dailymotion.com/#', $url)) {
-                return;
-            }
-            if (preg_match('#^https://www.dailymotion.com/#', $url)) {
-                return;
-            }
+                if (preg_match('#^https://www.dailymotion.com/#', $url)) {
+                    return;
+                }
+                if (preg_match('#^https://www.dailymotion.com/#', $url)) {
+                    return;
+                }
 
-            if (preg_match('#^<iframe#', $url)) {
-                $array = explode(" ", $url);
-                foreach ($array as $value) {
-                    if (strstr($value, 'src="https://www.youtube.com/embed/')) {
-                        return;
-                    }
-                    if (strstr($value, 'src="https://www.dailymotion.com/embed/')) {
-                        return;
+                if (preg_match('#^<iframe#', $url)) {
+                    $array = explode(" ", $url);
+                    foreach ($array as $value) {
+                        if (strstr($value, 'src="https://www.youtube.com/embed/')) {
+                            return;
+                        }
+                        if (strstr($value, 'src="https://www.dailymotion.com/embed/')) {
+                            return;
+                        }
                     }
                 }
-            }
-            if (($this->context->getObject()->id !== null) AND ($value['required'] === null) ){
-                return;
-            }
+                if (($this->context->getObject()->id !== null) AND ($value['required'] === null) ){
+                    return;
+                }
 
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('value', 'video')
-                ->atPath("videos")
-                ->addViolation();
-        }
+                $this->context->buildViolation($constraint->message)
+                    ->setParameter('value', 'video')
+                    ->atPath("videos")
+                    ->addViolation();
+            }}
 
-    }
+        if (is_string($value)) {
+
+                if (preg_match('#^https://youtu.be/#', $value)) {
+                    return;
+                }
+                if (preg_match('#^https://www.youtube.com/#', $value)) {
+                    return;
+                }
+                if (preg_match('#^https://dai.ly/#', $value)) {
+                    return;
+                }
+
+                if (preg_match('#^https://www.dailymotion.com/#', $value)) {
+                    return;
+                }
+                if (preg_match('#^https://www.dailymotion.com/#', $value)) {
+                    return;
+                }
+
+                if (preg_match('#^<iframe#', $value)) {
+                    $array = explode(" ", $value);
+                    foreach ($array as $value) {
+                        if (strstr($value, 'src="https://www.youtube.com/embed/')) {
+                            return;
+                        }
+                        if (strstr($value, 'src="https://www.dailymotion.com/embed/')) {
+                            return;
+                        }
+                    }
+                }
+
+                $this->context->buildViolation($constraint->message)
+                    ->setParameter('value', 'video')
+                    ->atPath("videos")
+                    ->addViolation();
+            }}
+
+
 }

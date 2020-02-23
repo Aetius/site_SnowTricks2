@@ -82,9 +82,10 @@
                 {{ form_end(form) }}
 
                 <div class="">
+                    <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
                     <a href="#confirmDelete" data-toggle="modal"
                        data-url="{{ path('trick_delete', {'id': trick.id}) }}">
-                        <input type="hidden" value="{{ csrf_token('delete'~ trick.id) }}">
+
                         <div class="btn btn-danger trick-delete-modal">Supprimer</div>
                     </a>
                 </div>
