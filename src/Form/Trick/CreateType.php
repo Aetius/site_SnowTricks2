@@ -3,7 +3,7 @@
 namespace App\Form\Trick;
 
 use App\Entity\TrickGroup;
-use App\Form\Trick\DTO\TrickDTO;
+use App\Form\Trick\DTO\CreateTrickDTO;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -61,11 +61,10 @@ class CreateType extends AbstractType
             ]);
     }
 
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TrickDTO::class,
+            'data_class' => CreateTrickDTO::class,
             'translation_domain' => 'forms',
             'error_mapping' => [
                 'videos' => 'videos.required',

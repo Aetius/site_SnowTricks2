@@ -5,6 +5,7 @@ namespace App\Form\Trick\DTO;
 
 
 use App\Entity\Trick;
+use App\Form\Video\DTO\VideoDTO;
 use App\Validator\UniqueTrick;
 use App\Validator\VideoFormatOk;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,9 +47,16 @@ class TrickDTO
 
 
     /**
-     * @VideoFormatOk()
+     * @Assert\All({
+     *    @VideoFormatOk(),
+     *     })
      */
     public $videos;
+
+    public function __construct()
+    {
+        $this->videos[] = new VideoDTO();
+    }
 
 
     static function createFromTrick(Trick $trick): TrickDTO

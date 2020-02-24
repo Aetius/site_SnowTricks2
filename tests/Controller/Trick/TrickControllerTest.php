@@ -213,5 +213,20 @@ class TrickControllerTest extends WebTestCase
     }
 
 
+    public function testDeleteTrickOk()
+    {
+        $trick = $this->findLastTrick($this->client)->getId();
+        $this->Login($this->client, UserControllerTest::ROLE_EDITOR);
+
+        $token = self::$container->get(CsrfTokenManagerInterface::class)->getToken('delete'.$trick)->getValue();
+
+        $this->client->request('GET',"/trick/delete/$trick",
+            ["_token" => $token]
+        );
+
+        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+    }
+
+
 
 }
