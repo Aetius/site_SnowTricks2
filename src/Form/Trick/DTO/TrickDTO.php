@@ -14,7 +14,7 @@ class TrickDTO
 {
     /**
      * @Assert\Length(min=5, max=100)
-     * @Assert\NotNull()
+     * @Assert\NotNull(groups={'create'})
      * @UniqueTrick()
      */
     public $title;
@@ -48,7 +48,9 @@ class TrickDTO
 
     /**
      * @Assert\All({
-     *    @VideoFormatOk(),
+     *    @VideoFormatOk(groups={'edit', 'create'}),
+     *    @Assert\NotBlank(groups={'create'}),
+     *    @Assert\NotNull(groups={'create'})
      *     })
      */
     public $videos;

@@ -68,6 +68,7 @@ class EditType extends AbstractType
         $resolver->setDefaults([
             'data_class' => TrickDTO::class,
             'translation_domain' => 'forms',
+            'validation_groups' => ['edit']
         ]);
     }
 
